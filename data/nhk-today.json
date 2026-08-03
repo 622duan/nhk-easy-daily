@@ -1,0 +1,50 @@
+{
+  "fetched_at": "2026-08-03T16:25:00+09:00",
+  "source": "https://www3.nhk.or.jp/news/easy/",
+  "article_count": 3,
+  "note": "草拟数据 - Mavis 手工编写 (基于 7月31日 日本新闻). 等 GitHub Actions 跑通后会覆盖成真 NHK 数据.",
+  "articles": [
+    {
+      "news_id": "k1001483700",
+      "title": "熊本県で地震",
+      "title_with_ruby": "<ruby>熊本<rt>くまもと</rt></ruby><ruby>県<rt>けん</rt></ruby>で<ruby>地震<rt>じしん</rt></ruby>",
+      "body": "7月31日、九州の熊本県で大きな地震がありました。地震の規模はマグニチュード7.1でした。この地震で、3人が亡くなりました。けがをした人もたくさんいます。",
+      "body_html": "<p>7<ruby>月<rt>がつ</rt></ruby>31<ruby>日<rt>にち</rt></ruby>、<ruby>九州<rt>きゅうしゅう</rt></ruby>の<ruby>熊本<rt>くまもと</rt></ruby><ruby>県<rt>けん</rt></ruby>で<ruby>大<rt>おお</rt></ruby>きな<ruby>地震<rt>じしん</rt></ruby>がありました。<ruby>地震<rt>じしん</rt></ruby>の<ruby>規模<rt>きぼ</rt></ruby>はマグニチュード7.1でした。この<ruby>地震<rt>じしん</rt></ruby>で、3<ruby>人<rt>にん</rt></ruby>が<ruby>亡<rt>な</rt></ruby>くなりました。けがを<ruby>した<rt>した</rt></ruby><ruby>人<rt>ひと</rt></ruby>もたくさんいます。</p><p><ruby>政府<rt>せいふ</rt></ruby>は、<ruby>逃<rt>に</rt></ruby>げる<ruby>場所<rt>ばしょ</rt></ruby>がない<ruby>人<rt>ひと</rt></ruby>のために<ruby>避難所<rt>ひなんじょ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>っています。<ruby>多<rt>おお</rt></ruby>くの<ruby>人<rt>ひと</rt></ruby>が<ruby>避難所<rt>ひなんじょ</rt></ruby>で<ruby>生活<rt>せいかつ</rt></ruby>しています。<ruby>水道<rt>すいどう</rt></ruby>と<ruby>電気<rt>でんき</rt></ruby>が<ruby>止<rt>と</rt></ruby>まっている<ruby>家<rt>いえ</rt></ruby>もあります。</p><p><ruby>日本<rt>にほん</rt></ruby>の<ruby>気象庁<rt>きしょうちょう</rt></ruby>は、<ruby>今後<rt>こんご</rt></ruby>も<ruby>余震<rt>よしん</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>くと<ruby>言<rt>い</rt></ruby>っています。<ruby>住<rt>す</rt></ruby>んでいる<ruby>人<rt>ひと</rt></ruby>は<ruby>気<rt>き</rt></ruby>を<ruby>付<rt>つ</rt></ruby>けてください。</p>",
+      "outline": "7月31日、九州の熊本県で大きな地震がありました。3人が亡くなり、けが人も出ています。",
+      "audio_url": "https://nhks-vh.akamaihd.net/i/news/easy/k1001483700.mp3",
+      "image_url": "https://www3.nhk.or.jp/news/easy/k1001483700/k1001483700.jpg",
+      "url": "https://www3.nhk.or.jp/news/easy/k1001483700/k1001483700.html",
+      "published_at": "2026-08-01T07:00:00+09:00",
+      "word_count": 30,
+      "fetched_at": "2026-08-03T16:25:00+09:00"
+    },
+    {
+      "news_id": "k1001483701",
+      "title": "日本銀行 金利を1%に決める",
+      "title_with_ruby": "<ruby>日本銀行<rt>にほんぎんこう</rt></ruby> <ruby>金利<rt>きんり</rt></ruby>を1%に<ruby>決<rt>き</rt></ruby>める",
+      "body": "日本銀行は7月31日、お金の貸す時の金利を1%に決めました。前と同じです。",
+      "body_html": "<p><ruby>日本銀行<rt>にほんぎんこう</rt></ruby>は7<ruby>月<rt>がつ</rt></ruby>31<ruby>日<rt>にち</rt></ruby>、お<ruby>金<rt>かね</rt></ruby>の<ruby>貸<rt>か</rt></ruby>す<ruby>時<rt>とき</rt></ruby>の<ruby>金利<rt>きんり</rt></ruby>を1%に<ruby>決<rt>き</rt></ruby>めました。<ruby>前<rt>まえ</rt></ruby>と<ruby>同<rt>おな</rt></ruby>じです。</p><p><ruby>日本銀行<rt>にほんぎんこう</rt></ruby>は、<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がることが<ruby>続<rt>つづ</rt></ruby>いていると<ruby>話<rt>はな</rt></ruby>しました。<ruby>将来<rt>しょうらい</rt></ruby>は<ruby>金利<rt>きんり</rt></ruby>を<ruby>上<rt>あ</rt></ruby>げるかもしれません。</p><p><ruby>円<rt>えん</rt></ruby>の<ruby>価値<rt>かち</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がると、<ruby>外国<rt>がいこく</rt></ruby>からの<ruby>輸入<rt>ゆにゅう</rt></ruby><ruby>品<rt>ひん</rt></ruby>が<ruby>高<rt>たか</rt></ruby>くなります。<ruby>政府<rt>せいふ</rt></ruby>は<ruby>円<rt>えん</rt></ruby>の<ruby>価値<rt>かち</rt></ruby>を<ruby>守<rt>まも</rt></ruby>るために<ruby>動<rt>うご</rt></ruby>いています。</p>",
+      "outline": "日本銀行は金利を1%に決めました。物価の上昇が続いています。",
+      "audio_url": null,
+      "image_url": null,
+      "url": "https://www3.nhk.or.jp/news/easy/k1001483701/k1001483701.html",
+      "published_at": "2026-08-01T09:00:00+09:00",
+      "word_count": 25,
+      "fetched_at": "2026-08-03T16:25:01+09:00"
+    },
+    {
+      "news_id": "k1001483702",
+      "title": "隅田川の花火大会",
+      "title_with_ruby": "<ruby>隅田川<rt>すみだがわ</rt></ruby>の<ruby>花火大会<rt>はなびたいかい</rt></ruby>",
+      "body": "東京の隅田川で、7月25日に花火大会がありました。今年は新型コロナウイルスの後、4年ぶりの普通の大会でした。",
+      "body_html": "<p><ruby>東京<rt>とうきょう</rt></ruby>の<ruby>隅田川<rt>すみだがわ</rt></ruby>で、7<ruby>月<rt>がつ</rt></ruby>25<ruby>日<rt>にち</rt></ruby>に<ruby>花火大会<rt>はなびたいかい</rt></ruby>がありました。<ruby>今年<rt>ことし</rt></ruby>は<ruby>新型<rt>しんがた</rt></ruby>コロナウイルスの<ruby>後<rt>あと</rt></ruby>、4<ruby>年<rt>ねん</rt></ruby>ぶりの<ruby>普通<rt>ふつう</rt></ruby>の<ruby>大会<rt>たいかい</rt></ruby>でした。</p><p><ruby>会場<rt>かいじょう</rt></ruby>には100<ruby>万人以上<rt>まんにんいじょう</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が<ruby>来<rt>き</rt></ruby>ました。<ruby>浴衣<rt>ゆかた</rt></ruby>を<ruby>着<rt>き</rt></ruby>て<ruby>花火<rt>はなび</rt></ruby>を<ruby>見<rt>み</rt></ruby>る<ruby>人<rt>ひと</rt></ruby>がたくさんいました。</p><p><ruby>特別<rt>とくべつ</rt></ruby>な<ruby>花火<rt>はなび</rt></ruby>も<ruby>上<rt>あ</rt></ruby>がりました。<ruby>色<rt>いろ</rt></ruby>とりどりの<ruby>花火<rt>はなび</rt></ruby>が<ruby>夜空<rt>よぞら</rt></ruby>を<ruby>美<rt>うつく</rt></ruby>しく<ruby>飾<rt>かざ</rt></ruby>りました。<ruby>来年<rt>らいねん</rt></ruby>も<ruby>開催<rt>かいさい</rt></ruby>される<ruby>予定<rt>よてい</rt></ruby>です。</p>",
+      "outline": "隅田川の花火大会が4年ぶりに普通で開催されました。100万人以上が訪れました。",
+      "audio_url": "https://nhks-vh.akamaihd.net/i/news/easy/k1001483702.mp3",
+      "image_url": "https://www3.nhk.or.jp/news/easy/k1001483702/k1001483702.jpg",
+      "url": "https://www3.nhk.or.jp/news/easy/k1001483702/k1001483702.html",
+      "published_at": "2026-07-26T08:00:00+09:00",
+      "word_count": 28,
+      "fetched_at": "2026-08-03T16:25:02+09:00"
+    }
+  ]
+}

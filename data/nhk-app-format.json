@@ -1,0 +1,428 @@
+{
+  "version": "2026-08-03",
+  "source": "https://www3.nhk.or.jp/news/easy/",
+  "fetched_at": "2026-08-03T16:25:00+09:00",
+  "default_level": "N3",
+  "items": [
+    {
+      "id": "nhk-k1001483700",
+      "badge": "N3",
+      "date": "8月1日",
+      "title_jp": "<ruby>熊本<rt>くまもと</rt></ruby><ruby>県<rt>けん</rt></ruby>で<ruby>地震<rt>じしん</rt></ruby>",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://www3.nhk.or.jp/news/easy/k1001483700/k1001483700.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/k1001483700.html",
+      "audioUrl": "https://nhks-vh.akamaihd.net/i/news/easy/k1001483700.mp3",
+      "body": [
+        "7<ruby>月<rt>がつ</rt></ruby>31<ruby>日<rt>にち</rt></ruby>、<ruby>九州<rt>きゅうしゅう</rt></ruby>の<ruby>熊本<rt>くまもと</rt></ruby><ruby>県<rt>けん</rt></ruby>で<ruby>大<rt>おお</rt></ruby>きな<ruby>地震<rt>じしん</rt></ruby>がありました。<ruby>地震<rt>じしん</rt></ruby>の<ruby>規模<rt>きぼ</rt></ruby>はマグニチュード7.1でした。この<ruby>地震<rt>じしん</rt></ruby>で、3<ruby>人<rt>にん</rt></ruby>が<ruby>亡<rt>な</rt></ruby>くなりました。けがを<ruby>した<rt>した</rt></ruby><ruby>人<rt>ひと</rt></ruby>もたくさんいます。",
+        "<ruby>政府<rt>せいふ</rt></ruby>は、<ruby>逃<rt>に</rt></ruby>げる<ruby>場所<rt>ばしょ</rt></ruby>がない<ruby>人<rt>ひと</rt></ruby>のために<ruby>避難所<rt>ひなんじょ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>っています。<ruby>多<rt>おお</rt></ruby>くの<ruby>人<rt>ひと</rt></ruby>が<ruby>避難所<rt>ひなんじょ</rt></ruby>で<ruby>生活<rt>せいかつ</rt></ruby>しています。<ruby>水道<rt>すいどう</rt></ruby>と<ruby>電気<rt>でんき</rt></ruby>が<ruby>止<rt>と</rt></ruby>まっている<ruby>家<rt>いえ</rt></ruby>もあります。",
+        "<ruby>日本<rt>にほん</rt></ruby>の<ruby>気象庁<rt>きしょうちょう</rt></ruby>は、<ruby>今後<rt>こんご</rt></ruby>も<ruby>余震<rt>よしん</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>くと<ruby>言<rt>い</rt></ruby>っています。<ruby>住<rt>す</rt></ruby>んでいる<ruby>人<rt>ひと</rt></ruby>は<ruby>気<rt>き</rt></ruby>を<ruby>付<rt>つ</rt></ruby>けてください。"
+      ],
+      "words": [
+        {
+          "word": "月",
+          "kana": "がつ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "日",
+          "kana": "にち",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "九州",
+          "kana": "きゅうしゅう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "熊本",
+          "kana": "くまもと",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "県",
+          "kana": "けん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "大",
+          "kana": "おお",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "地震",
+          "kana": "じしん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "規模",
+          "kana": "きぼ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "人",
+          "kana": "にん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "亡",
+          "kana": "な",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "した",
+          "kana": "した",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "人",
+          "kana": "ひと",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "政府",
+          "kana": "せいふ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "逃",
+          "kana": "に",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "場所",
+          "kana": "ばしょ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "避難所",
+          "kana": "ひなんじょ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "作",
+          "kana": "つく",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "多",
+          "kana": "おお",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "生活",
+          "kana": "せいかつ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "水道",
+          "kana": "すいどう",
+          "meaning": "",
+          "pos": ""
+        }
+      ],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-k1001483701",
+      "badge": "N3",
+      "date": "8月1日",
+      "title_jp": "<ruby>日本銀行<rt>にほんぎんこう</rt></ruby> <ruby>金利<rt>きんり</rt></ruby>を1%に<ruby>決<rt>き</rt></ruby>める",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
+      "externalUrl": "https://www3.nhk.or.jp/news/k1001483701.html",
+      "audioUrl": null,
+      "body": [
+        "<ruby>日本銀行<rt>にほんぎんこう</rt></ruby>は7<ruby>月<rt>がつ</rt></ruby>31<ruby>日<rt>にち</rt></ruby>、お<ruby>金<rt>かね</rt></ruby>の<ruby>貸<rt>か</rt></ruby>す<ruby>時<rt>とき</rt></ruby>の<ruby>金利<rt>きんり</rt></ruby>を1%に<ruby>決<rt>き</rt></ruby>めました。<ruby>前<rt>まえ</rt></ruby>と<ruby>同<rt>おな</rt></ruby>じです。",
+        "<ruby>日本銀行<rt>にほんぎんこう</rt></ruby>は、<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がることが<ruby>続<rt>つづ</rt></ruby>いていると<ruby>話<rt>はな</rt></ruby>しました。<ruby>将来<rt>しょうらい</rt></ruby>は<ruby>金利<rt>きんり</rt></ruby>を<ruby>上<rt>あ</rt></ruby>げるかもしれません。",
+        "<ruby>円<rt>えん</rt></ruby>の<ruby>価値<rt>かち</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がると、<ruby>外国<rt>がいこく</rt></ruby>からの<ruby>輸入<rt>ゆにゅう</rt></ruby><ruby>品<rt>ひん</rt></ruby>が<ruby>高<rt>たか</rt></ruby>くなります。<ruby>政府<rt>せいふ</rt></ruby>は<ruby>円<rt>えん</rt></ruby>の<ruby>価値<rt>かち</rt></ruby>を<ruby>守<rt>まも</rt></ruby>るために<ruby>動<rt>うご</rt></ruby>いています。"
+      ],
+      "words": [
+        {
+          "word": "日本銀行",
+          "kana": "にほんぎんこう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "月",
+          "kana": "がつ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "日",
+          "kana": "にち",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "金",
+          "kana": "かね",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "貸",
+          "kana": "か",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "時",
+          "kana": "とき",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "金利",
+          "kana": "きんり",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "決",
+          "kana": "き",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "前",
+          "kana": "まえ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "同",
+          "kana": "おな",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "物価",
+          "kana": "ぶっか",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "上",
+          "kana": "あ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "続",
+          "kana": "つづ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "話",
+          "kana": "はな",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "将来",
+          "kana": "しょうらい",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "円",
+          "kana": "えん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "価値",
+          "kana": "かち",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "下",
+          "kana": "さ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "外国",
+          "kana": "がいこく",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "輸入",
+          "kana": "ゆにゅう",
+          "meaning": "",
+          "pos": ""
+        }
+      ],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-k1001483702",
+      "badge": "N3",
+      "date": "7月26日",
+      "title_jp": "<ruby>隅田川<rt>すみだがわ</rt></ruby>の<ruby>花火大会<rt>はなびたいかい</rt></ruby>",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://www3.nhk.or.jp/news/easy/k1001483702/k1001483702.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/k1001483702.html",
+      "audioUrl": "https://nhks-vh.akamaihd.net/i/news/easy/k1001483702.mp3",
+      "body": [
+        "<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>隅田川<rt>すみだがわ</rt></ruby>で、7<ruby>月<rt>がつ</rt></ruby>25<ruby>日<rt>にち</rt></ruby>に<ruby>花火大会<rt>はなびたいかい</rt></ruby>がありました。<ruby>今年<rt>ことし</rt></ruby>は<ruby>新型<rt>しんがた</rt></ruby>コロナウイルスの<ruby>後<rt>あと</rt></ruby>、4<ruby>年<rt>ねん</rt></ruby>ぶりの<ruby>普通<rt>ふつう</rt></ruby>の<ruby>大会<rt>たいかい</rt></ruby>でした。",
+        "<ruby>会場<rt>かいじょう</rt></ruby>には100<ruby>万人以上<rt>まんにんいじょう</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が<ruby>来<rt>き</rt></ruby>ました。<ruby>浴衣<rt>ゆかた</rt></ruby>を<ruby>着<rt>き</rt></ruby>て<ruby>花火<rt>はなび</rt></ruby>を<ruby>見<rt>み</rt></ruby>る<ruby>人<rt>ひと</rt></ruby>がたくさんいました。",
+        "<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>花火<rt>はなび</rt></ruby>も<ruby>上<rt>あ</rt></ruby>がりました。<ruby>色<rt>いろ</rt></ruby>とりどりの<ruby>花火<rt>はなび</rt></ruby>が<ruby>夜空<rt>よぞら</rt></ruby>を<ruby>美<rt>うつく</rt></ruby>しく<ruby>飾<rt>かざ</rt></ruby>りました。<ruby>来年<rt>らいねん</rt></ruby>も<ruby>開催<rt>かいさい</rt></ruby>される<ruby>予定<rt>よてい</rt></ruby>です。"
+      ],
+      "words": [
+        {
+          "word": "東京",
+          "kana": "とうきょう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "隅田川",
+          "kana": "すみだがわ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "月",
+          "kana": "がつ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "日",
+          "kana": "にち",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "花火大会",
+          "kana": "はなびたいかい",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "今年",
+          "kana": "ことし",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "新型",
+          "kana": "しんがた",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "後",
+          "kana": "あと",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "年",
+          "kana": "ねん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "普通",
+          "kana": "ふつう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "大会",
+          "kana": "たいかい",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "会場",
+          "kana": "かいじょう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "万人以上",
+          "kana": "まんにんいじょう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "人",
+          "kana": "ひと",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "来",
+          "kana": "き",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "浴衣",
+          "kana": "ゆかた",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "着",
+          "kana": "き",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "花火",
+          "kana": "はなび",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "見",
+          "kana": "み",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "特別",
+          "kana": "とくべつ",
+          "meaning": "",
+          "pos": ""
+        }
+      ],
+      "source": "NHK Easy News"
+    }
+  ]
+}
