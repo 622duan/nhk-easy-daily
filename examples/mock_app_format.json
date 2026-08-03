@@ -1,0 +1,319 @@
+{
+  "version": "2026-08-03",
+  "source": "https://www3.nhk.or.jp/news/easy/",
+  "fetched_at": "2026-08-03T09:00:00+09:00",
+  "default_level": "N3",
+  "items": [
+    {
+      "id": "nhk-k1001483657",
+      "badge": "N3",
+      "date": "8月3日",
+      "title_jp": "<ruby>東京<rt>とうきょう</rt></ruby>で<ruby>新<rt>あたら</rt></ruby>しい<ruby>花火<rt>はなび</rt></ruby>の<ruby>大会<rt>たいかい</rt></ruby>",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://www3.nhk.or.jp/news/easy/k1001483657/k1001483657.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/k1001483657.html",
+      "audioUrl": "https://nhks-vh.akamaihd.net/i/news/easy/k1001483657.mp3",
+      "body": [
+        "<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>隅田川<rt>すみだがわ</rt></ruby>で、<ruby>新<rt>あたら</rt></ruby>しい<ruby>花火<rt>はなび</rt></ruby>の<ruby>大会<rt>たいかい</rt></ruby>が<ruby>始<rt>はじ</rt></ruby>まりました。",
+        "この<ruby>大会<rt>たいかい</rt></ruby>は、<ruby>毎年<rt>まいとし</rt></ruby><ruby>夏<rt>なつ</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>われる<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>行事<rt>ぎょうじ</rt></ruby>です。",
+        "<ruby>今年<rt>ことし</rt></ruby>は、<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>花火<rt>はなび</rt></ruby>が1<ruby>万<rt>まん</rt></ruby><ruby>発<rt>はつ</rt></ruby><ruby>打<rt>う</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>げられます。",
+        "<ruby>会場<rt>かいじょう</rt></ruby>には、<ruby>多<rt>おお</rt></ruby>くの<ruby>人<rt>ひと</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まりました。"
+      ],
+      "words": [
+        {
+          "word": "東京",
+          "kana": "とうきょう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "隅田川",
+          "kana": "すみだがわ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "新",
+          "kana": "あたら",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "花火",
+          "kana": "はなび",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "大会",
+          "kana": "たいかい",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "始",
+          "kana": "はじ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "毎年",
+          "kana": "まいとし",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "夏",
+          "kana": "なつ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "行",
+          "kana": "おこな",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "有名",
+          "kana": "ゆうめい",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "行事",
+          "kana": "ぎょうじ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "今年",
+          "kana": "ことし",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "特別",
+          "kana": "とくべつ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "万",
+          "kana": "まん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "発",
+          "kana": "はつ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "打",
+          "kana": "う",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "上",
+          "kana": "あ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "会場",
+          "kana": "かいじょう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "多",
+          "kana": "おお",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "人",
+          "kana": "ひと",
+          "meaning": "",
+          "pos": ""
+        }
+      ],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-k1001483658",
+      "badge": "N3",
+      "date": "8月3日",
+      "title_jp": "<ruby>日本<rt>にほん</rt></ruby>の<ruby>夏祭<rt>なつまつ</rt></ruby>り",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
+      "externalUrl": "https://www3.nhk.or.jp/news/k1001483658.html",
+      "audioUrl": "https://nhks-vh.akamaihd.net/i/news/easy/k1001483658.mp3",
+      "body": [
+        "<ruby>日本<rt>にほん</rt></ruby>では、<ruby>夏<rt>なつ</rt></ruby>になると<ruby>各地<rt>かくち</rt></ruby>で<ruby>祭<rt>まつ</rt></ruby>りが<ruby>行<rt>おこな</rt></ruby>われます。",
+        "<ruby>浴衣<rt>ゆかた</rt></ruby>を<ruby>着<rt>き</rt></ruby>て、<ruby>屋台<rt>やたい</rt></ruby>で<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>を<ruby>買<rt>か</rt></ruby>うのが<ruby>楽<rt>たの</rt></ruby>しいです。"
+      ],
+      "words": [
+        {
+          "word": "日本",
+          "kana": "にほん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "夏",
+          "kana": "なつ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "各地",
+          "kana": "かくち",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "祭",
+          "kana": "まつ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "行",
+          "kana": "おこな",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "浴衣",
+          "kana": "ゆかた",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "着",
+          "kana": "き",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "屋台",
+          "kana": "やたい",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "食",
+          "kana": "た",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "物",
+          "kana": "もの",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "買",
+          "kana": "か",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "楽",
+          "kana": "たの",
+          "meaning": "",
+          "pos": ""
+        }
+      ],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-k1001483659",
+      "badge": "N3",
+      "date": "8月3日",
+      "title_jp": "<ruby>駅<rt>えき</rt></ruby>で<ruby>新<rt>あたら</rt></ruby>しい<ruby>切符<rt>きっぷ</rt></ruby>",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
+      "externalUrl": "https://www3.nhk.or.jp/news/k1001483659.html",
+      "audioUrl": null,
+      "body": [
+        "<ruby>私<rt>わたし</rt></ruby>は<ruby>今日<rt>きょう</rt></ruby>、<ruby>駅<rt>えき</rt></ruby>で<ruby>新<rt>あたら</rt></ruby>しい<ruby>切符<rt>きっぷ</rt></ruby>を<ruby>買<rt>か</rt></ruby>いました。",
+        "<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>窓<rt>まど</rt></ruby>から<ruby>富士山<rt>ふじさん</rt></ruby>が<ruby>見<rt>み</rt></ruby>えます。"
+      ],
+      "words": [
+        {
+          "word": "私",
+          "kana": "わたし",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "今日",
+          "kana": "きょう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "駅",
+          "kana": "えき",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "新",
+          "kana": "あたら",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "切符",
+          "kana": "きっぷ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "買",
+          "kana": "か",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "電車",
+          "kana": "でんしゃ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "窓",
+          "kana": "まど",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "富士山",
+          "kana": "ふじさん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "見",
+          "kana": "み",
+          "meaning": "",
+          "pos": ""
+        }
+      ],
+      "source": "NHK Easy News"
+    }
+  ]
+}

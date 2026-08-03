@@ -1,0 +1,49 @@
+{
+  "fetched_at": "2026-08-03T09:00:00+09:00",
+  "source": "https://www3.nhk.or.jp/news/easy/",
+  "article_count": 3,
+  "articles": [
+    {
+      "news_id": "k1001483657",
+      "title": "東京で新しい花火の大会",
+      "title_with_ruby": "<ruby>東京<rt>とうきょう</rt></ruby>で<ruby>新<rt>あたら</rt></ruby>しい<ruby>花火<rt>はなび</rt></ruby>の<ruby>大会<rt>たいかい</rt></ruby>",
+      "body": "東京の隅田川で、新しい花火の大会が始まりました。この大会は、毎年夏に行われる有名な行事です。今年は、特別な花火が1万発打ち上げられます。会場には、多くの人が集まりました。花火の大会は、来週の日曜日まで続きます。",
+      "body_html": "<p><ruby>東京<rt>とうきょう</rt></ruby>の<ruby>隅田川<rt>すみだがわ</rt></ruby>で、<ruby>新<rt>あたら</rt></ruby>しい<ruby>花火<rt>はなび</rt></ruby>の<ruby>大会<rt>たいかい</rt></ruby>が<ruby>始<rt>はじ</rt></ruby>まりました。</p><p>この<ruby>大会<rt>たいかい</rt></ruby>は、<ruby>毎年<rt>まいとし</rt></ruby><ruby>夏<rt>なつ</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>われる<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>行事<rt>ぎょうじ</rt></ruby>です。</p><p><ruby>今年<rt>ことし</rt></ruby>は、<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>花火<rt>はなび</rt></ruby>が1<ruby>万<rt>まん</rt></ruby><ruby>発<rt>はつ</rt></ruby><ruby>打<rt>う</rt></ruby>ち<ruby>上<rt>あ</rt></ruby>げられます。</p><p><ruby>会場<rt>かいじょう</rt></ruby>には、<ruby>多<rt>おお</rt></ruby>くの<ruby>人<rt>ひと</rt></ruby>が<ruby>集<rt>あつ</rt></ruby>まりました。</p>",
+      "outline": "東京で新しい花火大会が始まりました。週末まで続きます。",
+      "audio_url": "https://nhks-vh.akamaihd.net/i/news/easy/k1001483657.mp3",
+      "image_url": "https://www3.nhk.or.jp/news/easy/k1001483657/k1001483657.jpg",
+      "url": "https://www3.nhk.or.jp/news/easy/k1001483657/k1001483657.html",
+      "published_at": "2026-08-03T09:00:00+09:00",
+      "word_count": 18,
+      "fetched_at": "2026-08-03T11:00:00+09:00"
+    },
+    {
+      "news_id": "k1001483658",
+      "title": "日本の夏祭り",
+      "title_with_ruby": "<ruby>日本<rt>にほん</rt></ruby>の<ruby>夏祭<rt>なつまつ</rt></ruby>り",
+      "body": "日本では、夏になると各地で祭りが行われます。浴衣を着て、屋台で食べ物を買うのが楽しいです。",
+      "body_html": "<p><ruby>日本<rt>にほん</rt></ruby>では、<ruby>夏<rt>なつ</rt></ruby>になると<ruby>各地<rt>かくち</rt></ruby>で<ruby>祭<rt>まつ</rt></ruby>りが<ruby>行<rt>おこな</rt></ruby>われます。</p><p><ruby>浴衣<rt>ゆかた</rt></ruby>を<ruby>着<rt>き</rt></ruby>て、<ruby>屋台<rt>やたい</rt></ruby>で<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>を<ruby>買<rt>か</rt></ruby>うのが<ruby>楽<rt>たの</rt></ruby>しいです。</p>",
+      "outline": "日本の夏祭りは、各地で賑やかに行われています。",
+      "audio_url": "https://nhks-vh.akamaihd.net/i/news/easy/k1001483658.mp3",
+      "image_url": null,
+      "url": "https://www3.nhk.or.jp/news/easy/k1001483658/k1001483658.html",
+      "published_at": "2026-08-03T08:30:00+09:00",
+      "word_count": 9,
+      "fetched_at": "2026-08-03T11:00:01+09:00"
+    },
+    {
+      "news_id": "k1001483659",
+      "title": "駅で新しい切符",
+      "title_with_ruby": "<ruby>駅<rt>えき</rt></ruby>で<ruby>新<rt>あたら</rt></ruby>しい<ruby>切符<rt>きっぷ</rt></ruby>",
+      "body": "私は今日、駅で新しい切符を買いました。電車の窓から富士山が見えます。",
+      "body_html": "<p><ruby>私<rt>わたし</rt></ruby>は<ruby>今日<rt>きょう</rt></ruby>、<ruby>駅<rt>えき</rt></ruby>で<ruby>新<rt>あたら</rt></ruby>しい<ruby>切符<rt>きっぷ</rt></ruby>を<ruby>買<rt>か</rt></ruby>いました。</p><p><ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>窓<rt>まど</rt></ruby>から<ruby>富士山<rt>ふじさん</rt></ruby>が<ruby>見<rt>み</rt></ruby>えます。</p>",
+      "outline": "駅で新しい切符が売られています。",
+      "audio_url": null,
+      "image_url": null,
+      "url": "https://www3.nhk.or.jp/news/easy/k1001483659/k1001483659.html",
+      "published_at": "2026-08-03T07:00:00+09:00",
+      "word_count": 8,
+      "fetched_at": "2026-08-03T11:00:02+09:00"
+    }
+  ]
+}
