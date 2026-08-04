@@ -1,405 +1,29 @@
 {
-  "version": "2026-08-03",
+  "version": "2026-08-04",
   "source": "https://www3.nhk.or.jp/news/easy/",
-  "fetched_at": "2026-08-03T16:25:00+09:00",
+  "fetched_at": "2026-08-04T09:30:00+09:00",
   "default_level": "N3",
   "items": [
     {
-      "id": "nhk-k1001483700",
+      "id": "nhk-k1001483800",
       "badge": "N3",
-      "date": "8月1日",
-      "title_jp": "<ruby>熊本<rt>くまもと</rt></ruby><ruby>県<rt>けん</rt></ruby>で<ruby>地震<rt>じしん</rt></ruby>",
-      "title_zh": "",
-      "duration": "1:00",
-      "plays": "new",
-      "thumb": "https://www3.nhk.or.jp/news/easy/k1001483700/k1001483700.jpg",
-      "externalUrl": "https://www3.nhk.or.jp/news/k1001483700.html",
-      "audioUrl": "https://nhks-vh.akamaihd.net/i/news/easy/k1001483700.mp3",
-      "body": [
-        "7<ruby>月<rt>がつ</rt></ruby>31<ruby>日<rt>にち</rt></ruby>、<ruby>九州<rt>きゅうしゅう</rt></ruby>の<ruby>熊本<rt>くまもと</rt></ruby><ruby>県<rt>けん</rt></ruby>で<ruby>大<rt>おお</rt></ruby>きな<ruby>地震<rt>じしん</rt></ruby>がありました。<ruby>地震<rt>じしん</rt></ruby>の<ruby>規模<rt>きぼ</rt></ruby>はマグニチュード7.1でした。この<ruby>地震<rt>じしん</rt></ruby>で、3<ruby>人<rt>にん</rt></ruby>が<ruby>亡<rt>な</rt></ruby>くなりました。けがを<ruby>した<rt>した</rt></ruby><ruby>人<rt>ひと</rt></ruby>もたくさんいます。",
-        "<ruby>政府<rt>せいふ</rt></ruby>は、<ruby>逃<rt>に</rt></ruby>げる<ruby>場所<rt>ばしょ</rt></ruby>がない<ruby>人<rt>ひと</rt></ruby>のために<ruby>避難所<rt>ひなんじょ</rt></ruby>を<ruby>作<rt>つく</rt></ruby>っています。<ruby>多<rt>おお</rt></ruby>くの<ruby>人<rt>ひと</rt></ruby>が<ruby>避難所<rt>ひなんじょ</rt></ruby>で<ruby>生活<rt>せいかつ</rt></ruby>しています。<ruby>水道<rt>すいどう</rt></ruby>と<ruby>電気<rt>でんき</rt></ruby>が<ruby>止<rt>と</rt></ruby>まっている<ruby>家<rt>いえ</rt></ruby>もあります。",
-        "<ruby>日本<rt>にほん</rt></ruby>の<ruby>気象庁<rt>きしょうちょう</rt></ruby>は、<ruby>今後<rt>こんご</rt></ruby>も<ruby>余震<rt>よしん</rt></ruby>が<ruby>続<rt>つづ</rt></ruby>くと<ruby>言<rt>い</rt></ruby>っています。<ruby>住<rt>す</rt></ruby>んでいる<ruby>人<rt>ひと</rt></ruby>は<ruby>気<rt>き</rt></ruby>を<ruby>付<rt>つ</rt></ruby>けてください。"
-      ],
-      "words": [
-        {
-          "word": "月",
-          "kana": "がつ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "日",
-          "kana": "にち",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "九州",
-          "kana": "きゅうしゅう",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "熊本",
-          "kana": "くまもと",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "県",
-          "kana": "けん",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "大",
-          "kana": "おお",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "地震",
-          "kana": "じしん",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "規模",
-          "kana": "きぼ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "人",
-          "kana": "にん",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "亡",
-          "kana": "な",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "した",
-          "kana": "した",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "人",
-          "kana": "ひと",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "政府",
-          "kana": "せいふ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "逃",
-          "kana": "に",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "場所",
-          "kana": "ばしょ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "避難所",
-          "kana": "ひなんじょ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "作",
-          "kana": "つく",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "多",
-          "kana": "おお",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "生活",
-          "kana": "せいかつ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "水道",
-          "kana": "すいどう",
-          "meaning": "",
-          "pos": ""
-        }
-      ],
-      "source": "NHK Easy News"
-    },
-    {
-      "id": "nhk-k1001483701",
-      "badge": "N3",
-      "date": "8月1日",
-      "title_jp": "<ruby>日本銀行<rt>にほんぎんこう</rt></ruby> <ruby>金利<rt>きんり</rt></ruby>を1%に<ruby>決<rt>き</rt></ruby>める",
+      "date": "8月4日",
+      "title_jp": "<ruby>環境<rt>かんきょう</rt></ruby>にいい<ruby>花火<rt>はなび</rt></ruby>",
       "title_zh": "",
       "duration": "1:00",
       "plays": "new",
       "thumb": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
-      "externalUrl": "https://www3.nhk.or.jp/news/k1001483701.html",
+      "externalUrl": "https://www3.nhk.or.jp/news/k1001483800.html",
       "audioUrl": null,
       "body": [
-        "<ruby>日本銀行<rt>にほんぎんこう</rt></ruby>は7<ruby>月<rt>がつ</rt></ruby>31<ruby>日<rt>にち</rt></ruby>、お<ruby>金<rt>かね</rt></ruby>の<ruby>貸<rt>か</rt></ruby>す<ruby>時<rt>とき</rt></ruby>の<ruby>金利<rt>きんり</rt></ruby>を1%に<ruby>決<rt>き</rt></ruby>めました。<ruby>前<rt>まえ</rt></ruby>と<ruby>同<rt>おな</rt></ruby>じです。",
-        "<ruby>日本銀行<rt>にほんぎんこう</rt></ruby>は、<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がることが<ruby>続<rt>つづ</rt></ruby>いていると<ruby>話<rt>はな</rt></ruby>しました。<ruby>将来<rt>しょうらい</rt></ruby>は<ruby>金利<rt>きんり</rt></ruby>を<ruby>上<rt>あ</rt></ruby>げるかもしれません。",
-        "<ruby>円<rt>えん</rt></ruby>の<ruby>価値<rt>かち</rt></ruby>が<ruby>下<rt>さ</rt></ruby>がると、<ruby>外国<rt>がいこく</rt></ruby>からの<ruby>輸入<rt>ゆにゅう</rt></ruby><ruby>品<rt>ひん</rt></ruby>が<ruby>高<rt>たか</rt></ruby>くなります。<ruby>政府<rt>せいふ</rt></ruby>は<ruby>円<rt>えん</rt></ruby>の<ruby>価値<rt>かち</rt></ruby>を<ruby>守<rt>まも</rt></ruby>るために<ruby>動<rt>うご</rt></ruby>いています。"
+        "<ruby>日本<rt>にほん</rt></ruby>の<ruby>花火<rt>はなび</rt></ruby>メーカーが<ruby>大学<rt>だいがく</rt></ruby>と<ruby>協力<rt>きょうりょく</rt></ruby>して、ごみが<ruby>残<rt>のこ</rt></ruby>らない<ruby>新<rt>あたら</rt></ruby>しい<ruby>花火<rt>はなび</rt></ruby>を<ruby>作<rt>つく</rt></ruby>りました。",
+        "この<ruby>花火<rt>はなび</rt></ruby>は<ruby>水<rt>みず</rt></ruby>にとける<ruby>材料<rt>ざいりょう</rt></ruby>でできています。<ruby>普通<rt>ふつう</rt></ruby>の<ruby>花火<rt>はなび</rt></ruby>は<ruby>使<rt>つか</rt></ruby>ったあとに<ruby>紙<rt>かみ</rt></ruby>やプラスチックが<ruby>残<rt>のこ</rt></ruby>ります。でも、<ruby>新<rt>あたら</rt></ruby>しい<ruby>花火<rt>はなび</rt></ruby>は<ruby>水<rt>みず</rt></ruby>で<ruby>流<rt>なが</rt></ruby>すとなくなります。",
+        "8月2日に<ruby>名古屋<rt>なごや</rt></ruby>で<ruby>開<rt>ひら</rt></ruby>かれた<ruby>世界<rt>せかい</rt></ruby>コスプレ<ruby>大会<rt>たいかい</rt></ruby>で<ruby>初<rt>はじ</rt></ruby>めて<ruby>使<rt>つか</rt></ruby>われました。<ruby>環境<rt>かんきょう</rt></ruby>を<ruby>守<rt>まも</rt></ruby>る<ruby>花火<rt>はなび</rt></ruby>として、<ruby>期待<rt>きたい</rt></ruby>されています。"
       ],
       "words": [
         {
-          "word": "日本銀行",
-          "kana": "にほんぎんこう",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "月",
-          "kana": "がつ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "日",
-          "kana": "にち",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "金",
-          "kana": "かね",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "貸",
-          "kana": "か",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "時",
-          "kana": "とき",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "金利",
-          "kana": "きんり",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "決",
-          "kana": "き",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "前",
-          "kana": "まえ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "同",
-          "kana": "おな",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "物価",
-          "kana": "ぶっか",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "上",
-          "kana": "あ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "続",
-          "kana": "つづ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "話",
-          "kana": "はな",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "将来",
-          "kana": "しょうらい",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "円",
-          "kana": "えん",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "価値",
-          "kana": "かち",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "下",
-          "kana": "さ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "外国",
-          "kana": "がいこく",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "輸入",
-          "kana": "ゆにゅう",
-          "meaning": "",
-          "pos": ""
-        }
-      ],
-      "source": "NHK Easy News"
-    },
-    {
-      "id": "nhk-k1001483702",
-      "badge": "N3",
-      "date": "7月26日",
-      "title_jp": "<ruby>隅田川<rt>すみだがわ</rt></ruby>の<ruby>花火大会<rt>はなびたいかい</rt></ruby>",
-      "title_zh": "",
-      "duration": "1:00",
-      "plays": "new",
-      "thumb": "https://www3.nhk.or.jp/news/easy/k1001483702/k1001483702.jpg",
-      "externalUrl": "https://www3.nhk.or.jp/news/k1001483702.html",
-      "audioUrl": "https://nhks-vh.akamaihd.net/i/news/easy/k1001483702.mp3",
-      "body": [
-        "<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>隅田川<rt>すみだがわ</rt></ruby>で、7<ruby>月<rt>がつ</rt></ruby>25<ruby>日<rt>にち</rt></ruby>に<ruby>花火大会<rt>はなびたいかい</rt></ruby>がありました。<ruby>今年<rt>ことし</rt></ruby>は<ruby>新型<rt>しんがた</rt></ruby>コロナウイルスの<ruby>後<rt>あと</rt></ruby>、4<ruby>年<rt>ねん</rt></ruby>ぶりの<ruby>普通<rt>ふつう</rt></ruby>の<ruby>大会<rt>たいかい</rt></ruby>でした。",
-        "<ruby>会場<rt>かいじょう</rt></ruby>には100<ruby>万人以上<rt>まんにんいじょう</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>が<ruby>来<rt>き</rt></ruby>ました。<ruby>浴衣<rt>ゆかた</rt></ruby>を<ruby>着<rt>き</rt></ruby>て<ruby>花火<rt>はなび</rt></ruby>を<ruby>見<rt>み</rt></ruby>る<ruby>人<rt>ひと</rt></ruby>がたくさんいました。",
-        "<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>花火<rt>はなび</rt></ruby>も<ruby>上<rt>あ</rt></ruby>がりました。<ruby>色<rt>いろ</rt></ruby>とりどりの<ruby>花火<rt>はなび</rt></ruby>が<ruby>夜空<rt>よぞら</rt></ruby>を<ruby>美<rt>うつく</rt></ruby>しく<ruby>飾<rt>かざ</rt></ruby>りました。<ruby>来年<rt>らいねん</rt></ruby>も<ruby>開催<rt>かいさい</rt></ruby>される<ruby>予定<rt>よてい</rt></ruby>です。"
-      ],
-      "words": [
-        {
-          "word": "東京",
-          "kana": "とうきょう",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "隅田川",
-          "kana": "すみだがわ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "月",
-          "kana": "がつ",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "日",
-          "kana": "にち",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "花火大会",
-          "kana": "はなびたいかい",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "今年",
-          "kana": "ことし",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "新型",
-          "kana": "しんがた",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "後",
-          "kana": "あと",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "年",
-          "kana": "ねん",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "普通",
-          "kana": "ふつう",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "大会",
-          "kana": "たいかい",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "会場",
-          "kana": "かいじょう",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "万人以上",
-          "kana": "まんにんいじょう",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "人",
-          "kana": "ひと",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "来",
-          "kana": "き",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "浴衣",
-          "kana": "ゆかた",
-          "meaning": "",
-          "pos": ""
-        },
-        {
-          "word": "着",
-          "kana": "き",
+          "word": "日本",
+          "kana": "にほん",
           "meaning": "",
           "pos": ""
         },
@@ -410,14 +34,390 @@
           "pos": ""
         },
         {
-          "word": "見",
-          "kana": "み",
+          "word": "大学",
+          "kana": "だいがく",
           "meaning": "",
           "pos": ""
         },
         {
-          "word": "特別",
-          "kana": "とくべつ",
+          "word": "協力",
+          "kana": "きょうりょく",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "残",
+          "kana": "のこ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "新",
+          "kana": "あたら",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "作",
+          "kana": "つく",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "水",
+          "kana": "みず",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "材料",
+          "kana": "ざいりょう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "普通",
+          "kana": "ふつう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "使",
+          "kana": "つか",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "紙",
+          "kana": "かみ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "流",
+          "kana": "なが",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "名古屋",
+          "kana": "なごや",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "開",
+          "kana": "ひら",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "世界",
+          "kana": "せかい",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "大会",
+          "kana": "たいかい",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "初",
+          "kana": "はじ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "環境",
+          "kana": "かんきょう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "守",
+          "kana": "まも",
+          "meaning": "",
+          "pos": ""
+        }
+      ],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-k1001483801",
+      "badge": "N3",
+      "date": "8月4日",
+      "title_jp": "<ruby>京都<rt>きょうと</rt></ruby> <ruby>外国人<rt>がいこくじん</rt></ruby>が<ruby>増<rt>ふ</rt></ruby>えた",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
+      "externalUrl": "https://www3.nhk.or.jp/news/k1001483801.html",
+      "audioUrl": null,
+      "body": [
+        "<ruby>京都<rt>きょうと</rt></ruby>に<ruby>旅行<rt>りょこう</rt></ruby>で<ruby>来<rt>く</rt></ruby>る<ruby>外国人<rt>がいこくじん</rt></ruby>が<ruby>今<rt>いま</rt></ruby>までで<ruby>一番<rt>いちばん</rt></ruby><ruby>多<rt>おお</rt></ruby>くなりました。",
+        "7月の<ruby>京都<rt>きょうと</rt></ruby>の<ruby>市内<rt>しない</rt></ruby>には、<ruby>約<rt>やく</rt></ruby>85<ruby>万人<rt>まんにん</rt></ruby>の<ruby>外国人<rt>がいこくじん</rt></ruby>が<ruby>来<rt>き</rt></ruby>ました。<ruby>去年<rt>きょねん</rt></ruby>の<ruby>同<rt>おな</rt></ruby>じ<ruby>月<rt>つき</rt></ruby>より<ruby>15%増<rt>まし</rt></ruby>えました。",
+        "<ruby>中国人<rt>ちゅうごくじん</rt></ruby>と<ruby>台湾人<rt>たいわんじん</rt></ruby>が<ruby>一番<rt>いちばん</rt></ruby><ruby>多<rt>おお</rt></ruby>いです。<ruby>京都<rt>きょうと</rt></ruby>の<ruby>古<rt>ふる</rt></ruby>い<ruby>建物<rt>たてもの</rt></ruby>や<ruby>料理<rt>りょうり</rt></ruby>が<ruby>人気<rt>にんき</rt></ruby>です。でも、<ruby>今<rt>いま</rt></ruby>は<ruby>来<rt>こ</rt></ruby>ない<ruby>人<rt>ひと</rt></ruby>も<ruby>増<rt>ふ</rt></ruby>えていて、<ruby>京都<rt>きょうと</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>は<ruby>悩<rt>なや</rt></ruby>んでいます。"
+      ],
+      "words": [
+        {
+          "word": "京都",
+          "kana": "きょうと",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "旅行",
+          "kana": "りょこう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "来",
+          "kana": "く",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "外国人",
+          "kana": "がいこくじん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "今",
+          "kana": "いま",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "一番",
+          "kana": "いちばん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "多",
+          "kana": "おお",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "市内",
+          "kana": "しない",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "約",
+          "kana": "やく",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "万人",
+          "kana": "まんにん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "来",
+          "kana": "き",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "去年",
+          "kana": "きょねん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "同",
+          "kana": "おな",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "月",
+          "kana": "つき",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "15%増",
+          "kana": "まし",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "中国人",
+          "kana": "ちゅうごくじん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "台湾人",
+          "kana": "たいわんじん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "古",
+          "kana": "ふる",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "建物",
+          "kana": "たてもの",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "料理",
+          "kana": "りょうり",
+          "meaning": "",
+          "pos": ""
+        }
+      ],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-k1001483802",
+      "badge": "N3",
+      "date": "8月4日",
+      "title_jp": "<ruby>新幹線<rt>しんかんせん</rt></ruby>が<ruby>混<rt>こ</rt></ruby>む 8<ruby>月<rt>がつ</rt></ruby>14<ruby>日<rt>にち</rt></ruby>",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
+      "externalUrl": "https://www3.nhk.or.jp/news/k1001483802.html",
+      "audioUrl": null,
+      "body": [
+        "JRが<ruby>盆<rt>ぼん</rt></ruby>休みに<ruby>新幹線<rt>しんかんせん</rt></ruby>が<ruby>混<rt>こ</rt></ruby>む<ruby>日<rt>ひ</rt></ruby>を<ruby>発表<rt>はっぴょう</rt></ruby>しました。8<ruby>月<rt>がつ</rt></ruby>14<ruby>日<rt>にち</rt></ruby>が<ruby>一番<rt>いちばん</rt></ruby><ruby>混<rt>こ</rt></ruby>みます。",
+        "お<ruby>盆<rt>ぼん</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>の<ruby>古<rt>ふる</rt></ruby>い<ruby>行事<rt>ぎょうじ</rt></ruby>です。<ruby>多<rt>おお</rt></ruby>くの<ruby>人<rt>ひと</rt></ruby>が<ruby>故郷<rt>こきょう</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>ったり、<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>ったりします。",
+        "JRによると、8<ruby>月<rt>がつ</rt></ruby>14<ruby>日<rt>にち</rt></ruby>の<ruby>東海道<rt>とうかいどう</rt></ruby><ruby>新幹線<rt>しんかんせん</rt></ruby>は、シートの<ruby>割合<rt>わりあい</rt></ruby>が160%になります。<ruby>早<rt>はや</rt></ruby>めに<ruby>予約<rt>よやく</rt></ruby>したほうが<ruby>良<rt>よ</rt></ruby>いです。"
+      ],
+      "words": [
+        {
+          "word": "盆",
+          "kana": "ぼん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "新幹線",
+          "kana": "しんかんせん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "混",
+          "kana": "こ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "日",
+          "kana": "ひ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "発表",
+          "kana": "はっぴょう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "月",
+          "kana": "がつ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "日",
+          "kana": "にち",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "一番",
+          "kana": "いちばん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "日本",
+          "kana": "にほん",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "古",
+          "kana": "ふる",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "行事",
+          "kana": "ぎょうじ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "多",
+          "kana": "おお",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "人",
+          "kana": "ひと",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "故郷",
+          "kana": "こきょう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "帰",
+          "kana": "かえ",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "旅行",
+          "kana": "りょこう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "行",
+          "kana": "い",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "東海道",
+          "kana": "とうかいどう",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "割合",
+          "kana": "わりあい",
+          "meaning": "",
+          "pos": ""
+        },
+        {
+          "word": "早",
+          "kana": "はや",
           "meaning": "",
           "pos": ""
         }
