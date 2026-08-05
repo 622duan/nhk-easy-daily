@@ -1,7 +1,76 @@
 {
-  "version": "",
+  "version": "2026-08-05",
   "source": "https://www3.nhk.or.jp/news/easy/",
-  "fetched_at": "",
+  "fetched_at": "2026-08-05T12:01:38.384104+09:00",
   "default_level": "N3",
-  "items": []
+  "items": [
+    {
+      "id": "nhk-ne2026080413003",
+      "badge": "N3",
+      "date": "8月4日",
+      "title_jp": "<h1 class=\"_1j8ph3o5\" style=\"--_1j8ph3o0:calc(2.25rem * (var(--font-size-scale-factor, 1)));--_1j8ph3o1:calc(1.875rem * (var(--font-size-scale-factor, 1)))\">4万4000以上の家や建物で水道が止まっている | NHKやさしいことばニュース</h1>",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://news.web.nhk/news/html/20260804/K10015195871_2608041604_0804163240_01_02.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080413003.html",
+      "audioUrl": null,
+      "body": [
+        "熊本県では、4万4000以上の家や建物で水道が止まっています。 このため、いろいろな場所に水をもらうことができる給水所をつくっています。 ..."
+      ],
+      "words": [],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-ne2026080412568",
+      "badge": "N3",
+      "date": "8月4日",
+      "title_jp": "<h1 class=\"_1j8ph3o5\" style=\"--_1j8ph3o0:calc(2.25rem * (var(--font-size-scale-factor, 1)));--_1j8ph3o1:calc(1.875rem * (var(--font-size-scale-factor, 1)))\">梅雨が終わった　西日本などで厳しい暑さが続く | NHKやさしいことばニュース</h1>",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://news.web.nhk/news/html/20260804/K10015195591_2608041900_0804190304_01_02.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080412568.html",
+      "audioUrl": null,
+      "body": [
+        "気象庁は4日、北陸地方と東北地方の梅雨が終わったようだと言いました。 北海道は梅雨がないので、これで日本の全部の場所で梅雨が終わりました。..."
+      ],
+      "words": [],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-ne2026080412537",
+      "badge": "N3",
+      "date": "8月4日",
+      "title_jp": "<h1 class=\"_1j8ph3o5\" style=\"--_1j8ph3o0:calc(2.25rem * (var(--font-size-scale-factor, 1)));--_1j8ph3o1:calc(1.875rem * (var(--font-size-scale-factor, 1)))\">東京の動物園でライオン3頭が死んだ　熱中症か | NHKやさしいことばニュース</h1>",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://news.web.nhk/news/html/20260804/K10015195681_2608041830_0804183050_01_03.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080412537.html",
+      "audioUrl": null,
+      "body": [
+        "東京の多摩動物公園には、たくさんのライオンがいます。 見る人は特別なバスでライオンの近くに行くことができて、人気があります。 しかし、最近、..."
+      ],
+      "words": [],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-ne2026080412043",
+      "badge": "N3",
+      "date": "8月4日",
+      "title_jp": "<h1 class=\"_1j8ph3o5\" style=\"--_1j8ph3o0:calc(2.25rem * (var(--font-size-scale-factor, 1)));--_1j8ph3o1:calc(1.875rem * (var(--font-size-scale-factor, 1)))\">熊本の地震　「このあとも1週間ぐらいは強い地震に気をつけて」 | NHKやさしいことばニュース</h1>",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://news.web.nhk/news/html/20260804/K10015195771_2608041635_0804164909_01_02.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080412043.html",
+      "audioUrl": null,
+      "body": [
+        "熊本県で起こった震度7の地震から、4日で1週間です。 熊本県によると、38人が亡くなりました。この中には、地震と関係があるかまだはっきりわ..."
+      ],
+      "words": [],
+      "source": "NHK Easy News"
+    }
+  ]
 }

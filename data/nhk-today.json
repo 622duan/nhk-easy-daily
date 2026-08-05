@@ -1,1 +1,65 @@
-{"fetched_at": "", "source": "", "article_count": 0, "articles": []}
+{
+  "fetched_at": "2026-08-05T12:01:38.384104+09:00",
+  "source": "https://www3.nhk.or.jp/news/easy/",
+  "article_count": 4,
+  "used_yesterday": false,
+  "fetch_error": null,
+  "articles": [
+    {
+      "news_id": "ne2026080413003",
+      "title": "4万4000以上の家や建物で水道が止まっている",
+      "title_with_ruby": "<h1 class=\"_1j8ph3o5\" style=\"--_1j8ph3o0:calc(2.25rem * (var(--font-size-scale-factor, 1)));--_1j8ph3o1:calc(1.875rem * (var(--font-size-scale-factor, 1)))\">4万4000以上の家や建物で水道が止まっている | NHKやさしいことばニュース</h1>",
+      "body": "熊本県では、4万4000以上の家や建物で水道が止まっています。\n\nこのため、いろいろな場所に水をもらうことができる給水所をつくっています。\n...",
+      "body_html": "<p class=\"esl7kn2s _1yvk0f68\" style=\"--_1yvk0f60:#1f1f20;--_1yvk0f61:#f9f9f9;--_1yvk0f62:normal;--_1yvk0f63:1.5;--_1yvk0f64:calc(1rem * (var(--font-size-scale-factor, 1)));--_1yvk0f65:calc(1rem * (var(--font-size-scale-factor, 1)))\">熊本県では、4万4000以上の家や建物で水道が止まっています。\n\nこのため、いろいろな場所に水をもらうことができる給水所をつくっています。\n...</p>",
+      "outline": "",
+      "audio_url": null,
+      "image_url": "https://news.web.nhk/news/html/20260804/K10015195871_2608041604_0804163240_01_02.jpg",
+      "url": "https://news.web.nhk/news/easy/ne2026080413003/ne2026080413003.html",
+      "published_at": "2026-08-04T12:00:00+09:00",
+      "word_count": 18,
+      "fetched_at": "2026-08-05T12:01:34.070607+09:00"
+    },
+    {
+      "news_id": "ne2026080412568",
+      "title": "梅雨が終わった　西日本などで厳しい暑さが続く",
+      "title_with_ruby": "<h1 class=\"_1j8ph3o5\" style=\"--_1j8ph3o0:calc(2.25rem * (var(--font-size-scale-factor, 1)));--_1j8ph3o1:calc(1.875rem * (var(--font-size-scale-factor, 1)))\">梅雨が終わった　西日本などで厳しい暑さが続く | NHKやさしいことばニュース</h1>",
+      "body": "気象庁は4日、北陸地方と東北地方の梅雨が終わったようだと言いました。\n\n北海道は梅雨がないので、これで日本の全部の場所で梅雨が終わりました。...",
+      "body_html": "<p class=\"esl7kn2s _1yvk0f68\" style=\"--_1yvk0f60:#1f1f20;--_1yvk0f61:#f9f9f9;--_1yvk0f62:normal;--_1yvk0f63:1.5;--_1yvk0f64:calc(1rem * (var(--font-size-scale-factor, 1)));--_1yvk0f65:calc(1rem * (var(--font-size-scale-factor, 1)))\">気象庁は4日、北陸地方と東北地方の梅雨が終わったようだと言いました。\n\n北海道は梅雨がないので、これで日本の全部の場所で梅雨が終わりました。...</p>",
+      "outline": "",
+      "audio_url": null,
+      "image_url": "https://news.web.nhk/news/html/20260804/K10015195591_2608041900_0804190304_01_02.jpg",
+      "url": "https://news.web.nhk/news/easy/ne2026080412568/ne2026080412568.html",
+      "published_at": "2026-08-04T12:00:00+09:00",
+      "word_count": 18,
+      "fetched_at": "2026-08-05T12:01:35.218447+09:00"
+    },
+    {
+      "news_id": "ne2026080412537",
+      "title": "東京の動物園でライオン3頭が死んだ　熱中症か",
+      "title_with_ruby": "<h1 class=\"_1j8ph3o5\" style=\"--_1j8ph3o0:calc(2.25rem * (var(--font-size-scale-factor, 1)));--_1j8ph3o1:calc(1.875rem * (var(--font-size-scale-factor, 1)))\">東京の動物園でライオン3頭が死んだ　熱中症か | NHKやさしいことばニュース</h1>",
+      "body": "東京の多摩動物公園には、たくさんのライオンがいます。\n見る人は特別なバスでライオンの近くに行くことができて、人気があります。\nしかし、最近、...",
+      "body_html": "<p class=\"esl7kn2s _1yvk0f68\" style=\"--_1yvk0f60:#1f1f20;--_1yvk0f61:#f9f9f9;--_1yvk0f62:normal;--_1yvk0f63:1.5;--_1yvk0f64:calc(1rem * (var(--font-size-scale-factor, 1)));--_1yvk0f65:calc(1rem * (var(--font-size-scale-factor, 1)))\">東京の多摩動物公園には、たくさんのライオンがいます。\n見る人は特別なバスでライオンの近くに行くことができて、人気があります。\nしかし、最近、...</p>",
+      "outline": "",
+      "audio_url": null,
+      "image_url": "https://news.web.nhk/news/html/20260804/K10015195681_2608041830_0804183050_01_03.jpg",
+      "url": "https://news.web.nhk/news/easy/ne2026080412537/ne2026080412537.html",
+      "published_at": "2026-08-04T12:00:00+09:00",
+      "word_count": 18,
+      "fetched_at": "2026-08-05T12:01:36.300413+09:00"
+    },
+    {
+      "news_id": "ne2026080412043",
+      "title": "熊本の地震　「このあとも1週間ぐらいは強い地震に気をつけて」",
+      "title_with_ruby": "<h1 class=\"_1j8ph3o5\" style=\"--_1j8ph3o0:calc(2.25rem * (var(--font-size-scale-factor, 1)));--_1j8ph3o1:calc(1.875rem * (var(--font-size-scale-factor, 1)))\">熊本の地震　「このあとも1週間ぐらいは強い地震に気をつけて」 | NHKやさしいことばニュース</h1>",
+      "body": "熊本県で起こった震度7の地震から、4日で1週間です。\n\n熊本県によると、38人が亡くなりました。この中には、地震と関係があるかまだはっきりわ...",
+      "body_html": "<p class=\"esl7kn2s _1yvk0f68\" style=\"--_1yvk0f60:#1f1f20;--_1yvk0f61:#f9f9f9;--_1yvk0f62:normal;--_1yvk0f63:1.5;--_1yvk0f64:calc(1rem * (var(--font-size-scale-factor, 1)));--_1yvk0f65:calc(1rem * (var(--font-size-scale-factor, 1)))\">熊本県で起こった震度7の地震から、4日で1週間です。\n\n熊本県によると、38人が亡くなりました。この中には、地震と関係があるかまだはっきりわ...</p>",
+      "outline": "",
+      "audio_url": null,
+      "image_url": "https://news.web.nhk/news/html/20260804/K10015195771_2608041635_0804164909_01_02.jpg",
+      "url": "https://news.web.nhk/news/easy/ne2026080412043/ne2026080412043.html",
+      "published_at": "2026-08-04T12:00:00+09:00",
+      "word_count": 18,
+      "fetched_at": "2026-08-05T12:01:37.383654+09:00"
+    }
+  ]
+}
