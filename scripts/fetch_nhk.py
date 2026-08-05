@@ -375,13 +375,21 @@ def fetch_daily_articles(
             print(f"  [{i}/{len(todays)}] {link}", file=sys.stderr)
         try:
             html = fetch_html(link)
-            article = parse_article(html, link)
+            if verbose:
+                print(f"    [fetch] {len(html)} bytes", file=sys.stderr)
+            article = parse_article(html, link, verbose=verbose)
             if article:
                 articles.append(article)
                 if verbose:
                     print(f"    ✓ {article.title[:40]}... ({article.word_count} 单词)", file=sys.stderr)
+            else:
+                if verbose:
+                    print(f"    ✗ parse_article returned None", file=sys.stderr)
         except Exception as e:
+            import traceback
             print(f"    ✗ 抓取失败: {e}", file=sys.stderr)
+            if verbose:
+                traceback.print_exc(file=sys.stderr)
         time.sleep(delay)
 
     return articles
