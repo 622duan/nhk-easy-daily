@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-08-05T12:01:38.384104+09:00",
+  "fetched_at": "2026-08-05T12:04:47.736847+09:00",
   "source": "https://www3.nhk.or.jp/news/easy/",
   "article_count": 4,
   "used_yesterday": false,
@@ -17,7 +17,7 @@
       "url": "https://news.web.nhk/news/easy/ne2026080413003/ne2026080413003.html",
       "published_at": "2026-08-04T12:00:00+09:00",
       "word_count": 18,
-      "fetched_at": "2026-08-05T12:01:34.070607+09:00"
+      "fetched_at": "2026-08-05T12:04:43.531023+09:00"
     },
     {
       "news_id": "ne2026080412568",
@@ -31,7 +31,7 @@
       "url": "https://news.web.nhk/news/easy/ne2026080412568/ne2026080412568.html",
       "published_at": "2026-08-04T12:00:00+09:00",
       "word_count": 18,
-      "fetched_at": "2026-08-05T12:01:35.218447+09:00"
+      "fetched_at": "2026-08-05T12:04:44.592084+09:00"
     },
     {
       "news_id": "ne2026080412537",
@@ -45,7 +45,7 @@
       "url": "https://news.web.nhk/news/easy/ne2026080412537/ne2026080412537.html",
       "published_at": "2026-08-04T12:00:00+09:00",
       "word_count": 18,
-      "fetched_at": "2026-08-05T12:01:36.300413+09:00"
+      "fetched_at": "2026-08-05T12:04:45.654580+09:00"
     },
     {
       "news_id": "ne2026080412043",
@@ -59,7 +59,7 @@
       "url": "https://news.web.nhk/news/easy/ne2026080412043/ne2026080412043.html",
       "published_at": "2026-08-04T12:00:00+09:00",
       "word_count": 18,
-      "fetched_at": "2026-08-05T12:01:37.383654+09:00"
+      "fetched_at": "2026-08-05T12:04:46.736542+09:00"
     }
   ]
 }
