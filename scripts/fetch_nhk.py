@@ -84,6 +84,8 @@ def extract_article_links(index_html: str) -> List[str]:
     soup = BeautifulSoup(index_html, "lxml")
     soup_text = str(soup)  # for debug
     links = set()
+    # 注: verbose 不在参数里, 总是打印 debug 提示
+    verbose = True
 
     for a in soup.find_all("a", href=True):
         href = a["href"]
