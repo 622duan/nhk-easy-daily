@@ -39,9 +39,11 @@ except ImportError:
 # ---- 常量 ----
 NHK_EASY_BASE = "https://www3.nhk.or.jp/news/easy/"
 NHK_EASY_BASES = [
-    "https://www3.nhk.or.jp/news/easy/",
-    "https://news.web.nhk/news/easy/",
+    "https://news.web.nhk/news/easy/",  # 新域名 (Next.js 渲染, 主页 JS 加载)
+    "https://www3.nhk.or.jp/news/easy/",  # 老域名
 ]
+# NHK Easy News 的 sitemap (新版用 article/{slug} 或 ne{YYYYMMDDHHMMSS} 模式)
+NHK_EASY_SITEMAP = "https://news.web.nhk/news/easy/sitemap/sitemap.xml"
 DEFAULT_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -89,15 +91,67 @@ def fetch_index_html(timeout: int = 30) -> str:
     for base in NHK_EASY_BASES:
         try:
             print(f"  [try] {base}", file=sys.stderr)
-            return fetch_html(base, timeout=timeout)
+            html = fetch_html(base, timeout=timeout)
+            # 抓一下页面的真实 URL (follow redirect 后)
+            print(f"  [ok] {len(html)} bytes", file=sys.stderr)
+            return html
         except Exception as e:
             last_error = e
             print(f"  [fail] {base}: {e}", file=sys.stderr)
     raise last_error or Exception("All NHK bases failed")
 
 
+def extract_article_links_from_sitemap(sitemap_url: str = NHK_EASY_SITEMAP) -> List[Dict[str, str]]:
+    """从 NHK Easy News sitemap 提取所有文章链接 + lastmod
+
+    Returns:
+        List of {url, lastmod, news_id}
+    """
+    try:
+        xml_text = fetch_html(sitemap_url)
+    except Exception as e:
+        print(f"SITEMAP_FETCH_ERROR: {e}", file=sys.stderr)
+        return []
+
+    # 解析 XML
+    soup = BeautifulSoup(xml_text, "xml")
+    articles = []
+
+    for url_elem in soup.find_all("url"):
+        loc = url_elem.find("loc")
+        lastmod = url_elem.find("lastmod")
+        if not loc:
+            continue
+        loc_text = loc.get_text(strip=True)
+        # 只取文章页: /news/easy/ne{...}/  或 /news/easy/article/... 模式
+        if "/news/easy/ne" in loc_text and loc_text.endswith(".html"):
+            # ne2026080412043
+            m = re.search(r"/news/easy/(ne\d+)/", loc_text)
+            if m:
+                news_id = m.group(1)
+                articles.append({
+                    "url": loc_text,
+                    "news_id": news_id,
+                    "lastmod": lastmod.get_text(strip=True) if lastmod else "",
+                })
+        elif "/news/easy/article/" in loc_text and loc_text.endswith(".html"):
+            # article/disaster_typhoon 等
+            m = re.search(r"/news/easy/article/([a-z0-9_]+)\.html", loc_text)
+            if m:
+                news_id = m.group(1)
+                articles.append({
+                    "url": loc_text,
+                    "news_id": news_id,
+                    "lastmod": lastmod.get_text(strip=True) if lastmod else "",
+                })
+
+    # 按 lastmod 倒序 (最新的在前)
+    articles.sort(key=lambda a: a.get("lastmod", ""), reverse=True)
+    return articles
+
+
 def extract_article_links(index_html: str) -> List[str]:
-    """从 NHK Easy News 主页提取所有文章链接"""
+    """从 NHK Easy News 主页提取所有文章链接 (老方法, 已废弃)"""
     soup = BeautifulSoup(index_html, "lxml")
     soup_text = str(soup)  # for debug
     links = set()
@@ -248,26 +302,37 @@ def fetch_daily_articles(
 ) -> List[NHKArticle]:
     """
     抓取 NHK Easy News 当日所有文章.
+    用 sitemap 拿当日文章链接 (新 NHK 用 Next.js, 主页 JS 渲染, 抓不到).
 
     Returns:
         List[NHKArticle] - 按发布时间倒序
     """
     if verbose:
-        print(f"[{datetime.now(JST).isoformat()}] 抓取 NHK Easy News 主页...", file=sys.stderr)
+        print(f"[{datetime.now(JST).isoformat()}] 抓取 NHK Easy News sitemap...", file=sys.stderr)
 
-    index_html = fetch_index_html()
-    links = extract_article_links(index_html)
+    # 用 sitemap 找今天的文章
+    sitemap_articles = extract_article_links_from_sitemap()
 
     if verbose:
-        print(f"  → 找到 {len(links)} 篇文章链接", file=sys.stderr)
+        print(f"  → sitemap 找到 {len(sitemap_articles)} 个文章 URL", file=sys.stderr)
+
+    # 只取 lastmod 是今天的 (YYYY-MM-DD)
+    today = datetime.now(JST).strftime("%Y-%m-%d")
+    todays = [a for a in sitemap_articles if a.get("lastmod", "").startswith(today)]
+
+    if verbose:
+        print(f"  → 今日 ({today}) 的文章: {len(todays)} 篇", file=sys.stderr)
+        for a in todays[:3]:
+            print(f"    - {a['news_id']} ({a['lastmod']}) {a['url'][:80]}", file=sys.stderr)
 
     if limit > 0:
-        links = links[:limit]
+        todays = todays[:limit]
 
     articles = []
-    for i, link in enumerate(links, 1):
+    for i, item in enumerate(todays, 1):
+        link = item["url"]
         if verbose:
-            print(f"  [{i}/{len(links)}] {link}", file=sys.stderr)
+            print(f"  [{i}/{len(todays)}] {link}", file=sys.stderr)
         try:
             html = fetch_html(link)
             article = parse_article(html, link)
