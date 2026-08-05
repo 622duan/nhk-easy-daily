@@ -102,10 +102,10 @@ def fetch_index_html(timeout: int = 30) -> str:
 
 
 def extract_article_links_from_sitemap(sitemap_url: str = NHK_EASY_SITEMAP) -> List[Dict[str, str]]:
-    """从 NHK Easy News sitemap 提取所有文章链接 + lastmod
+    """从 NHK Easy News sitemap 提取所有文章链接 + 解析 news_id 日期
 
     Returns:
-        List of {url, lastmod, news_id}
+        List of {url, news_id, lastmod, date}
     """
     try:
         xml_text = fetch_html(sitemap_url)
@@ -123,30 +123,27 @@ def extract_article_links_from_sitemap(sitemap_url: str = NHK_EASY_SITEMAP) -> L
         if not loc:
             continue
         loc_text = loc.get_text(strip=True)
-        # 只取文章页: /news/easy/ne{...}/  或 /news/easy/article/... 模式
-        if "/news/easy/ne" in loc_text and loc_text.endswith(".html"):
-            # ne2026080412043
-            m = re.search(r"/news/easy/(ne\d+)/", loc_text)
-            if m:
-                news_id = m.group(1)
-                articles.append({
-                    "url": loc_text,
-                    "news_id": news_id,
-                    "lastmod": lastmod.get_text(strip=True) if lastmod else "",
-                })
-        elif "/news/easy/article/" in loc_text and loc_text.endswith(".html"):
-            # article/disaster_typhoon 等
-            m = re.search(r"/news/easy/article/([a-z0-9_]+)\.html", loc_text)
-            if m:
-                news_id = m.group(1)
-                articles.append({
-                    "url": loc_text,
-                    "news_id": news_id,
-                    "lastmod": lastmod.get_text(strip=True) if lastmod else "",
-                })
+        lastmod_text = lastmod.get_text(strip=True) if lastmod else ""
 
-    # 按 lastmod 倒序 (最新的在前)
-    articles.sort(key=lambda a: a.get("lastmod", ""), reverse=True)
+        # 只取 ne{YYYYMMDDHHMMSS} 模式的最新 daily news
+        if "/news/easy/ne" in loc_text and loc_text.endswith(".html"):
+            m = re.search(r"/news/easy/(ne(\d{8})\d+)/", loc_text)
+            if m:
+                news_id = m.group(1)
+                date_str = m.group(2)  # YYYYMMDD
+                # 转成 YYYY-MM-DD
+                date_iso = f"{date_str[:4]}-{date_str[4:6]}-{date_str[6:8]}"
+                articles.append({
+                    "url": loc_text,
+                    "news_id": news_id,
+                    "lastmod": lastmod_text,
+                    "date": date_iso,
+                })
+        # 老的 article/{slug} 模式 (disaster/typhoon 等静态页, 跳过)
+        # 暂不取, 因为它们是话题页不是 daily news
+
+    # 按 news_id 倒序 (最新的在前)
+    articles.sort(key=lambda a: a.get("news_id", ""), reverse=True)
     return articles
 
 
@@ -314,16 +311,29 @@ def fetch_daily_articles(
     sitemap_articles = extract_article_links_from_sitemap()
 
     if verbose:
-        print(f"  → sitemap 找到 {len(sitemap_articles)} 个文章 URL", file=sys.stderr)
+        print(f"  → sitemap 找到 {len(sitemap_articles)} 个 ne 文章 URL", file=sys.stderr)
 
-    # 只取 lastmod 是今天的 (YYYY-MM-DD)
-    today = datetime.now(JST).strftime("%Y-%m-%d")
-    todays = [a for a in sitemap_articles if a.get("lastmod", "").startswith(today)]
+    # 取今天 + 昨天的文章 (NHK 8/5 11:54 抓的, 8/5 还没出, 用 8/4 兜底)
+    today = datetime.now(JST)
+    today_str = today.strftime("%Y-%m-%d")
+    yesterday_str = (today - timedelta(days=1)).strftime("%Y-%m-%d")
+    two_days_ago_str = (today - timedelta(days=2)).strftime("%Y-%m-%d")
+
+    # 优先取今天, 没有就拿昨天, 再没有就前天
+    todays = [a for a in sitemap_articles if a.get("date") == today_str]
+    if not todays:
+        if verbose:
+            print(f"  → 今日 ({today_str}) 无文章, 改用昨日 ({yesterday_str})", file=sys.stderr)
+        todays = [a for a in sitemap_articles if a.get("date") == yesterday_str]
+    if not todays:
+        if verbose:
+            print(f"  → 昨日也无, 改用前日 ({two_days_ago_str})", file=sys.stderr)
+        todays = [a for a in sitemap_articles if a.get("date") == two_days_ago_str]
 
     if verbose:
-        print(f"  → 今日 ({today}) 的文章: {len(todays)} 篇", file=sys.stderr)
-        for a in todays[:3]:
-            print(f"    - {a['news_id']} ({a['lastmod']}) {a['url'][:80]}", file=sys.stderr)
+        print(f"  → 找到 {len(todays)} 篇文章 (目标日期范围: today/yesterday/2-days-ago)", file=sys.stderr)
+        for a in todays[:5]:
+            print(f"    - {a['news_id']} ({a['date']}) {a['url'][:80]}", file=sys.stderr)
 
     if limit > 0:
         todays = todays[:limit]
