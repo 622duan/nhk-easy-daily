@@ -38,6 +38,10 @@ except ImportError:
 
 # ---- 常量 ----
 NHK_EASY_BASE = "https://www3.nhk.or.jp/news/easy/"
+NHK_EASY_BASES = [
+    "https://www3.nhk.or.jp/news/easy/",
+    "https://news.web.nhk/news/easy/",
+]
 DEFAULT_HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -72,11 +76,24 @@ class NHKArticle:
 # ---- 抓取函数 ----
 def fetch_html(url: str, timeout: int = 30) -> str:
     """抓取 URL 返回 HTML 文本"""
-    resp = requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout)
+    resp = requests.get(url, headers=DEFAULT_HEADERS, timeout=timeout, allow_redirects=True)
     resp.raise_for_status()
     # NHK 页面通常是 UTF-8
     resp.encoding = resp.apparent_encoding or "utf-8"
     return resp.text
+
+
+def fetch_index_html(timeout: int = 30) -> str:
+    """抓取 NHK Easy News 主页 - 尝试多个域名 (NHK 改过域名)"""
+    last_error = None
+    for base in NHK_EASY_BASES:
+        try:
+            print(f"  [try] {base}", file=sys.stderr)
+            return fetch_html(base, timeout=timeout)
+        except Exception as e:
+            last_error = e
+            print(f"  [fail] {base}: {e}", file=sys.stderr)
+    raise last_error or Exception("All NHK bases failed")
 
 
 def extract_article_links(index_html: str) -> List[str]:
@@ -90,9 +107,14 @@ def extract_article_links(index_html: str) -> List[str]:
     for a in soup.find_all("a", href=True):
         href = a["href"]
         # 匹配形如 /news/easy/XXXX/XXXX.html 或 https://www3.nhk.or.jp/news/easy/XXXX/XXXX.html
+        # 也兼容 news.web.nhk 域名
         m = re.search(r"/news/easy/([a-z0-9\-_]+)/([a-z0-9\-_]+)\.html$", href)
         if m:
-            full_url = urljoin(NHK_EASY_BASE, href)
+            # 用 href 的域名作为 base
+            if "news.web.nhk" in href:
+                full_url = href if href.startswith("http") else urljoin("https://news.web.nhk/", href)
+            else:
+                full_url = href if href.startswith("http") else urljoin(NHK_EASY_BASE, href)
             links.add(full_url)
 
     # 调试: 打印找到的 /news/easy/ 链接
@@ -233,7 +255,7 @@ def fetch_daily_articles(
     if verbose:
         print(f"[{datetime.now(JST).isoformat()}] 抓取 NHK Easy News 主页...", file=sys.stderr)
 
-    index_html = fetch_html(NHK_EASY_BASE)
+    index_html = fetch_index_html()
     links = extract_article_links(index_html)
 
     if verbose:
