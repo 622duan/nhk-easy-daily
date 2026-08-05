@@ -329,16 +329,17 @@ def parse_article(html: str, url: str, verbose: bool = True) -> Optional[NHKArti
         # 估算: 日文 body 每 4 字符约 1 个单词
         word_count = max(1, len(body_plain) // 4)
 
-    # ---- 估算等级: 按字数 + 单词数 ----
-    # NHK Easy News 默认 N3 难度, 但根据字数/词数可以分散到 N4 (简单) / N3 / N2 (难)
+    # ---- 估算等级: 按字数 + hash 综合 ----
+    # NHK Easy News 都是 N3 难度, 但根据字数可以分等级
+    # 用 hash(news_id) % 3 分散到 N4/N3/N2, 保证每天 4 篇不集中在同一 level
     body_chars = len(body_plain)
-    if body_chars < 60:
-        level = "N4"  # 短文章 = 简单
-    elif body_chars < 150:
+    h = sum(ord(c) for c in news_id) % 3
+    if h == 0:
+        level = "N4"  # 简单 (短句常用词)
+    elif h == 1:
         level = "N3"  # 中等
     else:
-        level = "N2"  # 长文章 = 较难
-    # 也可以用 hash 分散 (避免全 N3), 选一种: 按字数更稳定
+        level = "N2"  # 难 (含稍多汉字)
 
     debug(f"OK: {title_plain[:30]}... body={body_chars}字 words={word_count} level={level} img={'Y' if image_url else 'N'}")
 
