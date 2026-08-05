@@ -114,32 +114,52 @@ def format_date_jp(iso_date: str) -> str:
 
 
 def article_to_news_dict(article: Dict[str, Any], level: str = "N3") -> Dict[str, Any]:
-    """单篇 NHKArticle → app newsList 元素"""
+    """单篇 NHKArticle → app newsList 元素 (适配新版 NHK 无 ruby 格式)"""
     body_html = article.get("body_html", "")
-    body_paragraphs = split_body_paragraphs(body_html) or [article.get("body", "")]
+    body_plain = article.get("body", "")
+
+    # 切分段: 优先用 body_html 的 <p> 切, 失败用 body plain
+    body_paragraphs = split_body_paragraphs(body_html)
+    if not body_paragraphs and body_plain:
+        # 用 plain text 按 \n 切段
+        body_paragraphs = [p.strip() for p in body_plain.split("\n") if p.strip()]
+
+    # 去 HTML 标签: 新版 body_html 是含 <p> 的 HTML, body_paragraphs 已经去 tag
+    # 如果没有切好, body_paragraphs 可能是 <p>...</p> 完整 HTML, 需要去 tag
+    clean_paragraphs = []
+    for p in body_paragraphs:
+        # 去 <p> 等标签
+        p_clean = re.sub(r"<[^>]+>", "", p).strip()
+        p_clean = re.sub(r"\s+", " ", p_clean)
+        if p_clean:
+            clean_paragraphs.append(p_clean)
+
+    # ruby words (新版没有 ruby, 通常 0 个)
     words = ruby_to_word_dicts(body_html)
 
-    # 估算词数 (含汉字 ruby 标注的所有词)
+    # 估算词数
     word_count = len(words) if words else article.get("word_count", 0)
 
-    # 英文版 URL: NHK World 同一篇文章
-    # /news/easy/XXX/XXX.html → /news/XXX.html
+    # 英文版 URL
     news_id = article.get("news_id", "")
     en_url = f"https://www3.nhk.or.jp/news/{news_id}.html" if news_id else article.get("url", "")
+
+    # title: 用 plain text, 不用 title_with_ruby (新版有 h1 class style)
+    title_plain = article.get("title", "")
 
     return {
         "id": f"nhk-{news_id}",
         "badge": level,
         "date": format_date_jp(article.get("published_at", "")),
-        "title_jp": article.get("title_with_ruby", article.get("title", "")),
+        "title_jp": title_plain,  # 用 plain title
         "title_zh": "",  # 留空, UI 端处理
         "duration": estimate_duration(word_count),
         "plays": "new",
         "thumb": article.get("image_url", "") or "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
         "externalUrl": en_url,
         "audioUrl": article.get("audio_url", ""),
-        "body": body_paragraphs,
-        "words": words[:20],  # 限制每篇最多 20 个生词, 避免 UI 太长
+        "body": clean_paragraphs,
+        "words": words[:20],
         "source": "NHK Easy News",
     }
 
