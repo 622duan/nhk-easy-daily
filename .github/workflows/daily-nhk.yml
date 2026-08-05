@@ -1,10 +1,7 @@
-name: Daily NHK Easy News
+name: NHK Daily Update
 
-# 每天 UTC 0:00 跑一次 (北京时间 8:00, 东京时间 9:00 — 与 NHK 当日发稿同步)
-# 也支持手动触发 (workflow_dispatch)
+# 只保留手动触发 (cron 跑通后再加 schedule)
 on:
-  schedule:
-    - cron: "0 0 * * *"
   workflow_dispatch:
     inputs:
       limit:
@@ -12,20 +9,10 @@ on:
         required: false
         default: "5"
 
-# 防止并发跑 (比如上一次的还没跑完)
-concurrency:
-  group: nhk-daily
-  cancel-in-progress: false
-
-# 默认权限, 后面 push 步骤会单独提权
-permissions:
-  contents: read
-
 jobs:
-  fetch-and-commit:
+  fetch:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    # push 步骤需要写权限
     permissions:
       contents: write
 
@@ -33,19 +20,15 @@ jobs:
       - name: 检出代码
         uses: actions/checkout@v4
         with:
-          # 需要 fetch 全部分支历史, 因为我们要 commit
           fetch-depth: 0
 
       - name: 设置 Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: pip
 
       - name: 安装依赖
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: 抓取 NHK Easy News
         id: fetch
@@ -53,58 +36,31 @@ jobs:
           LIMIT: ${{ github.event.inputs.limit || '5' }}
         run: |
           mkdir -p data
-          python scripts/fetch_nhk.py \
-            --limit "${LIMIT}" \
-            --delay 1.5 \
-            --output data/nhk-today.json
-          echo "FETCHED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+          python scripts/fetch_nhk.py --limit "${LIMIT}" --output data/nhk-today.json
         continue-on-error: true
 
       - name: 转换为 app 格式
-        id: format
         if: steps.fetch.outcome == 'success'
-        run: |
-          python scripts/format_data.py \
-            --input data/nhk-today.json \
-            --output data/nhk-app-format.json
+        run: python scripts/format_data.py --input data/nhk-today.json --output data/nhk-app-format.json
 
       - name: 验证输出
-        if: steps.format.outcome == 'success'
+        if: steps.fetch.outcome == 'success'
         run: |
-          # 简单校验: 确保 JSON 合法, 且至少 1 篇文章
           python -c "
-          import json, sys
+          import json
           with open('data/nhk-app-format.json', 'r', encoding='utf-8') as f:
               data = json.load(f)
           items = data.get('items', [])
           if not items:
-              print('ERROR: no items in output', file=sys.stderr)
-              sys.exit(1)
-          print(f'✓ {len(items)} 篇文章, 共 {sum(len(i[\"words\"]) for i in items)} 词')
+              raise SystemExit('no items in output')
+          print(f'OK: {len(items)} articles, {sum(len(i[\"words\"]) for i in items)} words')
           "
 
       - name: 提交变更
-        if: steps.format.outcome == 'success'
+        if: steps.fetch.outcome == 'success'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          # 检查是否有变化
-          if git diff --quiet data/nhk-today.json data/nhk-app-format.json 2>/dev/null; then
-            echo "无变化, 跳过提交"
-            exit 0
-          fi
-
-          git add data/nhk-today.json data/nhk-app-format.json
-          DATE=$(date -u +%Y-%m-%d)
-          git commit -m "📰 NHK Easy News daily update (${DATE})"
+          git add data/
+          git diff --staged --quiet || git commit -m "data: daily NHK update $(date -u +%Y-%m-%d)"
           git push
-
-      - name: 失败时上传日志
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: fetch-logs
-          path: |
-            data/*.json
-          if-no-files-found: ignore
