@@ -34,12 +34,28 @@ jobs:
       - name: 安装依赖
         run: pip install -r requirements.txt
 
+      - name: 备份前一天内容
+        # 把 HEAD 的 nhk-app-format.json 保存为 yesterday.json
+        # 这样 fetch 抓空时, fetch_nhk.py 会自动用 yesterday 兜底
+        run: |
+          mkdir -p data
+          # 如果 HEAD 有内容, 拷贝; 否则写空 JSON
+          git show HEAD:data/nhk-app-format.json > data/yesterday.json 2>/dev/null || \
+            echo '{"fetched_at": "", "source": "https://www3.nhk.or.jp/news/easy/", "article_count": 0, "used_yesterday": false, "fetch_error": "", "articles": []}' > data/yesterday.json
+          # 输出昨天有多少条
+          python -c "
+          import json
+          try:
+              with open('data/yesterday.json') as f: d = json.load(f)
+              print('YESTERDAY_ITEMS=' + str(len(d.get('articles', []))))
+          except: print('YESTERDAY_ITEMS=0')
+          "
+
       - name: 抓取 NHK Easy News
         id: fetch
         env:
           LIMIT: ${{ github.event.inputs.limit || '5' }}
         run: |
-          mkdir -p data
           python scripts/fetch_nhk.py --limit "${LIMIT}" --output data/nhk-today.json
         continue-on-error: true
 
@@ -48,6 +64,7 @@ jobs:
         run: python scripts/format_data.py --input data/nhk-today.json --output data/nhk-app-format.json
 
       - name: 验证输出
+        # items 为空也 OK, 让 fetch_nhk.py 用 yesterday 兜底
         if: steps.fetch.outcome == 'success'
         run: |
           python -c "
@@ -56,9 +73,10 @@ jobs:
               data = json.load(f)
           items = data.get('items', [])
           if not items:
-              raise SystemExit('no items in output')
-          total_words = sum(len(i['words']) for i in items)
-          print('OK: ' + str(len(items)) + ' articles, ' + str(total_words) + ' words')
+              print('WARN: items is empty, using yesterday fallback')
+          else:
+              total_words = sum(len(i['words']) for i in items)
+              print('OK: ' + str(len(items)) + ' articles, ' + str(total_words) + ' words')
           "
 
       - name: 提交变更
@@ -66,6 +84,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/
-          git diff --staged --quiet || git commit -m "data: daily NHK update $(date -u +%Y-%m-%d)"
+          git add data/ .github/workflows/ scripts/
+          git diff --staged --quiet && echo 'no changes' && exit 0
+          # 看看用没用昨天
+          USED=$(python -c "import json;print(json.load(open('data/nhk-app-format.json')).get('used_yesterday', False))")
+          if [ "$USED" = "True" ]; then
+            git commit -m "data: NHK daily update $(date -u +%Y-%m-%d) (used yesterday)"
+          else
+            git commit -m "data: NHK daily update $(date -u +%Y-%m-%d)"
+          fi
           git push
