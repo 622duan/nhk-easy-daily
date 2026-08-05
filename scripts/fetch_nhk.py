@@ -206,7 +206,7 @@ def extract_plain_text(elem) -> str:
 
 
 def parse_article(html: str, url: str, verbose: bool = True) -> Optional[NHKArticle]:
-    """解析单篇 NHK Easy News 文章"""
+    """解析单篇 NHK Easy News 文章 (适配新 Next.js 渲染)"""
     soup = BeautifulSoup(html, "lxml")
 
     def debug(msg):
@@ -220,91 +220,115 @@ def parse_article(html: str, url: str, verbose: bool = True) -> Optional[NHKArti
         return None
     news_id = m.group(1)
 
-    # ---- 提取标题 ----
+    # ---- 提取标题: 新版 h1 在 SSR HTML 里 ----
     title_elem = (
-        soup.find("h1", class_="article-title")
+        soup.find("h1", class_=re.compile(r"^_1j8ph3o5$"))  # 新 NHK class
+        or soup.find("h1", class_="article-title")
         or soup.find("h1")
-        or soup.find("title")
     )
     if not title_elem:
-        debug(f"no h1/title found, html length={len(html)}")
+        debug(f"no h1 found, html length={len(html)}")
         return None
     title_plain = extract_plain_text(title_elem)
+    # 去掉 " | NHKやさしいことばニュース" 后缀
+    title_plain = re.sub(r"\s*\|\s*NHKやさしいことばニュース\s*$", "", title_plain).strip()
     title_with_ruby = str(title_elem)
 
-    if not title_plain or len(title_plain.strip()) < 3:
+    if not title_plain or len(title_plain) < 3:
         debug(f"title too short: {title_plain!r}")
         return None
 
-    # ---- 提取简介 ----
+    # ---- 提取简介 (新版可能没有) ----
     outline = ""
-    outline_elem = soup.find(id="js-outline") or soup.find(class_="article-outline")
-    if outline_elem:
-        outline = extract_plain_text(outline_elem)
 
-    # ---- 提取正文 ----
-    body_elem = (
-        soup.find(id="js-article-body")
-        or soup.find(class_="article-body")
-        or soup.find(class_="article-body__content")
-        or soup.find("article")
-    )
-    if not body_elem:
-        # 兜底: 找所有的 <p> 标签
-        all_p = soup.find_all("p")
-        if all_p:
-            debug(f"no body_elem, using all <p> ({len(all_p)} found)")
-            paragraphs = []
-            for p in all_p:
-                txt = extract_plain_text(p)
-                if txt and len(txt) > 20:  # 过滤短段 (如版权声明)
-                    paragraphs.append(txt)
-            body_plain = "\n".join(paragraphs)
-            body_html = "\n".join(str(p) for p in all_p)
-        else:
-            debug(f"no body_elem, no <p> found")
-            return None
-    else:
-        # 按段切分
-        paragraphs = []
-        for p in body_elem.find_all("p"):
-            txt = extract_plain_text(p)
-            if txt:
-                paragraphs.append(txt)
-        body_plain = "\n".join(paragraphs)
-        body_html = str(body_elem)
+    # ---- 提取正文: 新版所有 <p> 都在 main 里, 第一个是真正文, 后面是 footer ----
+    # 策略: 只取 main 里的 <p>, 或者只取第一个长 <p>
+    main_elem = soup.find("main")
+    p_candidates = main_elem.find_all("p") if main_elem else soup.find_all("p")
+
+    body_paragraphs = []
+    body_html_parts = []
+    for p in p_candidates:
+        txt = extract_plain_text(p)
+        # 过滤 footer (NHK ONE 接收合同 / Copyright / 表单引导文)
+        if any(skip in txt for skip in [
+            "NHK ONE",
+            "受信契約",
+            "Copyright NHK",
+            "お住まいの地域",
+            "用途",
+            "地域（放送局）",
+            "該当のボタン",
+            "受信料",
+            "リンクをご覧",
+            "利用開始後",
+            "順次表示",
+            "必要項目",
+            "手続きをお願いします",
+        ]):
+            continue
+        # 过滤短段 (< 30 字符, 表单提示)
+        if len(txt) < 30:
+            continue
+        body_paragraphs.append(txt)
+        body_html_parts.append(str(p))
+
+    if not body_paragraphs:
+        debug(f"no real body paragraphs found ({len(p_candidates)} total <p>)")
+        return None
+
+    body_plain = "\n\n".join(body_paragraphs)
+    body_html = "\n".join(body_html_parts)
 
     if not body_plain or len(body_plain) < 30:
         debug(f"body too short: {body_plain[:50]!r}")
         return None
 
-    # ---- 提取音频 URL ----
+    # ---- 提取音频 URL (新版没找到) ----
     audio_url = None
-    audio_elem = soup.find(attrs={"data-url": True, "class": re.compile("audio", re.I)})
-    if audio_elem:
-        audio_url = audio_elem.get("data-url")
-    if not audio_url:
-        # 兜底: 找 m3u8 链接
-        m3u8 = soup.find("a", href=re.compile(r"\.m3u8$"))
-        if m3u8:
-            audio_url = m3u8.get("href")
 
-    # ---- 提取图片 URL ----
+    # ---- 提取图片: 新版 img.src = news/html/... ----
     image_url = None
-    img = soup.find("img", class_="article-image") or soup.find("article-img")
-    if img and img.get("src"):
-        image_url = urljoin(url, img["src"])
+    # 优先用带 alt 的主图
+    for img in soup.find_all("img"):
+        src = img.get("src", "")
+        alt = img.get("alt", "")
+        if "news/html" in src and ("_01_" in src or "_02_" in src or len(src) > 50):
+            # 主图一般是 _01_ 或 _02_ 后缀
+            if "_01_" in src or "_02_" in src:
+                image_url = src if src.startswith("http") else urljoin(url, src)
+                break
+    if not image_url:
+        # 兜底: 取第一个 news/html 的图
+        for img in soup.find_all("img"):
+            src = img.get("src", "")
+            if "news/html" in src:
+                image_url = src if src.startswith("http") else urljoin(url, src)
+                break
 
-    # ---- 发布时间 ----
+    # ---- 发布时间: 从 news_id 解析 (ne{YYYYMMDD}{HHMM}{NNN} = 15 字符) ----
+    # 实际 NHK Easy News 的 news_id 格式: ne + 8位日期 + 4位时分 + 3位序号
+    # 例如 ne2026080412043 = 2026-08-04 12:04 编号3
+    # 但秒数不固定, 我们用 12:00 (中午) 兜底, 因为精度不是关键
     published_at = ""
-    time_elem = soup.find("time")
-    if time_elem and time_elem.get("datetime"):
-        published_at = time_elem["datetime"]
+    m = re.match(r"ne(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})", news_id)
+    if m:
+        y, mo, d, hh, mm = m.groups()
+        # 检查是不是 12 字符 YYYYMMDDHHMM
+        if len(news_id) == 12:  # ne + 10
+            published_at = f"{y}-{mo}-{d}T{hh}:{mm}:00+09:00"
+        else:
+            # 只精确到日期
+            published_at = f"{y}-{mo}-{d}T12:00:00+09:00"
 
-    # ---- 统计单词数 (ruby 标注) ----
+    # ---- 统计单词数: 新版没有 ruby, 用字符数/4 估算 ----
+    # 之前有 ruby 时 word_count = len(soup.find_all("ruby"))
     word_count = len(soup.find_all("ruby"))
+    if word_count == 0:
+        # 估算: 日文 body 每 4 字符约 1 个单词
+        word_count = max(1, len(body_plain) // 4)
 
-    debug(f"OK: {title_plain[:30]}... body={len(body_plain)}字 words={word_count}")
+    debug(f"OK: {title_plain[:30]}... body={len(body_plain)}字 words={word_count} img={'Y' if image_url else 'N'}")
 
     return NHKArticle(
         news_id=news_id,
