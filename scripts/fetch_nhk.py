@@ -72,6 +72,7 @@ class NHKArticle:
     url: str
     published_at: str                # ISO 8601 (JST)
     word_count: int = 0              # body 中 ruby 标注的单词数
+    level: str = "N3"                # 估算等级: N4 (简单) / N3 / N2 (难)
     fetched_at: str = ""             # 抓取时间 (JST)
 
 
@@ -328,7 +329,18 @@ def parse_article(html: str, url: str, verbose: bool = True) -> Optional[NHKArti
         # 估算: 日文 body 每 4 字符约 1 个单词
         word_count = max(1, len(body_plain) // 4)
 
-    debug(f"OK: {title_plain[:30]}... body={len(body_plain)}字 words={word_count} img={'Y' if image_url else 'N'}")
+    # ---- 估算等级: 按字数 + 单词数 ----
+    # NHK Easy News 默认 N3 难度, 但根据字数/词数可以分散到 N4 (简单) / N3 / N2 (难)
+    body_chars = len(body_plain)
+    if body_chars < 60:
+        level = "N4"  # 短文章 = 简单
+    elif body_chars < 150:
+        level = "N3"  # 中等
+    else:
+        level = "N2"  # 长文章 = 较难
+    # 也可以用 hash 分散 (避免全 N3), 选一种: 按字数更稳定
+
+    debug(f"OK: {title_plain[:30]}... body={body_chars}字 words={word_count} level={level} img={'Y' if image_url else 'N'}")
 
     return NHKArticle(
         news_id=news_id,
@@ -342,6 +354,7 @@ def parse_article(html: str, url: str, verbose: bool = True) -> Optional[NHKArti
         url=url,
         published_at=published_at,
         word_count=word_count,
+        level=level,
         fetched_at=datetime.now(JST).isoformat(),
     )
 

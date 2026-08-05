@@ -33,7 +33,7 @@ import re
 import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 JST = timezone(timedelta(hours=9))
 
@@ -113,10 +113,17 @@ def format_date_jp(iso_date: str) -> str:
         return ""
 
 
-def article_to_news_dict(article: Dict[str, Any], level: str = "N3") -> Dict[str, Any]:
-    """单篇 NHKArticle → app newsList 元素 (适配新版 NHK 无 ruby 格式)"""
+def article_to_news_dict(article: Dict[str, Any], level: Optional[str] = None) -> Dict[str, Any]:
+    """单篇 NHKArticle → app newsList 元素 (适配新版 NHK 无 ruby 格式)
+
+    level: 不传则用 article 自带的 level 字段 (按字数估算 N4/N3/N2)
+    """
     body_html = article.get("body_html", "")
     body_plain = article.get("body", "")
+
+    # 优先用 article 自带的 level (按字数估算), fallback 到参数
+    if level is None:
+        level = article.get("level", "N3")
 
     # 切分段: 优先用 body_html 的 <p> 切, 失败用 body plain
     body_paragraphs = split_body_paragraphs(body_html)
@@ -180,12 +187,20 @@ def main():
         data = json.load(f)
 
     articles = data.get("articles", [])
-    news_items = [article_to_news_dict(a, level=args.level) for a in articles]
+    # 每篇 article 用自己的 level 字段 (不传 level 参数, 内部取 article['level'])
+    news_items = [article_to_news_dict(a) for a in articles]
+
+    # 按 level 分组输出
+    by_level = {}
+    for item in news_items:
+        lv = item.get("badge", "N3")
+        by_level.setdefault(lv, []).append(item)
 
     output = {
         "version": datetime.now(JST).strftime("%Y-%m-%d"),
         "source": data.get("source", "https://www3.nhk.or.jp/news/easy/"),
         "fetched_at": data.get("fetched_at", ""),
+        "by_level": {lv: len(items) for lv, items in by_level.items()},
         "default_level": args.level,
         "items": news_items,
     }
