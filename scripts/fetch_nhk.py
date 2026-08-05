@@ -250,6 +250,21 @@ def fetch_daily_articles(
     return articles
 
 
+def load_fallback() -> List[NHKArticle]:
+    """如果 NHK 抓不到, 用本地 fallback 文件 (data/fallback.json)"""
+    from pathlib import Path
+    fallback_path = Path(__file__).parent.parent / "data" / "fallback.json"
+    if not fallback_path.exists():
+        return []
+    try:
+        with open(fallback_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return [NHKArticle(**a) for a in data.get("articles", [])]
+    except Exception as e:
+        print(f"FALLBACK_LOAD_ERROR: {e}", file=sys.stderr)
+        return []
+
+
 # ---- 入口 ----
 def main():
     parser = argparse.ArgumentParser(description="NHK Easy News 抓取器")
@@ -257,8 +272,11 @@ def main():
     parser.add_argument("--delay", type=float, default=1.0, help="文章间延迟秒数 (默认 1.0)")
     parser.add_argument("--output", "-o", default="data/nhk-today.json", help="输出 JSON 路径")
     parser.add_argument("--quiet", action="store_true", help="静默模式")
+    parser.add_argument("--no-fallback", action="store_true", help="禁用 fallback (抓空时失败)")
     args = parser.parse_args()
 
+    articles = []
+    fetch_error = None
     try:
         articles = fetch_daily_articles(
             limit=args.limit,
@@ -266,13 +284,30 @@ def main():
             verbose=not args.quiet,
         )
     except Exception as e:
-        print(f"FATAL: {e}", file=sys.stderr)
+        fetch_error = str(e)
+        print(f"FETCH_ERROR: {e}", file=sys.stderr)
+
+    # 抓取为空 (周末/节假日) 时, 用本地 fallback 兜底
+    used_fallback = False
+    if not articles and not args.no_fallback:
+        fallback = load_fallback()
+        if fallback:
+            articles = fallback
+            used_fallback = True
+            if not args.quiet:
+                print(f"⚠️  抓取为空, 用 fallback 数据 ({len(fallback)} 篇)", file=sys.stderr)
+
+    if not articles and not args.no_fallback:
+        # 既没抓到, 也没 fallback → 失败
+        print("FATAL: 没抓到任何文章, 也无 fallback", file=sys.stderr)
         sys.exit(1)
 
     output = {
         "fetched_at": datetime.now(JST).isoformat(),
         "source": NHK_EASY_BASE,
         "article_count": len(articles),
+        "used_fallback": used_fallback,
+        "fetch_error": fetch_error,
         "articles": [asdict(a) for a in articles],
     }
 
