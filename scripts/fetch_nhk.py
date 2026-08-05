@@ -250,19 +250,30 @@ def fetch_daily_articles(
     return articles
 
 
-def load_fallback() -> List[NHKArticle]:
-    """如果 NHK 抓不到, 用本地 fallback 文件 (data/fallback.json)"""
+def load_yesterday() -> List[NHKArticle]:
+    """如果 NHK 抓不到, 用前一天的数据 (data/yesterday.json)
+
+    优先级: yesterday.json > (空)
+    注: 之前用 fallback.json, 现在改用 yesterday.json (前一天 commit 的内容)
+    """
     from pathlib import Path
-    fallback_path = Path(__file__).parent.parent / "data" / "fallback.json"
-    if not fallback_path.exists():
+    yesterday_path = Path(__file__).parent.parent / "data" / "yesterday.json"
+    if not yesterday_path.exists():
         return []
     try:
-        with open(fallback_path, "r", encoding="utf-8") as f:
+        with open(yesterday_path, "r", encoding="utf-8") as f:
             data = json.load(f)
-        return [NHKArticle(**a) for a in data.get("articles", [])]
+        articles = [NHKArticle(**a) for a in data.get("articles", [])]
+        print(f"YESTERDAY_LOADED: {len(articles)} 篇", file=sys.stderr)
+        return articles
     except Exception as e:
-        print(f"FALLBACK_LOAD_ERROR: {e}", file=sys.stderr)
+        print(f"YESTERDAY_LOAD_ERROR: {e}", file=sys.stderr)
         return []
+
+# 兼容旧名字
+def load_fallback() -> List[NHKArticle]:
+    """deprecated: 用 load_yesterday() 替代"""
+    return load_yesterday()
 
 
 # ---- 入口 ----
@@ -287,15 +298,15 @@ def main():
         fetch_error = str(e)
         print(f"FETCH_ERROR: {e}", file=sys.stderr)
 
-    # 抓取为空 (周末/节假日) 时, 用本地 fallback 兜底
-    used_fallback = False
+    # 抓取为空 (周末/节假日) 时, 用昨天数据兜底
+    used_yesterday = False
     if not articles and not args.no_fallback:
-        fallback = load_fallback()
-        if fallback:
-            articles = fallback
-            used_fallback = True
+        yesterday = load_yesterday()
+        if yesterday:
+            articles = yesterday
+            used_yesterday = True
             if not args.quiet:
-                print(f"⚠️  抓取为空, 用 fallback 数据 ({len(fallback)} 篇)", file=sys.stderr)
+                print(f"⚠️  抓取为空, 用昨天数据 ({len(yesterday)} 篇)", file=sys.stderr)
 
     if not articles and not args.no_fallback:
         # 既没抓到, 也没 fallback → 失败
@@ -306,7 +317,7 @@ def main():
         "fetched_at": datetime.now(JST).isoformat(),
         "source": NHK_EASY_BASE,
         "article_count": len(articles),
-        "used_fallback": used_fallback,
+        "used_yesterday": used_yesterday,
         "fetch_error": fetch_error,
         "articles": [asdict(a) for a in articles],
     }
