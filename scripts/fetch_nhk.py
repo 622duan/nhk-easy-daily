@@ -205,14 +205,18 @@ def extract_plain_text(elem) -> str:
     return " ".join(texts)
 
 
-def parse_article(html: str, url: str) -> Optional[NHKArticle]:
+def parse_article(html: str, url: str, verbose: bool = True) -> Optional[NHKArticle]:
     """解析单篇 NHK Easy News 文章"""
     soup = BeautifulSoup(html, "lxml")
 
+    def debug(msg):
+        if verbose:
+            print(f"    [parse] {msg}", file=sys.stderr)
+
     # ---- 提取 news_id ----
-    # URL 形如 https://www3.nhk.or.jp/news/easy/k1001234567/k1001234567.html
     m = re.search(r"/news/easy/([a-z0-9\-_]+)/", url)
     if not m:
+        debug(f"news_id regex failed for {url}")
         return None
     news_id = m.group(1)
 
@@ -220,11 +224,17 @@ def parse_article(html: str, url: str) -> Optional[NHKArticle]:
     title_elem = (
         soup.find("h1", class_="article-title")
         or soup.find("h1")
+        or soup.find("title")
     )
     if not title_elem:
+        debug(f"no h1/title found, html length={len(html)}")
         return None
     title_plain = extract_plain_text(title_elem)
     title_with_ruby = str(title_elem)
+
+    if not title_plain or len(title_plain.strip()) < 3:
+        debug(f"title too short: {title_plain!r}")
+        return None
 
     # ---- 提取简介 ----
     outline = ""
@@ -236,19 +246,37 @@ def parse_article(html: str, url: str) -> Optional[NHKArticle]:
     body_elem = (
         soup.find(id="js-article-body")
         or soup.find(class_="article-body")
+        or soup.find(class_="article-body__content")
         or soup.find("article")
     )
     if not body_elem:
-        return None
+        # 兜底: 找所有的 <p> 标签
+        all_p = soup.find_all("p")
+        if all_p:
+            debug(f"no body_elem, using all <p> ({len(all_p)} found)")
+            paragraphs = []
+            for p in all_p:
+                txt = extract_plain_text(p)
+                if txt and len(txt) > 20:  # 过滤短段 (如版权声明)
+                    paragraphs.append(txt)
+            body_plain = "\n".join(paragraphs)
+            body_html = "\n".join(str(p) for p in all_p)
+        else:
+            debug(f"no body_elem, no <p> found")
+            return None
+    else:
+        # 按段切分
+        paragraphs = []
+        for p in body_elem.find_all("p"):
+            txt = extract_plain_text(p)
+            if txt:
+                paragraphs.append(txt)
+        body_plain = "\n".join(paragraphs)
+        body_html = str(body_elem)
 
-    # 按段切分
-    paragraphs = []
-    for p in body_elem.find_all("p"):
-        txt = extract_plain_text(p)
-        if txt:
-            paragraphs.append(txt)
-    body_plain = "\n".join(paragraphs)
-    body_html = str(body_elem)
+    if not body_plain or len(body_plain) < 30:
+        debug(f"body too short: {body_plain[:50]!r}")
+        return None
 
     # ---- 提取音频 URL ----
     audio_url = None
@@ -275,6 +303,8 @@ def parse_article(html: str, url: str) -> Optional[NHKArticle]:
 
     # ---- 统计单词数 (ruby 标注) ----
     word_count = len(soup.find_all("ruby"))
+
+    debug(f"OK: {title_plain[:30]}... body={len(body_plain)}字 words={word_count}")
 
     return NHKArticle(
         news_id=news_id,
