@@ -82,15 +82,23 @@ def fetch_html(url: str, timeout: int = 30) -> str:
 def extract_article_links(index_html: str) -> List[str]:
     """从 NHK Easy News 主页提取所有文章链接"""
     soup = BeautifulSoup(index_html, "lxml")
+    soup_text = str(soup)  # for debug
     links = set()
 
     for a in soup.find_all("a", href=True):
         href = a["href"]
-        # 匹配形如 /news/easy/XXXX/XXXX.html 的链接
-        m = re.match(r"^/news/easy/([a-z0-9\-_]+)/([a-z0-9\-_]+)\.html$", href)
+        # 匹配形如 /news/easy/XXXX/XXXX.html 或 https://www3.nhk.or.jp/news/easy/XXXX/XXXX.html
+        m = re.search(r"/news/easy/([a-z0-9\-_]+)/([a-z0-9\-_]+)\.html$", href)
         if m:
             full_url = urljoin(NHK_EASY_BASE, href)
             links.add(full_url)
+
+    # 调试: 打印找到的 /news/easy/ 链接
+    if verbose and not links:
+        all_easy = re.findall(r"href=['\"]([^'\"]*news/easy[^'\"]*)['\"]", soup_text)
+        print(f"  [debug] 找到 {len(all_easy)} 个含 'news/easy' 的链接 (但都不匹配严格格式):", file=sys.stderr)
+        for h in all_easy[:5]:
+            print(f"    - {h}", file=sys.stderr)
 
     return sorted(links)
 
