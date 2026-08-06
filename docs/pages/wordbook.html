@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>単語帳 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .wordbook-hero {
+    background: linear-gradient(135deg, #EC4899 0%, #F472B6 100%);
+    color: white;
+    padding: 24px 20px 30px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .wordbook-hero::after {
+    content: "言";
+    position: absolute;
+    right: -10px;
+    bottom: -50px;
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    font-family: "Noto Sans JP", serif;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .stat-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .stat-card .label {
+    font-size: 10px;
+    margin-top: 4px;
+    opacity: 0.9;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(15,23,42,0.05);
+  }
+  .filter-tab {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--hae);
+    background: rgba(15,23,42,0.04);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-tab.active {
+    background: var(--akane);
+    color: white;
+  }
+
+  .word-card {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.15s;
+  }
+  .word-card:active { transform: scale(0.99); }
+
+  .word-card .emoji {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .word-card .emoji.heart { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+  .word-card .emoji.wrong { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+  .word-card .emoji.skip { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+  .word-card .emoji.study { background: rgba(16, 185, 129, 0.1); color: var(--n5); }
+  .word-card .emoji.done { background: rgba(100, 116, 139, 0.1); color: var(--hae); }
+
+  .word-card .body {
+    flex: 1;
+    min-width: 0;
+  }
+  .word-card .jp-word {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--sumi);
+    line-height: 1.2;
+  }
+  .word-card .meta {
+    font-size: 11px;
+    color: var(--hae);
+    margin-top: 4px;
+  }
+
+  .review-fab {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--akane), #E76F72);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(188, 78, 81, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    z-index: 20;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <div data-auto-stepper></div>
+
+    <div class="wordbook-hero">
+      <div class="flex items-center justify-between" style="position: relative; z-index: 2;">
+        <a href="home.html" class="back-btn" style="background: rgba(255,255,255,0.2); color: white;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </a>
+        <div class="text-center">
+          <h1 class="text-lg font-bold">単語帳</h1>
+        </div>
+        <button class="btn-icon" style="width: 36px; height: 36px; background: rgba(255,255,255,0.2); color: white;">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+
+      <div class="text-center mt-4" style="position: relative; z-index: 2;">
+        <p class="text-xs" style="opacity: 0.85;">永久保存 · 永不覆盖</p>
+        <h2 class="text-2xl font-bold mt-1" id="wbTotal">0 个</h2>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="num" id="wbStatFav">0</div>
+          <div class="label">⭐ 收藏</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="wbStatWrong">0</div>
+          <div class="label">❌ 错词</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" id="wbStatSkip">0</div>
+          <div class="label">⏭️ 待复习</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 搜索框 -->
+    <div class="px-5 mt-4">
+      <div class="relative">
+        <i class="fas fa-search absolute" style="left: 14px; top: 50%; transform: translateY(-50%); color: var(--hae); font-size: 14px;"></i>
+        <input type="text" id="wbSearch" placeholder="搜索假名 / 汉字 / 中文..." class="search-input">
+      </div>
+    </div>
+
+    <!-- 分类 Tab (动态渲染) -->
+    <div class="px-5">
+      <div class="filter-tabs" id="wbTabs">
+        <div class="filter-tab active" data-wb-tab="all">全部 <span class="tab-count">0</span></div>
+        <div class="filter-tab" data-wb-tab="vocab">📚 单词 <span class="tab-count">0</span></div>
+        <div class="filter-tab" data-wb-tab="news">📰 新闻 <span class="tab-count">0</span></div>
+        <div class="filter-tab" data-wb-tab="fav">⭐ 收藏 <span class="tab-count">0</span></div>
+        <div class="filter-tab" data-wb-tab="wrong">❌ 错词 <span class="tab-count">0</span></div>
+        <div class="filter-tab" data-wb-tab="skip">⏭️ 待复习 <span class="tab-count">0</span></div>
+      </div>
+    </div>
+
+    <!-- 排序 -->
+    <div class="px-5 mt-3 flex items-center justify-between">
+      <span class="text-xs text-muted" id="wbCount">共 0 个</span>
+      <button class="text-xs text-akane font-semi" onclick="JP.WordBook.get() && renderWbList()">
+        <i class="fas fa-rotate"></i> 刷新
+      </button>
+    </div>
+
+    <!-- 词条列表（数据驱动） -->
+    <div class="px-5 mt-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs text-muted" id="wbCount">共 0 词</span>
+      </div>
+      <div id="wbListContainer"></div>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <div class="tab-bar">
+      <a class="tab-bar-item" href="home.html">
+        <i class="fas fa-home"></i><span>首页</span>
+      </a>
+      <a class="tab-bar-item" href="vocab-list.html">
+        <i class="fas fa-graduation-cap"></i><span>学习</span>
+      </a>
+      <a class="tab-bar-item active" href="wordbook.html">
+        <i class="fas fa-bookmark"></i><span>单词本</span>
+      </a>
+      <a class="tab-bar-item" href="profile.html">
+        <i class="far fa-user"></i><span>我的</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../data.js"></script>
+<script src="../nhk-daily.js"></script>
+<script>
+  // 单词本过滤
+  let currentWbTab = 'all';
+  let wbWords = [];
+  let newsContext = null;  // 如果从 news 跳过来, 显示该 news 的词
+
+  // 真实从 JP.WordBook (localStorage) 读
+  function buildWbWords() {
+    return JP.WordBook.get() || [];
+  }
+
+  // 从 URL 参数读取 news 上下文
+  function initNewsContext() {
+    const params = new URLSearchParams(window.location.search);
+    const from = params.get('from');
+    const newsId = params.get('newsId');
+    if (from === 'news' && newsId) {
+      // 跨 level 找 news
+      for (const lv of Object.keys(JP_DATA)) {
+        const list = (JP_DATA[lv] && JP_DATA[lv].newsList) || [];
+        const found = list.find(n => n.id === newsId);
+        if (found) {
+          newsContext = found;
+          break;
+        }
+      }
+      if (newsContext) {
+        // 自动提取 news 里出现的词
+        const bodyText = (newsContext.body || []).join(' ');
+        const allWords = [];
+        const seen = new Set();
+        for (const lv of Object.keys(JP_DATA)) {
+          const list = (JP_DATA[lv] && JP_DATA[lv].vocabList) || [];
+          for (const w of list) {
+            if (w.word && w.word.length >= 2 && bodyText.includes(w.word) && !seen.has(w.word)) {
+              allWords.push({ ...w, level: lv, source: 'news_context' });
+              seen.add(w.word);
+            }
+          }
+        }
+        wbWords = allWords;
+        currentWbTab = 'all';
+
+        // 隐藏 tabs (news 上下文不需要分类 tab)
+        document.querySelectorAll('[data-wb-tab]').forEach(t => {
+          t.style.display = 'none';
+        });
+        // 隐藏 stat-grid (顶部统计)
+        const statGrid = document.querySelector('.stat-grid');
+        if (statGrid) statGrid.style.display = 'none';
+
+        // 顶部加 banner - 插到 wbListContainer 之前
+        const listContainer = document.getElementById('wbListContainer');
+        if (listContainer && !document.getElementById('newsContextBanner')) {
+          const banner = document.createElement('div');
+          banner.id = 'newsContextBanner';
+          banner.style.cssText = 'background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.2); border-radius: 10px; padding: 10px 14px; margin: 0 16px 12px; font-size: 12px; color: #DC2626;';
+          banner.innerHTML = `
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span>📰</span>
+              <div style="flex:1;">
+                <div style="font-weight:600;">本新闻词列表</div>
+                <div style="opacity:0.7;">${newsContext.title_jp || newsId} · ${allWords.length} 词</div>
+              </div>
+              <a href="news-detail.html?id=${newsId}" style="color:#DC2626;text-decoration:underline;font-size:11px;">返回新闻</a>
+            </div>
+          `;
+          listContainer.parentNode.insertBefore(banner, listContainer);
+        }
+      }
+    }
+  }
+
+  // 把 WordBook 里的 item 分到不同桶
+  function classifyWord(w) {
+    if (!w) return 'other';
+    if (w.id && w.id.startsWith('card-fav-')) return 'fav';
+    if (w.id && w.id.startsWith('card-x-')) return 'wrong';
+    if (w.id && w.id.startsWith('card-o-')) return 'known';
+    if (w.id && w.id.startsWith('news-')) return 'fav';  // 新闻收藏 = fav
+    if (w.status === 'unknown') return 'wrong';
+    if (w.status === 'new') return 'skip';
+    if (w.status === 'fav') return 'fav';
+    if (w.status === 'wrong') return 'wrong';
+    return 'other';
+  }
+
+  function updateWbCounts() {
+    const all = wbWords;
+    const counts = {
+      all: all.length,
+      vocab: all.filter(w => w.id && w.id.startsWith('card-')).length,
+      news: all.filter(w => w.id && w.id.startsWith('news-')).length,
+      fav: all.filter(w => classifyWord(w) === 'fav').length,
+      wrong: all.filter(w => classifyWord(w) === 'wrong').length,
+      skip: all.filter(w => classifyWord(w) === 'skip').length,
+    };
+    // 更新 tab 数字
+    document.querySelectorAll('[data-wb-tab]').forEach(tab => {
+      const key = tab.dataset.wbTab;
+      const span = tab.querySelector('.tab-count');
+      if (span && counts[key] !== undefined) {
+        span.textContent = counts[key];
+      }
+    });
+    // 更新顶部统计
+    const total = document.getElementById('wbTotal');
+    if (total) total.textContent = counts.all + ' 个';
+    if (document.getElementById('wbStatFav')) document.getElementById('wbStatFav').textContent = counts.fav;
+    if (document.getElementById('wbStatWrong')) document.getElementById('wbStatWrong').textContent = counts.wrong;
+    if (document.getElementById('wbStatSkip')) document.getElementById('wbStatSkip').textContent = counts.skip;
+  }
+
+  function renderWbList() {
+    let filtered = wbWords;
+    if (currentWbTab === 'vocab') {
+      filtered = wbWords.filter(w => w.id && w.id.startsWith('card-'));
+    } else if (currentWbTab === 'news') {
+      filtered = wbWords.filter(w => w.id && w.id.startsWith('news-'));
+    } else if (currentWbTab === 'fav') {
+      filtered = wbWords.filter(w => classifyWord(w) === 'fav');
+    } else if (currentWbTab === 'wrong') {
+      filtered = wbWords.filter(w => classifyWord(w) === 'wrong');
+    } else if (currentWbTab === 'skip') {
+      filtered = wbWords.filter(w => classifyWord(w) === 'skip');
+    }
+
+    // 搜索过滤
+    const q = (document.getElementById('wbSearch')?.value || '').trim().toLowerCase();
+    if (q) {
+      filtered = filtered.filter(w => {
+        return (w.word && w.word.toLowerCase().includes(q))
+            || (w.kanji && w.kanji.toLowerCase().includes(q))
+            || (w.kana && w.kana.toLowerCase().includes(q))
+            || (w.meaning && w.meaning.toLowerCase().includes(q))
+            || (w.meaning_zh && w.meaning_zh.toLowerCase().includes(q))
+            || (w.title_jp && w.title_jp.toLowerCase().includes(q))
+            || (w.title_zh && w.title_zh.toLowerCase().includes(q));
+      });
+    }
+
+    const container = document.getElementById('wbListContainer');
+    if (!container) return;
+
+    if (filtered.length === 0) {
+      const hint = wbWords.length === 0
+        ? '去学习页面收藏单词, 或在新闻里点 ♡'
+        : '切换到其他分类看看';
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📭</div>
+          <p class="empty-text">${wbWords.length === 0 ? '单词本是空的' : '这个分类下还没有内容'}</p>
+          <p class="empty-hint">${hint}</p>
+        </div>
+      `;
+      const c = document.getElementById('wbCount');
+      if (c) c.textContent = '共 0 个';
+      return;
+    }
+
+    container.innerHTML = filtered.map(w => {
+      const isNews = w.id && w.id.startsWith('news-');
+      const cat = classifyWord(w);
+      const safeId = (w.id || '').replace(/'/g, "");
+      const safeSpeak = (w.word || w.kanji || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+      if (isNews) {
+        return `
+          <a href="news-detail.html?id=${(w.news_id || w.id.replace('news-',''))}" class="vocab-card" style="text-decoration:none;color:inherit;display:flex;">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="badge" style="background:#DC2626;color:white;">📰 新闻</span>
+                ${w.date ? `<span class="text-xs text-muted">${w.date}</span>` : ''}
+                ${w.badge ? `<span class="badge badge-${w.badge.toLowerCase()}">${w.badge}</span>` : ''}
+              </div>
+              <h3 class="jp font-bold text-sm" style="line-height:1.5;">${w.title_jp || '?'}</h3>
+              <p class="text-xs text-muted mt-1">${w.title_zh || w.outline || ''}</p>
+            </div>
+            <button class="btn-icon" style="width:32px;height:32px;align-self:center;" onclick="event.preventDefault();event.stopPropagation();removeWbItem('${safeId}')" title="移除">
+              <i class="fas fa-trash text-xs text-muted"></i>
+            </button>
+          </a>
+        `;
+      } else {
+        return `
+          <div class="vocab-card">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="badge badge-${(w.level || 'N5').toLowerCase()}">${w.level || 'N5'}</span>
+                ${cat === 'fav' ? '<span class="badge" style="background:#F59E0B;color:white;">⭐ 收藏</span>' : ''}
+                ${cat === 'wrong' ? '<span class="badge" style="background:#EF4444;color:white;">❌ 错词</span>' : ''}
+                ${cat === 'known' ? '<span class="badge" style="background:#10B981;color:white;">✓ 已认</span>' : ''}
+                ${cat === 'skip' ? '<span class="badge" style="background:#6B7280;color:white;">⏭️ 待复习</span>' : ''}
+              </div>
+              <h3 class="jp font-bold text-base" style="line-height:1.4;">${w.word || w.kanji || '?'}</h3>
+              <p class="text-xs text-muted mt-1">${w.kana || ''} ${w.pitch ? '['+w.pitch+']' : ''} · ${w.pos || ''}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-xs font-semi">${w.meaning_zh || w.meaning || ''}</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;margin-left:8px;">
+              <button class="btn-icon" style="width:32px;height:32px;" onclick="JP.speak('${safeSpeak}')" title="发音">
+                <i class="fas fa-volume-up text-xs text-akane"></i>
+              </button>
+              <button class="btn-icon" style="width:32px;height:32px;" onclick="removeWbItem('${safeId}')" title="删除">
+                <i class="fas fa-trash text-xs text-muted"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    }).join('');
+
+    document.getElementById('wbCount').textContent = `共 ${filtered.length} 个`;
+  }
+
+  function removeWbItem(id) {
+    if (!confirm('确定要删除吗?')) return;
+    JP.WordBook.remove(id);
+    wbWords = buildWbWords();
+    updateWbCounts();
+    renderWbList();
+  }
+
+  // Tab 点击
+  document.querySelectorAll('[data-wb-tab]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('[data-wb-tab]').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentWbTab = tab.dataset.wbTab;
+      renderWbList();
+    });
+  });
+
+  // 搜索输入
+  document.getElementById('wbSearch').addEventListener('input', () => {
+    renderWbList();
+  });
+
+  // 初始化 - 等待 JP_DATA + NHK merge 完成后
+  function init() {
+    // 先尝试 news context
+    initNewsContext();
+    if (newsContext) {
+      updateWbCounts();
+      renderWbList();
+      return;
+    }
+    wbWords = buildWbWords();
+    updateWbCounts();
+    renderWbList();
+  }
+
+  // 立即 init 一次 (没 NHK merge 也能跑)
+  init();
+
+  // 等 NHK merge 后再 init (可能 news context 找到了)
+  let nhkInitDone = false;
+  window.addEventListener('nhk-daily-loaded', () => {
+    if (nhkInitDone) return;
+    nhkInitDone = true;
+    // 不管之前 newsContext 找没找到, 都重新 init (因为 news 现在已经 merge 到 JP_DATA)
+    init();
+  });
+</script>
+</body>
+</html>
