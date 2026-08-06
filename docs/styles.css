@@ -1,0 +1,774 @@
+/* ============================================
+   日本語ライフ — 共享设计系统
+   ============================================ */
+
+:root {
+  /* 品牌色 */
+  --akane: #BC4E51;        /* 茜色 - 主色 */
+  --akane-soft: #E8B5B7;   /* 茜色 soft */
+  --ai-iro: #1B3A5C;       /* 蓝染 - 辅色 */
+  --ai-soft: #B8C5D6;      /* 蓝染 soft */
+  --kinari: #FAFAF7;       /* 生成り - 米白背景 */
+  --sumi: #0F172A;         /* 墨 - 主文字 */
+  --hae: #64748B;          /* 灰色 - 次文字 */
+  --shironeri: #FFFFFF;    /* 白 */
+
+  /* 状态色 */
+  --n5: #10B981;   /* 绿 */
+  --n4: #0EA5E9;   /* 蓝 */
+  --n3: #F59E0B;   /* 橙 */
+  --n2: #8B5CF6;   /* 紫 */
+  --n1: #EF4444;   /* 红 */
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+
+  /* 圆角 */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --r-2xl: 32px;
+
+  /* 阴影 */
+  --sh-soft: 0 2px 8px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.06);
+  --sh-md: 0 4px 16px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --sh-lg: 0 12px 40px rgba(15, 23, 42, 0.08), 0 4px 8px rgba(15, 23, 42, 0.04);
+  --sh-brand: 0 8px 24px rgba(188, 78, 81, 0.18);
+}
+
+/* ============================================
+   基础
+   ============================================ */
+* { -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+               "Hiragino Sans", "Noto Sans JP", "Source Han Sans", "Helvetica Neue", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--sumi);
+  background: var(--kinari);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* PWA iOS standalone: 让 body 顶部让出 status bar 空间 */
+@supports (padding-top: env(safe-area-inset-top)) {
+  html.pwa body { padding-top: env(safe-area-inset-top); }
+}
+
+/* PWA iOS standalone: status bar 黑底白字, 融入页面 */
+@supports (padding-top: env(safe-area-inset-top)) {
+  html.pwa .nav-header,
+  html.pwa .keigo-hero,
+  html.pwa .topic-hero,
+  html.pwa .news-detail-hero {
+    padding-top: calc(env(safe-area-inset-top) + 12px);
+  }
+}
+
+/* ============================================
+   拼写输入框 (替代假名键盘)
+   ============================================ */
+.spell-input {
+  width: 100%;
+  padding: 16px 18px;
+  font-size: 24px;
+  font-weight: 500;
+  text-align: center;
+  border: 2px solid var(--n5, #10B981);
+  border-radius: 12px;
+  background: white;
+  color: var(--sumi, #0F172A);
+  outline: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+}
+.spell-input:focus {
+  border-color: var(--akane, #D14B4B);
+  box-shadow: 0 0 0 4px rgba(209, 75, 75, 0.1);
+}
+.spell-input::placeholder {
+  color: rgba(15, 23, 42, 0.3);
+  font-size: 14px;
+}
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.japanese {
+  font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", "PingFang SC", sans-serif;
+  font-feature-settings: "palt";
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ============================================
+   振假名 & 音调
+   ============================================ */
+ruby {
+  ruby-align: center;
+}
+rt {
+  font-size: 0.45em;
+  color: var(--hae);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* 音调数字 — 标在第一个高音的假名右上 */
+.pitch {
+  position: relative;
+  display: inline-block;
+}
+.pitch::after {
+  content: attr(data-pitch);
+  position: absolute;
+  top: -0.5em;
+  right: -0.6em;
+  font-size: 0.55em;
+  font-weight: 600;
+  color: var(--akane);
+  background: white;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(188, 78, 81, 0.3);
+  line-height: 1;
+}
+
+/* ============================================
+   iPhone 外壳
+   ============================================ */
+.phone-frame {
+  width: 390px;
+  height: 844px;
+  background: var(--shironeri);
+  border-radius: 56px;
+  border: 10px solid #1F2937;
+  box-shadow:
+    0 0 0 2px #374151,
+    0 30px 80px rgba(15, 23, 42, 0.18),
+    0 0 0 14px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+  margin: 20px auto;
+}
+
+.phone-frame::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 32px;
+  background: #0F172A;
+  border-radius: 20px;
+  z-index: 100;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  background: var(--kinari);
+  position: relative;
+}
+.phone-screen::-webkit-scrollbar { display: none; }
+
+/* 移动端：去掉 iPhone 外壳，直接全屏 */
+@media (max-width: 768px) {
+  body { background: var(--kinari); padding: 0; }
+  .phone-frame {
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+  }
+  .phone-frame::before { display: none; }
+  .phone-screen { height: 100%; }
+}
+
+.level-stepper {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 999px;
+  padding: 3px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+}
+.step-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--hae);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: transparent;
+}
+.step-btn:active {
+  background: rgba(15, 23, 42, 0.06);
+  transform: scale(0.92);
+}
+.step-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+.step-btn:disabled:active {
+  transform: none;
+  background: transparent;
+}
+.level-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 22px;
+  min-width: 90px;
+  cursor: pointer;
+  user-select: none;
+}
+.level-display .level-num {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  transition: color 0.2s;
+}
+.level-display .level-desc {
+  font-size: 9px;
+  color: var(--hae);
+  margin-top: 3px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.level-display:active {
+  transform: scale(0.96);
+}
+
+/* 等级 Picker - 弹层 */
+.level-picker-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 200;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+}
+.level-picker-mask.show { display: flex; }
+.level-picker {
+  background: white;
+  border-radius: 24px 24px 0 0;
+  padding: 20px;
+  width: 100%;
+  max-width: 430px;
+  animation: slideUpSheet 0.3s ease;
+}
+@keyframes slideUpSheet {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.level-picker .handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(15, 23, 42, 0.15);
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+.level-picker h3 {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+}
+.level-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.level-option:active { background: var(--kinari); transform: scale(0.99); }
+.level-option .pill {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  color: white;
+  min-width: 44px;
+  text-align: center;
+}
+.level-option .name { font-size: 14px; font-weight: 600; }
+.level-option .sub { font-size: 11px; color: var(--hae); margin-top: 2px; }
+.level-option .check { margin-left: auto; color: var(--akane); opacity: 0; }
+.level-option.selected .check { opacity: 1; }
+
+/* ============================================
+   通用组件
+   ============================================ */
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-soft);
+}
+
+.solid-card {
+  background: white;
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-soft);
+  padding: 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.btn:active { transform: scale(0.96); }
+
+.btn-primary {
+  background: var(--akane);
+  color: white;
+  box-shadow: var(--sh-brand);
+}
+.btn-primary:hover { background: #A84547; }
+
+.btn-secondary {
+  background: white;
+  color: var(--sumi);
+  border: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--hae);
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.05);
+  color: var(--sumi);
+  transition: all 0.15s;
+}
+.btn-icon:active { transform: scale(0.92); background: rgba(15, 23, 42, 0.1); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.badge-n5 { background: rgba(16, 185, 129, 0.12); color: var(--n5); }
+.badge-n4 { background: rgba(14, 165, 233, 0.12); color: var(--n4); }
+.badge-n3 { background: rgba(245, 158, 11, 0.12); color: var(--n3); }
+.badge-n2 { background: rgba(139, 92, 246, 0.12); color: var(--n2); }
+.badge-n1 { background: rgba(239, 68, 68, 0.12); color: var(--n1); }
+.badge-gray { background: rgba(100, 116, 139, 0.12); color: var(--hae); }
+.badge-akane { background: rgba(188, 78, 81, 0.12); color: var(--akane); }
+
+/* ============================================
+   底部 Tab Bar
+   ============================================ */
+.tab-bar {
+  position: sticky;
+  /* 避免被 mavis 注入的右下角 floating ball 遮挡（球在 bottom:20px 高 40px） */
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  display: flex;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
+  padding: 8px 0 16px 0;
+  z-index: 30;
+}
+.tab-bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 0;
+  color: var(--hae);
+  font-size: 10px;
+  font-weight: 500;
+}
+.tab-bar-item.active { color: var(--akane); }
+.tab-bar-item i { font-size: 18px; }
+
+/* ============================================
+   导航栏
+   ============================================ */
+.nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px 12px 20px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+.nav-header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+.back-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.05);
+  color: var(--sumi);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.back-btn:hover { background: rgba(15, 23, 42, 0.1); }
+.back-btn:active { transform: scale(0.92); }
+.nav-header .back-btn {
+  background: rgba(15, 23, 42, 0.05);
+  color: var(--sumi);
+}
+
+/* ============================================
+   音调折线图（用于单词本/拼写反馈）
+   ============================================ */
+.pitch-graph {
+  display: flex;
+  align-items: flex-end;
+  height: 60px;
+  gap: 4px;
+  padding: 0 4px;
+}
+.pitch-bar {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.4s ease;
+  position: relative;
+}
+.pitch-bar::after {
+  content: attr(data-mora);
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: var(--hae);
+}
+
+/* ============================================
+   进度条
+   ============================================ */
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(15, 23, 42, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--akane);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* ============================================
+   动画
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+}
+.pulse { animation: pulse 1.6s ease-in-out infinite; }
+
+@keyframes confetti {
+  0% { transform: translateY(0) rotate(0); opacity: 1; }
+  100% { transform: translateY(60px) rotate(360deg); opacity: 0; }
+}
+
+/* ============================================
+   工具类
+   ============================================ */
+.page {
+  padding: 0 20px 100px 20px;
+}
+.page-tight { padding: 0 20px 40px 20px; }
+
+.row { display: flex; align-items: center; }
+.col { display: flex; flex-direction: column; }
+.gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; } .gap-6 { gap: 24px; }
+.mt-2 { margin-top: 8px; } .mt-4 { margin-top: 16px; } .mt-6 { margin-top: 24px; }
+.mb-2 { margin-bottom: 8px; } .mb-4 { margin-bottom: 16px; }
+.text-xs { font-size: 11px; } .text-sm { font-size: 13px; } .text-md { font-size: 15px; }
+.text-lg { font-size: 18px; } .text-xl { font-size: 22px; } .text-2xl { font-size: 28px; }
+.font-bold { font-weight: 700; } .font-semi { font-weight: 600; }
+.text-muted { color: var(--hae); }
+.text-akane { color: var(--akane); } .text-ai { color: var(--ai-iro); }
+.center { text-align: center; }
+.between { display: flex; align-items: center; justify-content: space-between; }
+.flex-1 { flex: 1; }
+.rounded-full { border-radius: 999px; }
+
+/* ============================================
+   装饰
+   ============================================ */
+.bg-gradient-jp {
+  background:
+    radial-gradient(at 0% 0%, rgba(188, 78, 81, 0.08) 0%, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(27, 58, 92, 0.06) 0%, transparent 50%),
+    var(--kinari);
+}
+
+.divider {
+  height: 1px;
+  background: rgba(15, 23, 42, 0.06);
+  margin: 16px 0;
+}
+
+/* 振假名大字 - 用于单词卡正面 */
+.furi-large rt { font-size: 0.35em; }
+.furi-medium rt { font-size: 0.4em; }
+.furi-small rt { font-size: 0.45em; }
+
+/* 假名选择按钮 */
+.kana-btn {
+  width: 44px;
+  height: 56px;
+  border-radius: var(--r-md);
+  background: white;
+  border: 1.5px solid rgba(15, 23, 42, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--sumi);
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.kana-btn:active { transform: scale(0.94); background: var(--kinari); }
+.kana-btn.correct {
+  background: var(--success);
+  color: white;
+  border-color: var(--success);
+}
+.kana-btn.wrong {
+  background: var(--danger);
+  color: white;
+  border-color: var(--danger);
+  animation: shake 0.3s;
+}
+.kana-btn.hint {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: var(--warning);
+  color: var(--warning);
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* 录音按钮 - 跳动 */
+.record-btn {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--akane), #E76F72);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  box-shadow: var(--sh-brand);
+  position: relative;
+  transition: all 0.2s;
+}
+.record-btn::before, .record-btn::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid var(--akane);
+  opacity: 0.3;
+  animation: recordRipple 1.4s ease-out infinite;
+}
+.record-btn::after { animation-delay: 0.7s; }
+@keyframes recordRipple {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+.record-btn:active { transform: scale(0.94); }
+.record-btn.recording { background: var(--danger); }
+
+/* 进度点 */
+.dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.15);
+  transition: all 0.3s;
+}
+.dot.active { width: 24px; background: var(--akane); border-radius: 3px; }
+.dot.done { background: var(--success); }
+
+/* 列表项 */
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: white;
+  border-radius: var(--r-md);
+  margin-bottom: 8px;
+  transition: all 0.15s;
+}
+.list-item:active { transform: scale(0.98); background: var(--kinari); }
+
+/* 输入框 */
+.search-input {
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border-radius: var(--r-md);
+  background: rgba(15, 23, 42, 0.05);
+  border: none;
+  font-size: 15px;
+  color: var(--sumi);
+  outline: none;
+  transition: all 0.2s;
+}
+.search-input:focus { background: white; box-shadow: var(--sh-md); }
+
+/* 章节头 */
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.section-head h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.section-head .more {
+  font-size: 13px;
+  color: var(--akane);
+  font-weight: 500;
+}
+
+/* 音频播放器 */
+.audio-player {
+  background: linear-gradient(135deg, var(--akane), #E76F72);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.audio-player::after {
+  content: "";
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+.play-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: white;
+  color: var(--akane);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-right: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 32px;
+  flex: 1;
+}
+.wave {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 2px;
+  min-height: 4px;
+}
