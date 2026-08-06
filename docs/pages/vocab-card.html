@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>単語カード - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .flip-card {
+    position: relative;
+    height: 520px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .flip-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    overflow: hidden;
+    transition: opacity 0.25s ease, transform 0.3s ease;
+  }
+  .flip-front {
+    z-index: 2;
+    opacity: 1;
+    transform: scale(1);
+  }
+  .flip-back {
+    z-index: 1;
+    opacity: 0;
+    transform: scale(0.97);
+    pointer-events: none;
+    overflow-y: auto;
+  }
+  .flip-card.flipped .flip-front {
+    z-index: 1;
+    opacity: 0;
+    transform: scale(0.97);
+    pointer-events: none;
+  }
+  .flip-card.flipped .flip-back {
+    z-index: 2;
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+  .flip-back::-webkit-scrollbar { display: none; }
+
+  .flip-front {
+    background: linear-gradient(135deg, #FAFAF7 0%, white 100%);
+    box-shadow: var(--sh-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+
+  /* 装饰圆 */
+  .flip-front::before {
+    content: "";
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 180px; height: 180px;
+    background: rgba(188, 78, 81, 0.08);
+    border-radius: 50%;
+  }
+  .flip-front::after {
+    content: "";
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 140px; height: 140px;
+    background: rgba(27, 58, 92, 0.06);
+    border-radius: 50%;
+  }
+
+  .big-kanji {
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--sumi);
+    line-height: 1.2;
+    z-index: 2;
+  }
+  .big-kanji ruby rt {
+    font-size: 18px;
+    color: var(--akane);
+    font-weight: 500;
+  }
+  .big-pitch {
+    font-size: 28px;
+    color: var(--akane);
+    margin-left: 8px;
+    font-weight: 600;
+  }
+
+  .pitch-visual {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    margin-top: 20px;
+    height: 60px;
+  }
+  .pitch-visual .mora {
+    width: 32px;
+    background: linear-gradient(180deg, var(--akane) 0%, #E76F72 100%);
+    border-radius: 4px 4px 0 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 4px;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .pitch-visual .mora.low {
+    background: linear-gradient(180deg, #C8C8C8 0%, #E0E0E0 100%);
+  }
+
+  .flip-back {
+    background: white;
+    box-shadow: var(--sh-lg);
+    padding: 24px;
+    overflow-y: auto;
+  }
+
+  .info-row {
+    display: flex;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+  }
+  .info-row .label {
+    width: 70px;
+    color: var(--hae);
+    font-size: 12px;
+    padding-top: 1px;
+  }
+  .info-row .val {
+    flex: 1;
+    font-size: 14px;
+    color: var(--sumi);
+  }
+
+  .example-box {
+    background: rgba(188, 78, 81, 0.04);
+    border-left: 3px solid var(--akane);
+    padding: 12px 14px;
+    border-radius: 0 8px 8px 0;
+    margin: 8px 0;
+  }
+  .example-box .jp {
+    font-size: 15px;
+    color: var(--sumi);
+    line-height: 1.5;
+  }
+  .example-box .jp ruby rt {
+    font-size: 10px;
+    color: var(--hae);
+  }
+  .example-box .zh {
+    font-size: 12px;
+    color: var(--hae);
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <div data-auto-stepper></div>
+
+    <div class="nav-header">
+      <div class="flex items-center gap-3">
+        <a href="vocab-list.html" class="back-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
+        <h1>单词卡</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="btn-icon" id="topFlipBtn" style="width: 36px; height: 36px;" title="翻到背面看释义">
+          <i class="fas fa-sync-alt"></i>
+        </button>
+        <button class="btn-icon" id="topFavBtn" style="width: 36px; height: 36px;" title="加入单词本">
+          <i class="far fa-heart"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- 进度 -->
+    <div class="px-5 mt-2">
+      <div class="flex items-center justify-between text-xs text-muted">
+        <span id="cardProgress">1 / 10</span>
+        <span>今日 · <span data-bind="levelName">N5</span></span>
+      </div>
+      <div class="progress-track mt-1" style="height: 4px;">
+        <div class="progress-fill" id="progressBar" style="width: 10%;"></div>
+      </div>
+    </div>
+
+    <!-- 翻卡 -->
+    <div class="px-5">
+      <div class="flip-card" id="flipCard" onclick="this.classList.toggle('flipped')">
+        <div class="flip-inner" style="position:relative; width:100%; height:100%;">
+
+          <!-- 正面 -->
+          <div class="flip-face flip-front">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="badge" id="frontBadgeLevel">N5</span>
+              <span class="badge" id="frontBadgePos">名词</span>
+            </div>
+            <div class="jp" style="z-index: 2; text-align: center;">
+              <div class="big-kanji" id="wordKanji"></div>
+              <div class="big-pitch" id="wordPitch">0</div>
+            </div>
+            <div class="pitch-visual" id="pitchVisual"></div>
+            <p class="text-xs text-muted mt-3">点击卡片查看释义</p>
+          </div>
+
+          <!-- 背面 -->
+          <div class="flip-face flip-back">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="badge" id="backBadgeLevel">N5</span>
+              <span class="badge" id="backBadgePos">名词</span>
+            </div>
+            <h2 class="jp text-xl font-bold mb-2" style="font-size: 26px;" id="wordKanjiBack"></h2>
+            <p class="text-md font-semi mb-3" id="wordMeaning"></p>
+
+            <div class="info-row">
+              <span class="label">读音</span>
+              <span class="val jp" id="wordKana"></span>
+            </div>
+            <div class="info-row">
+              <span class="label">词性</span>
+              <span class="val" id="wordPos">名词</span>
+            </div>
+            <div class="info-row">
+              <span class="label">释义</span>
+              <span class="val" id="wordMeaning2"></span>
+            </div>
+
+            <p class="text-xs text-muted mt-4 mb-2">例句</p>
+            <div class="example-box" id="ex0">
+              <div class="jp" id="ex0jp"></div>
+              <div class="zh" id="ex0zh"></div>
+              <div class="mt-2 flex items-center gap-2">
+                <button class="btn-icon" id="ex0Speak" style="width: 28px; height: 28px;">
+                  <i class="fas fa-volume-up text-xs" style="color: var(--akane);"></i>
+                </button>
+                <span class="text-xs text-muted">点击听发音</span>
+              </div>
+            </div>
+
+            <div class="example-box" id="ex1">
+              <div class="jp" id="ex1jp"></div>
+              <div class="zh" id="ex1zh"></div>
+            </div>
+
+            <div class="example-box" id="ex2">
+              <div class="jp" id="ex2jp"></div>
+              <div class="zh" id="ex2zh"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 翻卡操作 -->
+    <div class="px-5 flex items-center justify-center gap-4 mt-2">
+      <button class="btn-icon" id="btnX" style="width: 56px; height: 56px; background: rgba(239, 68, 68, 0.1); color: var(--danger);">
+        <i class="fas fa-times"></i>
+      </button>
+      <button class="record-btn" id="btnSpeak" style="width: 72px; height: 72px; font-size: 26px;">
+        <i class="fas fa-volume-up"></i>
+      </button>
+      <button class="btn-icon" id="btnCheck" style="width: 56px; height: 56px; background: rgba(16, 185, 129, 0.1); color: var(--success);">
+        <i class="fas fa-check"></i>
+      </button>
+    </div>
+    <p class="text-center text-xs text-muted mt-2">不认识 · 听发音 · 认识</p>
+
+    <!-- 快捷操作 -->
+    <div class="px-5 mt-4">
+      <div class="grid grid-cols-3 gap-2">
+        <button class="btn btn-secondary" style="font-size: 12px; padding: 10px 8px;">
+          <i class="far fa-bookmark"></i> 收藏
+        </button>
+        <button class="btn btn-secondary" style="font-size: 12px; padding: 10px 8px;">
+          <i class="fas fa-pen"></i> 拼写
+        </button>
+        <button class="btn btn-secondary" style="font-size: 12px; padding: 10px 8px;">
+          <i class="fas fa-share"></i> 分享
+        </button>
+      </div>
+    </div>
+
+    <!-- 卡片导航 -->
+    <div class="px-5 mt-5 flex items-center justify-between">
+      <button class="btn btn-ghost" id="prevBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 上一个
+      </button>
+      <button class="btn btn-ghost" id="nextBtn">
+        下一个 <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../data.js"></script>
+<script src="../nhk-daily.js"></script>
+<script>
+  // 读取 URL ?w= (词) 或 ?idx= (序号) — 只在初始化时读一次
+  const params = new URLSearchParams(location.search);
+  const wordParam = params.get('w');
+  let currentIdx = 0;
+  let currentCard = null;
+  let currentList = [];
+  let lastList = null;
+  let initialIdx = null;
+
+  function resolveInitialIdx() {
+    const level = JP.State.level;
+    const list = (JP_DATA[level] && JP_DATA[level].vocabList) || [];
+    if (wordParam) {
+      const idx = list.findIndex(w => w.word === wordParam);
+      if (idx >= 0) return idx;
+    }
+    const p = parseInt(params.get('idx') || '0', 10) || 0;
+    return Math.max(0, Math.min(p, list.length - 1));
+  }
+
+  function getPosBadgeClass(pos) {
+    if (!pos) return 'badge-akane';
+    if (pos === '名詞' || pos === '代名詞') return 'badge-akane';
+    if (pos === '動詞') return 'badge-ai-iro';
+    if (pos === 'い形容詞') return 'badge-n5';
+    if (pos === 'な形容詞') return 'badge-akane';
+    if (pos === '副詞') return 'badge-gray';
+    return 'badge-akane';
+  }
+
+  function renderCard() {
+    const level = JP.State.level;
+    const data = JP_DATA[level];
+    if (!data) return;
+
+    currentList = data.vocabList || [];
+    if (currentList.length === 0) return;
+
+    // 第一次渲染时锁定初始 idx，之后用 currentIdx
+    if (initialIdx === null || currentList !== lastList) {
+      currentIdx = resolveInitialIdx();
+      initialIdx = currentIdx;
+    }
+    if (currentIdx < 0) currentIdx = currentList.length - 1;
+    if (currentIdx >= currentList.length) currentIdx = 0;
+    lastList = currentList;
+
+    currentCard = currentList[currentIdx];
+
+    // 进度
+    document.getElementById('cardProgress').textContent = `${currentIdx + 1} / ${currentList.length}`;
+    document.getElementById('progressBar').style.width = ((currentIdx + 1) / currentList.length * 100) + '%';
+
+    // 等级
+    const lv = level;
+    const badgeClass = 'badge-' + lv.toLowerCase();
+    document.getElementById('frontBadgeLevel').className = 'badge ' + badgeClass;
+    document.getElementById('frontBadgeLevel').textContent = lv;
+    document.getElementById('backBadgeLevel').className = 'badge ' + badgeClass;
+    document.getElementById('backBadgeLevel').textContent = lv;
+
+    // 词性
+    const pos = currentCard.pos || '名詞';
+    document.getElementById('frontBadgePos').className = 'badge ' + getPosBadgeClass(pos);
+    document.getElementById('frontBadgePos').textContent = pos;
+    document.getElementById('backBadgePos').className = 'badge ' + getPosBadgeClass(pos);
+    document.getElementById('backBadgePos').textContent = pos;
+
+    // 词
+    document.getElementById('wordKanji').innerHTML = currentCard.word;
+    document.getElementById('wordKanjiBack').innerHTML = currentCard.word;
+    document.getElementById('wordPitch').textContent = currentCard.pitch || '0';
+    document.getElementById('wordKana').textContent = currentCard.kana;
+    document.getElementById('wordPos').textContent = pos;
+    document.getElementById('wordMeaning').textContent = currentCard.meaning;
+    document.getElementById('wordMeaning2').textContent = currentCard.meaning;
+
+    // 例句（如果没有现成的，根据词性自动生成）
+    let examples = currentCard.examples;
+    if (!examples || examples.length === 0) {
+      examples = generateExamples(currentCard);
+    }
+    for (let i = 0; i < 3; i++) {
+      const ex = examples[i];
+      const jpEl = document.getElementById('ex' + i + 'jp');
+      const zhEl = document.getElementById('ex' + i + 'zh');
+      if (ex) {
+        jpEl.innerHTML = ex.jp;
+        zhEl.textContent = ex.zh;
+        document.getElementById('ex' + i).style.display = '';
+      } else {
+        document.getElementById('ex' + i).style.display = 'none';
+      }
+    }
+
+    // 例句发音
+    const ex0Speak = document.getElementById('ex0Speak');
+    ex0Speak.onclick = (e) => {
+      e.stopPropagation();
+      if (examples[0]) JP.speak(examples[0].jp.replace(/<[^>]+>/g, ''));
+    };
+
+    // 主发音
+    const btnSpeak = document.getElementById('btnSpeak');
+    btnSpeak.onclick = (e) => {
+      e.stopPropagation();
+      JP.speak(currentCard.word);
+    };
+
+    // 翻回正面
+    document.getElementById('flipCard').classList.remove('flipped');
+
+    // URL
+    const newUrl = location.pathname + '?idx=' + currentIdx;
+    history.replaceState(null, '', newUrl);
+
+    // 同步右上角收藏按钮状态
+    const favBtn = document.getElementById('topFavBtn');
+    if (favBtn) {
+      const isFav = JP.WordBook.has('card-fav-' + currentCard.word);
+      favBtn.innerHTML = `<i class="${isFav ? 'fas' : 'far'} fa-heart"${isFav ? ' style="color: var(--akane);"' : ''}></i>`;
+    }
+
+    // 音调可视化
+    renderPitchVisual(currentCard.kana, currentCard.pitch);
+
+    // 滚动到顶
+    document.querySelector('.phone-screen').scrollTop = 0;
+  }
+
+  function generateExamples(w) {
+    const pos = w.pos || '名詞';
+    const word = w.word;
+    const kana = w.kana;
+    const ex = [];
+    if (pos === '名詞') {
+      ex.push({ jp: `これは<ruby>${word}<rt>${kana}</rt></ruby>です。`, zh: `这是${w.meaning}。` });
+      ex.push({ jp: `<ruby>${word}<rt>${kana}</rt></ruby>を<ruby>見<rt>み</rt></ruby>てください。`, zh: `请看${w.meaning}。` });
+    } else if (pos === '動詞') {
+      ex.push({ jp: `毎日<ruby>${word}<rt>${kana}</rt></ruby>ます。`, zh: `每天${w.meaning}。` });
+      ex.push({ jp: `<ruby>${word}<rt>${kana}</rt></ruby>たいです。`, zh: `想${w.meaning}。` });
+    } else if (pos === 'い形容詞') {
+      ex.push({ jp: `とても<ruby>${word}<rt>${kana}</rt></ruby>です。`, zh: `很${w.meaning}。` });
+    } else if (pos === 'な形容詞') {
+      ex.push({ jp: `<ruby>${word}<rt>${kana}</rt></ruby>な<ruby>人<rt>ひと</rt></ruby>です。`, zh: `是${w.meaning}的人。` });
+    } else if (pos === '副詞') {
+      ex.push({ jp: `<ruby>${word}<rt>${kana}</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>します。`, zh: `${w.meaning}地学习。` });
+    } else {
+      ex.push({ jp: `「<ruby>${word}<rt>${kana}</rt></ruby>」は<ruby>大切<rt>たいせつ</rt></ruby>です。`, zh: `${w.meaning}很重要。` });
+    }
+    return ex;
+  }
+
+  function renderPitchVisual(kana, pitch) {
+    const el = document.getElementById('pitchVisual');
+    if (!el || !kana) return;
+
+    const morae = kana.split('');
+    const pitchNum = parseInt(pitch, 10) || 0;
+
+    el.innerHTML = morae.map((c, i) => {
+      let isHigh;
+      if (pitchNum === 0) isHigh = true;
+      else if (pitchNum === 1) isHigh = i === 0;
+      else isHigh = i < pitchNum;
+      const h = isHigh ? 28 : 18;
+      return `<div class="mora ${isHigh ? '' : 'low'}" style="height: ${h}px;">${c}</div>`;
+    }).join('');
+  }
+
+  // 导航
+  function goNext() {
+    currentIdx++;
+    renderCard();
+  }
+  function goPrev() {
+    currentIdx--;
+    renderCard();
+  }
+  function goRandom() {
+    currentIdx = Math.floor(Math.random() * currentList.length);
+    renderCard();
+  }
+
+  document.getElementById('prevBtn').onclick = goPrev;
+  document.getElementById('nextBtn').onclick = goNext;
+  document.getElementById('topFlipBtn').onclick = () => {
+    document.getElementById('flipCard').classList.toggle('flipped');
+  };
+  document.getElementById('topFavBtn').onclick = (e) => {
+    if (!currentCard) return;
+    const id = 'card-fav-' + currentCard.word;
+    if (JP.WordBook.has(id)) {
+      JP.WordBook.remove(id);
+      e.currentTarget.innerHTML = '<i class="far fa-heart"></i>';
+    } else {
+      JP.WordBook.add({ id, word: currentCard.word, kana: currentCard.kana, pitch: currentCard.pitch, level: JP.State.level, meaning_zh: currentCard.meaning, pos: currentCard.pos, source: 'card', status: 'new' });
+      e.currentTarget.innerHTML = '<i class="fas fa-heart" style="color: var(--akane);"></i>';
+    }
+  };
+  document.getElementById('btnX').onclick = () => {
+    JP.WordBook.add({ id: 'card-x-' + currentCard.word, word: currentCard.word, kana: currentCard.kana, pitch: currentCard.pitch, level: JP.State.level, meaning_zh: currentCard.meaning + ' (不认识)', pos: currentCard.pos, source: 'card', status: 'unknown' });
+    goNext();
+  };
+  document.getElementById('btnCheck').onclick = () => {
+    JP.WordBook.add({ id: 'card-o-' + currentCard.word, word: currentCard.word, kana: currentCard.kana, pitch: currentCard.pitch, level: JP.State.level, meaning_zh: currentCard.meaning, pos: currentCard.pos, source: 'card', status: 'known' });
+    goNext();
+  };
+
+  // 收藏
+  document.querySelector('button.btn-secondary .fa-bookmark').parentElement.onclick = (e) => {
+    e.preventDefault();
+    const id = 'card-fav-' + currentCard.word;
+    if (JP.WordBook.has(id)) {
+      JP.WordBook.remove(id);
+      e.currentTarget.innerHTML = '<i class="far fa-bookmark"></i> 收藏';
+    } else {
+      JP.WordBook.add({ id, word: currentCard.word, kana: currentCard.kana, pitch: currentCard.pitch, level: JP.State.level, meaning_zh: currentCard.meaning, pos: currentCard.pos, source: 'card', status: 'new' });
+      e.currentTarget.innerHTML = '<i class="fas fa-bookmark"></i> 已收藏';
+    }
+  };
+
+  renderCard();
+  window.addEventListener('levelchange', () => { initialIdx = null; currentIdx = 0; renderCard(); });
+</script>
+</body>
+</html>
