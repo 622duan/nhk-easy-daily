@@ -285,8 +285,12 @@ def parse_article(html: str, url: str, verbose: bool = True) -> Optional[NHKArti
         debug(f"body too short: {body_plain[:50]!r}")
         return None
 
-    # ---- 提取音频 URL (新版没找到) ----
+    # ---- 提取音频 URL ----
+    # 老文章 k100 编号: https://www3.nhk.or.jp/news/easy/{id}/{id}.mp3
+    # 新文章 ne 编号: 暂无公开 mp3 (NHK 改了网站架构)
     audio_url = None
+    if news_id.startswith('k100'):
+        audio_url = f'https://www3.nhk.or.jp/news/easy/{news_id}/{news_id}.mp3'
 
     # ---- 提取图片: 新版 img.src = news/html/... ----
     image_url = None
