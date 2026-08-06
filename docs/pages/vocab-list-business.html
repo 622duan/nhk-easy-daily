@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>商务日语词库 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .search-box {
+    background: rgba(15, 23, 42, 0.05);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 20px 12px;
+  }
+  .search-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    color: var(--sumi);
+    outline: none;
+  }
+  .search-box input::placeholder {
+    color: var(--hae);
+    opacity: 0.6;
+  }
+
+  .word-row {
+    background: white;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    transition: all 0.15s;
+  }
+  .word-row:active { transform: scale(0.98); background: var(--kinari); }
+
+  .word-kanji {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--sumi);
+    line-height: 1.2;
+  }
+  .word-kana {
+    font-size: 12px;
+    color: var(--hae);
+    margin-top: 2px;
+  }
+  .word-meaning {
+    font-size: 13px;
+    color: var(--hae);
+    margin-left: auto;
+    text-align: right;
+    max-width: 110px;
+  }
+  .word-tag {
+    font-size: 10px;
+    color: #16a34a;
+    background: rgba(22, 163, 74, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-top: 2px;
+    display: inline-block;
+    font-weight: 600;
+  }
+
+  .header-banner {
+    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 16px;
+    margin: 12px 20px;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+  }
+  .header-banner h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .header-banner p {
+    font-size: 12px;
+    opacity: 0.9;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <div data-auto-stepper></div>
+
+    <div class="nav-header">
+      <div class="flex items-center gap-3">
+        <a href="home.html" class="back-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
+        <h1>商务日语</h1>
+      </div>
+    </div>
+
+    <div class="header-banner">
+      <h2>💼 商务日语词库</h2>
+      <p>职场 / 商谈 / 邮件必备词汇 · 2648词</p>
+    </div>
+
+    <!-- 搜索框 -->
+    <div class="search-box">
+      <i class="fas fa-search" style="color: var(--hae); opacity: 0.6;"></i>
+      <input type="text" id="searchInput" placeholder="搜索单词或读音..." />
+    </div>
+
+    <!-- 词条列表 -->
+    <div class="px-5 mt-4">
+      <p class="text-xs text-muted mb-3" id="vocabSectionTitle">商务场景高频词汇</p>
+      <div id="vocabListContainer"></div>
+      <p class="text-center text-xs text-muted mt-3" id="vocabCount"></p>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <div class="tab-bar">
+      <a class="tab-bar-item" href="home.html">
+        <i class="fas fa-home"></i><span>首页</span>
+      </a>
+      <a class="tab-bar-item" href="vocab-list.html">
+        <i class="fas fa-graduation-cap"></i><span>学习</span>
+      </a>
+      <a class="tab-bar-item" href="wordbook.html">
+        <i class="fas fa-bookmark"></i><span>单词本</span>
+      </a>
+      <a class="tab-bar-item" href="profile.html">
+        <i class="far fa-user"></i><span>我的</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../nhk-daily.js"></script>
+<script src="../data.js"></script>
+<script>
+  let searchQuery = '';
+
+  function renderVocabList() {
+    let list = (JP_DATA.specialized && JP_DATA.specialized.business) || [];
+
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(w => 
+        (w.word && w.word.toLowerCase().includes(q)) ||
+        (w.kanji && w.kanji.toLowerCase().includes(q)) ||
+        (w.kana && w.kana.toLowerCase().includes(q)) ||
+        (w.meaning && w.meaning.toLowerCase().includes(q))
+      );
+    }
+
+    const container = document.getElementById('vocabListContainer');
+    if (!container) return;
+
+    if (list.length === 0) {
+      container.innerHTML = '<p class="text-center text-muted text-sm" style="padding: 40px 0;">未找到相关词条</p>';
+      document.getElementById('vocabCount').textContent = '';
+      return;
+    }
+
+    // Cap at 100 visible items for performance
+    const displayList = list.slice(0, 100);
+
+    container.innerHTML = displayList.map((w, i) => `
+      <a href="vocab-card.html?w=${encodeURIComponent(w.word)}" class="word-row">
+        <div class="flex-1">
+          <div class="jp">
+            <span class="word-kanji">${w.word}</span>
+            <span class="pitch" data-pitch="${w.pitch}" style="margin-left: 8px;"></span>
+          </div>
+          <div class="word-kana jp">${w.kana}<sup style="color: #16a34a;">${w.pitch}</sup></div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="btn-icon" style="width: 32px; height: 32px;" onclick="event.preventDefault(); JP.speak('${w.word}');">
+            <i class="fas fa-volume-up text-sm" style="color: #16a34a;"></i>
+          </button>
+          <div>
+            <div class="word-meaning">${w.meaning}</div>
+            <div class="word-tag">商务</div>
+          </div>
+        </div>
+      </a>
+    `).join('');
+
+    const total = (JP_DATA.specialized.business || []).length;
+    if (searchQuery) {
+      document.getElementById('vocabCount').textContent = `— 找到 ${list.length} 个匹配 —`;
+    } else {
+      document.getElementById('vocabCount').textContent = `— 共 ${total} 词 (显示前100) —`;
+    }
+  }
+
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    searchQuery = e.target.value.trim();
+    renderVocabList();
+  });
+
+  renderVocabList();
+</script>
+</body>
+</html>
