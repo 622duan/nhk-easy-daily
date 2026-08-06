@@ -164,7 +164,8 @@ def article_to_news_dict(article: Dict[str, Any], level: Optional[str] = None) -
         "plays": "new",
         "thumb": article.get("image_url", "") or "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
         "externalUrl": en_url,
-        "audioUrl": article.get("audio_url", ""),
+        # audioUrl 优先级: fetch_nhk.py 抓的 audio_url > 本地 data/audio/{news_id}.mp3 (TTS录)
+        "audioUrl": article.get("audio_url") or f"https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/{news_id}.mp3",
         "body": clean_paragraphs,
         "words": words[:20],
         "source": "NHK Easy News",
