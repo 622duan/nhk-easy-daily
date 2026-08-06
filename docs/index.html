@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>日本語ライフ - 原型预览</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--kinari, #FAFAF7);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+    color: #0F172A;
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
+  }
+  .jp { font-family: 'Noto Sans JP', sans-serif; }
+
+  /* ===== 桌面端 hero ===== */
+  .nav {
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(15,23,42,0.06);
+    z-index: 100;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-logo {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, #BC4E51, #E76F72);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 16px;
+    box-shadow: 0 4px 12px rgba(188,78,81,0.3);
+  }
+  .brand-text { font-weight: 800; font-size: 18px; letter-spacing: -0.02em; }
+  .brand-text .jp { font-size: 14px; color: #64748B; margin-left: 6px; }
+  .nav-meta { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #64748B; }
+  .pill {
+    padding: 6px 14px;
+    background: rgba(188,78,81,0.08);
+    color: #BC4E51;
+    border-radius: 999px;
+    font-size: 12px; font-weight: 600;
+  }
+
+  .hero {
+    padding: 64px 32px 32px 32px;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero h1 {
+    font-size: 48px; font-weight: 800;
+    letter-spacing: -0.03em; line-height: 1.1;
+    margin: 0 0 16px 0;
+  }
+  .hero h1 .jp { color: #BC4E51; }
+  .hero .tagline {
+    font-size: 17px; color: #64748B;
+    line-height: 1.6;
+    max-width: 600px; margin: 0 auto;
+  }
+  .hero .meta {
+    margin-top: 24px;
+    display: flex; gap: 12px;
+    justify-content: center; flex-wrap: wrap;
+  }
+  .meta-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px;
+    background: white; border-radius: 999px;
+    font-size: 12px; font-weight: 500;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  }
+  .meta-chip i { color: #BC4E51; }
+
+  .group {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+  .group-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .group-head h2 { font-size: 24px; font-weight: 700; margin: 0; letter-spacing: -0.02em; }
+  .group-head .desc { font-size: 14px; color: #64748B; }
+  .group-head .num {
+    font-size: 12px; color: #64748B;
+    background: rgba(15,23,42,0.04);
+    padding: 4px 10px; border-radius: 999px;
+  }
+
+  /* ===== 桌面端 iPhone 预览墙 ===== */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 32px;
+    justify-items: center;
+  }
+  .phone-card {
+    width: 100%;
+    max-width: 290px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .phone-wrap {
+    width: 290px; height: 627px;
+    background: white;
+    border-radius: 44px;
+    border: 8px solid #1F2937;
+    box-shadow:
+      0 0 0 1.5px #374151,
+      0 20px 50px rgba(15, 23, 42, 0.12),
+      0 0 0 8px rgba(0, 0, 0, 0.03);
+    position: relative; overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .phone-wrap:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      0 0 0 1.5px #374151,
+      0 30px 70px rgba(15, 23, 42, 0.18),
+      0 0 0 8px rgba(0, 0, 0, 0.03);
+  }
+  .phone-wrap::before {
+    content: "";
+    position: absolute;
+    top: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 90px; height: 24px;
+    background: #0F172A;
+    border-radius: 16px;
+    z-index: 100;
+  }
+  .phone-wrap iframe {
+    width: 100%; height: 100%;
+    border: none; display: block;
+  }
+  .phone-label { margin-top: 16px; text-align: center; }
+  .phone-label .name { font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
+  .phone-label .sub { font-size: 11px; color: #64748B; margin-top: 4px; }
+
+  .legend {
+    background: linear-gradient(135deg, #FFF5F5 0%, white 100%);
+    border: 1px solid rgba(188,78,81,0.15);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin: 32px auto;
+    max-width: 800px;
+    display: flex; gap: 20px; align-items: flex-start;
+  }
+  .legend i { font-size: 24px; color: #BC4E51; margin-top: 2px; }
+  .legend .text h3 { margin: 0 0 6px 0; font-size: 16px; font-weight: 700; }
+  .legend .text p { margin: 0; font-size: 13px; color: #64748B; line-height: 1.6; }
+
+  footer {
+    text-align: center;
+    padding: 40px 32px;
+    color: #64748B; font-size: 12px;
+  }
+
+  /* ===== 移动端：直接列表（电脑端隐藏） ===== */
+  .mobile-only { display: none; }
+
+  .mobile-hero {
+    padding: 20px 20px 8px 20px;
+  }
+  .mobile-hero h1 {
+    font-size: 26px; font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.2;
+    margin: 0 0 6px 0;
+  }
+  .mobile-hero h1 .jp { color: #BC4E51; }
+  .mobile-hero p {
+    font-size: 13px; color: #64748B;
+    line-height: 1.5; margin: 0 0 16px 0;
+  }
+  .quick-cta {
+    display: block;
+    background: linear-gradient(135deg, #BC4E51, #E76F72);
+    color: white;
+    border-radius: 16px;
+    padding: 16px 20px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 15px;
+    box-shadow: 0 8px 24px rgba(188,78,81,0.3);
+    margin-bottom: 16px;
+  }
+  .quick-cta:active { transform: scale(0.98); }
+  .quick-cta i { margin-left: 6px; }
+
+  .mobile-group {
+    padding: 8px 20px 0 20px;
+  }
+  .mobile-group h3 {
+    font-size: 12px; color: #64748B;
+    font-weight: 700;
+    margin: 16px 0 8px 0;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .page-list {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  }
+  .page-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(15,23,42,0.05);
+    text-decoration: none;
+    color: inherit;
+  }
+  .page-item:last-child { border-bottom: none; }
+  .page-item:active { background: var(--kinari, #FAFAF7); }
+  .page-item .ico {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 15px;
+    flex-shrink: 0;
+  }
+  .page-item .lbl { flex: 1; min-width: 0; }
+  .page-item .lbl .t { font-size: 14px; font-weight: 600; }
+  .page-item .lbl .s { font-size: 11px; color: #64748B; margin-top: 2px; }
+  .page-item .arr { color: #64748B; font-size: 12px; }
+
+  .mobile-footer {
+    text-align: center;
+    padding: 24px 20px 100px 20px;
+    color: #94A3B8; font-size: 11px;
+  }
+
+  /* ===== 响应式：768px 以下 = 移动端布局 ===== */
+  @media (max-width: 768px) {
+    .nav { padding: 12px 20px; }
+    .nav-meta { display: none; }
+    .desktop-only { display: none !important; }
+    .mobile-only { display: block; }
+    .group { padding: 20px 0; }
+  }
+  @media (min-width: 769px) {
+    .mobile-only { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 共享导航 -->
+<nav class="nav">
+  <div class="brand">
+    <div class="brand-logo">日</div>
+    <div>
+      <div class="brand-text">日本語ライフ<span class="jp">Nihongo Life</span></div>
+    </div>
+  </div>
+  <div class="nav-meta">
+    <span class="pill">v2.0 · 原型</span>
+    <span><i class="far fa-calendar"></i> 2026/07/27</span>
+    <span><i class="fas fa-mobile-alt"></i> 移动优先</span>
+  </div>
+</nav>
+
+<!-- ============== 桌面端 ============== -->
+<div class="desktop-only">
+  <div class="hero">
+    <h1>不只是考试 <br>是<span class="jp">"在日本能开口说话"</span>的日语</h1>
+    <p class="tagline">
+      沉浸式日语学习 App · N5-N1 等级体系 · NHK 真实新闻广播 · 单词本永久保存<br>
+      敬语 / 动词变形 / 拼写纠正 / 五十音图 — 一个 App 走完
+    </p>
+    <div class="meta">
+      <span class="meta-chip"><i class="fas fa-check"></i> 15 个高保真页面</span>
+      <span class="meta-chip"><i class="fas fa-check"></i> 振假名 + 音调标注</span>
+      <span class="meta-chip"><i class="fas fa-check"></i> NHK 真实音频</span>
+      <span class="meta-chip"><i class="fas fa-check"></i> 单词本永久持久化</span>
+    </div>
+  </div>
+
+  <div class="legend">
+    <i class="fas fa-hand-pointer"></i>
+    <div class="text">
+      <h3>点击手机屏预览交互</h3>
+      <p>每个手机壳都是可交互的 HTML 页面原型 — 点假名听发音、点录音按钮、翻卡、点词查义。等级 Stepper 跨页面同步、单词本用 localStorage 持久化。</p>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-head">
+      <h2>核心流程</h2>
+      <span class="desc">从入门到精通的 5 个主页面</span>
+      <span class="num">5 屏</span>
+    </div>
+    <div class="grid">
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/onboarding.html', '_blank')">
+          <iframe src="pages/onboarding.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">🎌 欢迎引导</div>
+          <div class="sub">选择目标 · 开始学习</div>
+        </div>
+      </div>
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/home.html', '_blank')">
+          <iframe src="pages/home.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">🏠 首页</div>
+          <div class="sub">等级 Stepper + 4 大入口</div>
+        </div>
+      </div>
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/vocab-list.html', '_blank')">
+          <iframe src="pages/vocab-list.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">📚 单词列表</div>
+          <div class="sub">N5-N1 切换 · 音调标注</div>
+        </div>
+      </div>
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/vocab-card.html', '_blank')">
+          <iframe src="pages/vocab-card.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">🎴 单词卡（翻卡）</div>
+          <div class="sub">假名 / 音调图 / 例句</div>
+        </div>
+      </div>
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/news-detail.html', '_blank')">
+          <iframe src="pages/news-detail.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">📰 新闻详情</div>
+          <div class="sub">NHK 真实音频 · 振假名</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-head">
+      <h2>新闻模块</h2>
+      <span class="desc">每日 NHK 新闻 · 5 个等级</span>
+      <span class="num">2 屏</span>
+    </div>
+    <div class="grid">
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/news-list.html', '_blank')">
+          <iframe src="pages/news-list.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">📋 新闻列表</div>
+          <div class="sub">今日推荐 + 往期</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-head">
+      <h2>语法模块</h2>
+      <span class="desc">敬语 + 动词变形</span>
+      <span class="num">4 屏</span>
+    </div>
+    <div class="grid">
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/keigo-index.html', '_blank')">
+          <iframe src="pages/keigo-index.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">🤝 敬语主页</div>
+          <div class="sub">3 大体系 + 4 个场景</div>
+        </div>
+      </div>
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/keigo-detail.html', '_blank')">
+          <iframe src="pages/keigo-detail.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">📖 敬语详情</div>
+          <div class="sub">变形规则 + 职场对话</div>
+        </div>
+      </div>
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/verb-index.html', '_blank')">
+          <iframe src="pages/verb-index.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">🔄 动词变形主页</div>
+          <div class="sub">10 种形 × 3 类动词</div>
+        </div>
+      </div>
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/verb-detail.html', '_blank')">
+          <iframe src="pages/verb-detail.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">📐 动词变形详情</div>
+          <div class="sub">ます形 + 例句</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-head">
+      <h2>拼写练习</h2>
+      <span class="desc">低等级辅助 · 高等级纠正</span>
+      <span class="num">2 屏</span>
+    </div>
+    <div class="grid">
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/spell-easy.html', '_blank')">
+          <iframe src="pages/spell-easy.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">🎧 发音辅助 (N5-N3)</div>
+          <div class="sub">听音 → 假名提示 → 拼写</div>
+        </div>
+      </div>
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/spell-hard.html', '_blank')">
+          <iframe src="pages/spell-hard.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">🎤 发音纠正 (N2-N1)</div>
+          <div class="sub">录音评分 + 音素反馈 + 成功回放</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-head">
+      <h2>单词本 & 工具</h2>
+      <span class="desc">永久持久化 · 复习模式</span>
+      <span class="num">3 屏</span>
+    </div>
+    <div class="grid">
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/wordbook.html', '_blank')">
+          <iframe src="pages/wordbook.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">📒 单词本</div>
+          <div class="sub">5 Tab · 搜索 · 复习</div>
+        </div>
+      </div>
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/kana.html', '_blank')">
+          <iframe src="pages/kana.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">🈁 五十音图</div>
+          <div class="sub">平假名 / 片假名切换</div>
+        </div>
+      </div>
+      <div class="phone-card">
+        <div class="phone-wrap" onclick="window.open('pages/profile.html', '_blank')">
+          <iframe src="pages/profile.html" loading="lazy"></iframe>
+        </div>
+        <div class="phone-label">
+          <div class="name">👤 我的</div>
+          <div class="sub">进度 · 统计 · 设置</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend" style="background: linear-gradient(135deg, #F0F9FF 0%, white 100%); border-color: rgba(27,58,92,0.15);">
+    <i style="color: #1B3A5C;" class="fas fa-lightbulb"></i>
+    <div class="text">
+      <h3>原型说明</h3>
+      <p>
+        📍 <strong>15 个页面</strong>已全部完成 · 移动端优先（iPhone 14 尺寸 390×844）<br>
+        📍 <strong>NHK 真实音频</strong>：当前用 Web Speech API 兜底演示；生产接入 NHK 公开广播 CDN<br>
+        📍 <strong>单词本持久化</strong>：用 localStorage 演示，可跨会话保留<br>
+        📍 <strong>等级 Stepper</strong>：跨页面同步（N5/N4/N3/N2/N1）<br>
+        📍 <strong>音调标注</strong>：用 0/1/2/3 数字标在第一个高音假名右上角
+      </p>
+    </div>
+  </div>
+
+  <footer>
+    <p>日本語ライフ · PRD: <a href="../docs/prd.md" style="color: #BC4E51;">/docs/prd.md</a></p>
+    <p style="margin-top: 8px;">© 2026 日本語ライフ · Made with ❤️ for real Japanese learning</p>
+  </footer>
+</div>
+
+<!-- ============== 移动端（直接列表）============== -->
+<div class="mobile-only">
+  <div class="mobile-hero">
+    <h1>不只是考试<br>是<span class="jp">"在日本能开口说话"</span>的日语</h1>
+    <p>15 个高保真移动页面 · NHK 真实音频 · 单词本永久保存</p>
+    <a href="pages/home.html" class="quick-cta">
+      直接进入 App <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+
+  <div class="mobile-group">
+    <h3>核心流程</h3>
+    <div class="page-list">
+      <a href="pages/home.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #BC4E51, #E76F72);"><i class="fas fa-home"></i></div>
+        <div class="lbl"><div class="t">首页</div><div class="s">等级 Stepper + 4 大入口</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+      <a href="pages/onboarding.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);"><i class="fas fa-hand-sparkles"></i></div>
+        <div class="lbl"><div class="t">欢迎引导</div><div class="s">选择目标 · 开始学习</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+      <a href="pages/vocab-list.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #BC4E51, #E76F72);"><i class="fas fa-book"></i></div>
+        <div class="lbl"><div class="t">单词列表</div><div class="s">N5-N1 切换 · 音调标注</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+      <a href="pages/vocab-card.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #E76F72, #F472B6);"><i class="fas fa-clone"></i></div>
+        <div class="lbl"><div class="t">单词卡（翻卡）</div><div class="s">假名 / 音调图 / 例句</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="mobile-group">
+    <h3>新闻听力</h3>
+    <div class="page-list">
+      <a href="pages/news-list.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #1B3A5C, #3A5F87);"><i class="fas fa-newspaper"></i></div>
+        <div class="lbl"><div class="t">新闻列表</div><div class="s">今日推荐 + 往期</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+      <a href="pages/news-detail.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #2D5A8C, #5A8FCC);"><i class="fas fa-headphones"></i></div>
+        <div class="lbl"><div class="t">新闻详情</div><div class="s">NHK 音频 · 振假名 · 点词查义</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="mobile-group">
+    <h3>语法</h3>
+    <div class="page-list">
+      <a href="pages/keigo-index.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #F59E0B, #FBBF24);"><i class="fas fa-comment-dots"></i></div>
+        <div class="lbl"><div class="t">敬语主页</div><div class="s">3 大体系 + 4 个场景</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+      <a href="pages/keigo-detail.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #FBBF24, #FCD34D);"><i class="fas fa-book-open"></i></div>
+        <div class="lbl"><div class="t">敬语详情</div><div class="s">变形规则 + 职场对话</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+      <a href="pages/verb-index.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #10B981, #34D399);"><i class="fas fa-magic"></i></div>
+        <div class="lbl"><div class="t">动词变形主页</div><div class="s">10 种形 × 3 类动词</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+      <a href="pages/verb-detail.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #34D399, #6EE7B7);"><i class="fas fa-pencil-ruler"></i></div>
+        <div class="lbl"><div class="t">动词变形详情</div><div class="s">ます形 + 场景例句</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="mobile-group">
+    <h3>拼写练习</h3>
+    <div class="page-list">
+      <a href="pages/spell-easy.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #10B981, #34D399);"><i class="fas fa-headphones"></i></div>
+        <div class="lbl"><div class="t">发音辅助 (N5-N3)</div><div class="s">听音 → 假名提示 → 拼写</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+      <a href="pages/spell-hard.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #8B5CF6, #A78BFA);"><i class="fas fa-microphone"></i></div>
+        <div class="lbl"><div class="t">发音纠正 (N2-N1)</div><div class="s">录音评分 + 音素反馈</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="mobile-group">
+    <h3>单词本 & 工具</h3>
+    <div class="page-list">
+      <a href="pages/wordbook.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #EC4899, #F472B6);"><i class="fas fa-bookmark"></i></div>
+        <div class="lbl"><div class="t">单词本</div><div class="s">5 Tab · 搜索 · 复习</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+      <a href="pages/kana.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #1B3A5C, #3A5F87);"><i class="fas fa-language"></i></div>
+        <div class="lbl"><div class="t">五十音图</div><div class="s">平假名 / 片假名切换</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+      <a href="pages/profile.html" class="page-item">
+        <div class="ico" style="background: linear-gradient(135deg, #64748B, #94A3B8);"><i class="fas fa-user"></i></div>
+        <div class="lbl"><div class="t">我的</div><div class="s">进度 · 统计 · 设置</div></div>
+        <i class="fas fa-chevron-right arr"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="mobile-footer">
+    <p>日本語ライフ v2.0 · 2026/07/27</p>
+    <p style="margin-top: 6px;">Made with ❤️ for real Japanese learning</p>
+  </div>
+</div>
+
+</body>
+</html>
