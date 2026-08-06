@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>五十音図表 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 0; }
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .hero {
+    padding: 16px 20px 14px 20px;
+    text-align: center;
+    background: linear-gradient(135deg, #1B3A5C 0%, #2D5A8C 100%);
+    color: white;
+  }
+  .hero h1 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 4px 0;
+  }
+  .hero p {
+    font-size: 12px;
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  /* 表格风格 */
+  .kana-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    font-size: 11px;
+  }
+  .kana-table th, .kana-table td {
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    padding: 4px 2px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .kana-table th {
+    background: rgba(15, 23, 42, 0.04);
+    color: var(--sumi);
+    font-weight: 700;
+    font-size: 11px;
+  }
+  .kana-table th.row-label {
+    background: rgba(188, 78, 81, 0.06);
+    color: var(--akane);
+    width: 36px;
+  }
+  .kana-table th.col-label {
+    background: rgba(27, 58, 92, 0.04);
+    color: var(--ai-iro);
+    font-size: 10px;
+    width: 38px;
+  }
+  .kana-cell {
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .kana-cell:active {
+    background: rgba(188, 78, 81, 0.15);
+  }
+  .kana-cell .hira {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  .kana-cell .kata {
+    font-size: 10px;
+    color: var(--hae);
+    line-height: 1.1;
+  }
+  .kana-cell .romaji {
+    font-size: 9px;
+    color: var(--hae);
+    margin-top: 1px;
+  }
+  .kana-cell.empty {
+    background: rgba(15, 23, 42, 0.02);
+    cursor: default;
+    color: var(--hae);
+  }
+  .kana-cell.empty:active { background: rgba(15, 23, 42, 0.02); }
+  .kana-cell.empty .hira {
+    font-size: 11px;
+    color: var(--hae);
+    font-weight: 400;
+    opacity: 0.55;
+  }
+  .kana-cell.empty .kata {
+    font-size: 9px;
+    color: var(--hae);
+    opacity: 0.55;
+  }
+  .kana-cell .subscript {
+    font-size: 8px;
+    color: var(--hae);
+    font-weight: 400;
+  }
+
+  /* 拗音/浊拗音 - 右上的小标签 */
+  .label-sm {
+    font-size: 9px;
+    color: var(--hae);
+    background: rgba(15,23,42,0.04);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  /* 主表格外的区域 */
+  .kana-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--sumi);
+    margin: 12px 16px 6px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .kana-section-title::before {
+    content: "";
+    width: 3px;
+    height: 12px;
+    background: var(--akane);
+    border-radius: 2px;
+  }
+  .kana-section-title .en {
+    font-size: 9px;
+    color: var(--hae);
+    font-weight: 500;
+    margin-left: 4px;
+  }
+
+  /* 主表格 + 拗音 横向并排 */
+  .row-2col {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 0 16px;
+  }
+  @media (min-width: 480px) {
+    .row-2col { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* 浊音 + 浊拗音 */
+  .row-2col-2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 0 16px 16px 16px;
+  }
+  @media (min-width: 480px) {
+    .row-2col-2 { grid-template-columns: 1fr 1fr; }
+  }
+
+  .legend {
+    font-size: 10px;
+    color: var(--hae);
+    padding: 8px 16px 16px 16px;
+    line-height: 1.5;
+  }
+  .legend b { color: var(--sumi); }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <div data-auto-stepper></div>
+
+    <div class="hero">
+      <div class="flex items-center justify-between mb-2" style="position: relative; z-index: 3;">
+        <a href="home.html" class="back-btn" style="background: rgba(255,255,255,0.2); color: white; width: 32px; height: 32px;">
+          <i class="fas fa-chevron-left" style="font-size: 12px;"></i>
+        </a>
+        <h1>五十音図表</h1>
+        <button class="btn-icon" style="width: 32px; height: 32px; background: rgba(255,255,255,0.2); color: white;">
+          <i class="fas fa-volume-up" style="font-size: 12px;"></i>
+        </button>
+      </div>
+      <p>点任意假名听发音</p>
+    </div>
+
+    <!-- 主表 + 拗音（横向） -->
+    <div class="row-2col" style="padding-top: 12px;">
+      <!-- 清音主表 -->
+      <div>
+        <div class="kana-section-title">清音 <span class="en">Seion</span></div>
+        <table class="kana-table">
+          <thead>
+            <tr>
+              <th class="row-label"></th>
+              <th class="col-label">あ段</th>
+              <th class="col-label">い段</th>
+              <th class="col-label">う段</th>
+              <th class="col-label">え段</th>
+              <th class="col-label">お段</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="row-label">あ行</th>
+              <td class="kana-cell" onclick="JP.speak('あ')"><div class="hira">あ</div><div class="kata">ア</div><div class="romaji">a</div></td>
+              <td class="kana-cell" onclick="JP.speak('い')"><div class="hira">い</div><div class="kata">イ</div><div class="romaji">i</div></td>
+              <td class="kana-cell" onclick="JP.speak('う')"><div class="hira">う</div><div class="kata">ウ</div><div class="romaji">u</div></td>
+              <td class="kana-cell" onclick="JP.speak('え')"><div class="hira">え</div><div class="kata">エ</div><div class="romaji">e</div></td>
+              <td class="kana-cell" onclick="JP.speak('お')"><div class="hira">お</div><div class="kata">オ</div><div class="romaji">o</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">か行</th>
+              <td class="kana-cell" onclick="JP.speak('か')"><div class="hira">か</div><div class="kata">カ</div><div class="romaji">ka</div></td>
+              <td class="kana-cell" onclick="JP.speak('き')"><div class="hira">き</div><div class="kata">キ</div><div class="romaji">ki</div></td>
+              <td class="kana-cell" onclick="JP.speak('く')"><div class="hira">く</div><div class="kata">ク</div><div class="romaji">ku</div></td>
+              <td class="kana-cell" onclick="JP.speak('け')"><div class="hira">け</div><div class="kata">ケ</div><div class="romaji">ke</div></td>
+              <td class="kana-cell" onclick="JP.speak('こ')"><div class="hira">こ</div><div class="kata">コ</div><div class="romaji">ko</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">さ行</th>
+              <td class="kana-cell" onclick="JP.speak('さ')"><div class="hira">さ</div><div class="kata">サ</div><div class="romaji">sa</div></td>
+              <td class="kana-cell" onclick="JP.speak('し')"><div class="hira">し</div><div class="kata">シ</div><div class="romaji">shi</div></td>
+              <td class="kana-cell" onclick="JP.speak('す')"><div class="hira">す</div><div class="kata">ス</div><div class="romaji">su</div></td>
+              <td class="kana-cell" onclick="JP.speak('せ')"><div class="hira">せ</div><div class="kata">セ</div><div class="romaji">se</div></td>
+              <td class="kana-cell" onclick="JP.speak('そ')"><div class="hira">そ</div><div class="kata">ソ</div><div class="romaji">so</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">た行</th>
+              <td class="kana-cell" onclick="JP.speak('た')"><div class="hira">た</div><div class="kata">タ</div><div class="romaji">ta</div></td>
+              <td class="kana-cell" onclick="JP.speak('ち')"><div class="hira">ち</div><div class="kata">チ</div><div class="romaji">chi</div></td>
+              <td class="kana-cell" onclick="JP.speak('つ')"><div class="hira">つ</div><div class="kata">ツ</div><div class="romaji">tsu</div></td>
+              <td class="kana-cell" onclick="JP.speak('て')"><div class="hira">て</div><div class="kata">テ</div><div class="romaji">te</div></td>
+              <td class="kana-cell" onclick="JP.speak('と')"><div class="hira">と</div><div class="kata">ト</div><div class="romaji">to</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">な行</th>
+              <td class="kana-cell" onclick="JP.speak('な')"><div class="hira">な</div><div class="kata">ナ</div><div class="romaji">na</div></td>
+              <td class="kana-cell" onclick="JP.speak('に')"><div class="hira">に</div><div class="kata">ニ</div><div class="romaji">ni</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぬ')"><div class="hira">ぬ</div><div class="kata">ヌ</div><div class="romaji">nu</div></td>
+              <td class="kana-cell" onclick="JP.speak('ね')"><div class="hira">ね</div><div class="kata">ネ</div><div class="romaji">ne</div></td>
+              <td class="kana-cell" onclick="JP.speak('の')"><div class="hira">の</div><div class="kata">ノ</div><div class="romaji">no</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">は行</th>
+              <td class="kana-cell" onclick="JP.speak('は')"><div class="hira">は</div><div class="kata">ハ</div><div class="romaji">ha</div></td>
+              <td class="kana-cell" onclick="JP.speak('ひ')"><div class="hira">ひ</div><div class="kata">ヒ</div><div class="romaji">hi</div></td>
+              <td class="kana-cell" onclick="JP.speak('ふ')"><div class="hira">ふ</div><div class="kata">フ</div><div class="romaji">fu</div></td>
+              <td class="kana-cell" onclick="JP.speak('へ')"><div class="hira">へ</div><div class="kata">ヘ</div><div class="romaji">he</div></td>
+              <td class="kana-cell" onclick="JP.speak('ほ')"><div class="hira">ほ</div><div class="kata">ホ</div><div class="romaji">ho</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">ま行</th>
+              <td class="kana-cell" onclick="JP.speak('ま')"><div class="hira">ま</div><div class="kata">マ</div><div class="romaji">ma</div></td>
+              <td class="kana-cell" onclick="JP.speak('み')"><div class="hira">み</div><div class="kata">ミ</div><div class="romaji">mi</div></td>
+              <td class="kana-cell" onclick="JP.speak('む')"><div class="hira">む</div><div class="kata">ム</div><div class="romaji">mu</div></td>
+              <td class="kana-cell" onclick="JP.speak('め')"><div class="hira">め</div><div class="kata">メ</div><div class="romaji">me</div></td>
+              <td class="kana-cell" onclick="JP.speak('も')"><div class="hira">も</div><div class="kata">モ</div><div class="romaji">mo</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">や行</th>
+              <td class="kana-cell" onclick="JP.speak('や')"><div class="hira">や</div><div class="kata">ヤ</div><div class="romaji">ya</div></td>
+              <td class="kana-cell empty"><div class="hira">い</div><div class="kata">(i)</div></td>
+              <td class="kana-cell" onclick="JP.speak('ゆ')"><div class="hira">ゆ</div><div class="kata">ユ</div><div class="romaji">yu</div></td>
+              <td class="kana-cell empty"><div class="hira">え</div><div class="kata">(e)</div></td>
+              <td class="kana-cell" onclick="JP.speak('よ')"><div class="hira">よ</div><div class="kata">ヨ</div><div class="romaji">yo</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">ら行</th>
+              <td class="kana-cell" onclick="JP.speak('ら')"><div class="hira">ら</div><div class="kata">ラ</div><div class="romaji">ra</div></td>
+              <td class="kana-cell" onclick="JP.speak('り')"><div class="hira">り</div><div class="kata">リ</div><div class="romaji">ri</div></td>
+              <td class="kana-cell" onclick="JP.speak('る')"><div class="hira">る</div><div class="kata">ル</div><div class="romaji">ru</div></td>
+              <td class="kana-cell" onclick="JP.speak('れ')"><div class="hira">れ</div><div class="kata">レ</div><div class="romaji">re</div></td>
+              <td class="kana-cell" onclick="JP.speak('ろ')"><div class="hira">ろ</div><div class="kata">ロ</div><div class="romaji">ro</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">わ行</th>
+              <td class="kana-cell" onclick="JP.speak('わ')"><div class="hira">わ</div><div class="kata">ワ</div><div class="romaji">wa</div></td>
+              <td class="kana-cell empty"><div class="hira">い</div><div class="kata">(i)</div></td>
+              <td class="kana-cell empty"><div class="hira">う</div><div class="kata">(u)</div></td>
+              <td class="kana-cell empty"><div class="hira">え</div><div class="kata">(e)</div></td>
+              <td class="kana-cell" onclick="JP.speak('を')"><div class="hira">を</div><div class="kata">ヲ</div><div class="romaji">o</div></td>
+            </tr>
+            <tr>
+              <th class="row-label" style="background: rgba(27, 58, 92, 0.06); color: var(--ai-iro);">拨音</th>
+              <td class="kana-cell" colspan="5" onclick="JP.speak('ん')" style="background: rgba(27, 58, 92, 0.04);">
+                <div class="hira">ん</div><div class="kata">ン</div><div class="romaji">n</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 拗音 -->
+      <div>
+        <div class="kana-section-title">拗音 <span class="en">Youon</span></div>
+        <table class="kana-table">
+          <thead>
+            <tr>
+              <th class="row-label"></th>
+              <th class="col-label">ゃ</th>
+              <th class="col-label">ゅ</th>
+              <th class="col-label">ょ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="row-label">き</th>
+              <td class="kana-cell" onclick="JP.speak('きゃ')"><div class="hira">きゃ</div><div class="kata">キャ</div><div class="romaji">kya</div></td>
+              <td class="kana-cell" onclick="JP.speak('きゅ')"><div class="hira">きゅ</div><div class="kata">キュ</div><div class="romaji">kyu</div></td>
+              <td class="kana-cell" onclick="JP.speak('きょ')"><div class="hira">きょ</div><div class="kata">キョ</div><div class="romaji">kyo</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">し</th>
+              <td class="kana-cell" onclick="JP.speak('しゃ')"><div class="hira">しゃ</div><div class="kata">シャ</div><div class="romaji">sha</div></td>
+              <td class="kana-cell" onclick="JP.speak('しゅ')"><div class="hira">しゅ</div><div class="kata">シュ</div><div class="romaji">shu</div></td>
+              <td class="kana-cell" onclick="JP.speak('しょ')"><div class="hira">しょ</div><div class="kata">ショ</div><div class="romaji">sho</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">ち</th>
+              <td class="kana-cell" onclick="JP.speak('ちゃ')"><div class="hira">ちゃ</div><div class="kata">チャ</div><div class="romaji">cha</div></td>
+              <td class="kana-cell" onclick="JP.speak('ちゅ')"><div class="hira">ちゅ</div><div class="kata">チュ</div><div class="romaji">chu</div></td>
+              <td class="kana-cell" onclick="JP.speak('ちょ')"><div class="hira">ちょ</div><div class="kata">チョ</div><div class="romaji">cho</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">に</th>
+              <td class="kana-cell" onclick="JP.speak('にゃ')"><div class="hira">にゃ</div><div class="kata">ニャ</div><div class="romaji">nya</div></td>
+              <td class="kana-cell" onclick="JP.speak('にゅ')"><div class="hira">にゅ</div><div class="kata">ニュ</div><div class="romaji">nyu</div></td>
+              <td class="kana-cell" onclick="JP.speak('にょ')"><div class="hira">にょ</div><div class="kata">ニョ</div><div class="romaji">nyo</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">ひ</th>
+              <td class="kana-cell" onclick="JP.speak('ひゃ')"><div class="hira">ひゃ</div><div class="kata">ヒャ</div><div class="romaji">hya</div></td>
+              <td class="kana-cell" onclick="JP.speak('ひゅ')"><div class="hira">ひゅ</div><div class="kata">ヒュ</div><div class="romaji">hyu</div></td>
+              <td class="kana-cell" onclick="JP.speak('ひょ')"><div class="hira">ひょ</div><div class="kata">ヒョ</div><div class="romaji">hyo</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">み</th>
+              <td class="kana-cell" onclick="JP.speak('みゃ')"><div class="hira">みゃ</div><div class="kata">ミャ</div><div class="romaji">mya</div></td>
+              <td class="kana-cell" onclick="JP.speak('みゅ')"><div class="hira">みゅ</div><div class="kata">ミュ</div><div class="romaji">myu</div></td>
+              <td class="kana-cell" onclick="JP.speak('みょ')"><div class="hira">みょ</div><div class="kata">ミョ</div><div class="romaji">myo</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">り</th>
+              <td class="kana-cell" onclick="JP.speak('りゃ')"><div class="hira">りゃ</div><div class="kata">リャ</div><div class="romaji">rya</div></td>
+              <td class="kana-cell" onclick="JP.speak('りゅ')"><div class="hira">りゅ</div><div class="kata">リュ</div><div class="romaji">ryu</div></td>
+              <td class="kana-cell" onclick="JP.speak('りょ')"><div class="hira">りょ</div><div class="kata">リョ</div><div class="romaji">ryo</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 浊音 + 浊拗音 -->
+    <div class="row-2col-2" style="padding-top: 0;">
+      <div>
+        <div class="kana-section-title">浊音・半浊音 <span class="en">Dakuon / Handakuon</span></div>
+        <table class="kana-table">
+          <thead>
+            <tr>
+              <th class="row-label"></th>
+              <th class="col-label">あ段</th>
+              <th class="col-label">い段</th>
+              <th class="col-label">う段</th>
+              <th class="col-label">え段</th>
+              <th class="col-label">お段</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="row-label">が行</th>
+              <td class="kana-cell" onclick="JP.speak('が')"><div class="hira">が</div><div class="kata">ガ</div><div class="romaji">ga</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぎ')"><div class="hira">ぎ</div><div class="kata">ギ</div><div class="romaji">gi</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぐ')"><div class="hira">ぐ</div><div class="kata">グ</div><div class="romaji">gu</div></td>
+              <td class="kana-cell" onclick="JP.speak('げ')"><div class="hira">げ</div><div class="kata">ゲ</div><div class="romaji">ge</div></td>
+              <td class="kana-cell" onclick="JP.speak('ご')"><div class="hira">ご</div><div class="kata">ゴ</div><div class="romaji">go</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">ざ行</th>
+              <td class="kana-cell" onclick="JP.speak('ざ')"><div class="hira">ざ</div><div class="kata">ザ</div><div class="romaji">za</div></td>
+              <td class="kana-cell" onclick="JP.speak('じ')"><div class="hira">じ</div><div class="kata">ジ</div><div class="romaji">ji</div></td>
+              <td class="kana-cell" onclick="JP.speak('ず')"><div class="hira">ず</div><div class="kata">ズ</div><div class="romaji">zu</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぜ')"><div class="hira">ぜ</div><div class="kata">ゼ</div><div class="romaji">ze</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぞ')"><div class="hira">ぞ</div><div class="kata">ゾ</div><div class="romaji">zo</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">だ行</th>
+              <td class="kana-cell" onclick="JP.speak('だ')"><div class="hira">だ</div><div class="kata">ダ</div><div class="romaji">da</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぢ')"><div class="hira">ぢ</div><div class="kata">ヂ</div><div class="romaji">ji</div></td>
+              <td class="kana-cell" onclick="JP.speak('づ')"><div class="hira">づ</div><div class="kata">ヅ</div><div class="romaji">zu</div></td>
+              <td class="kana-cell" onclick="JP.speak('で')"><div class="hira">で</div><div class="kata">デ</div><div class="romaji">de</div></td>
+              <td class="kana-cell" onclick="JP.speak('ど')"><div class="hira">ど</div><div class="kata">ド</div><div class="romaji">do</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">ば行</th>
+              <td class="kana-cell" onclick="JP.speak('ば')"><div class="hira">ば</div><div class="kata">バ</div><div class="romaji">ba</div></td>
+              <td class="kana-cell" onclick="JP.speak('び')"><div class="hira">び</div><div class="kata">ビ</div><div class="romaji">bi</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぶ')"><div class="hira">ぶ</div><div class="kata">ブ</div><div class="romaji">bu</div></td>
+              <td class="kana-cell" onclick="JP.speak('べ')"><div class="hira">べ</div><div class="kata">ベ</div><div class="romaji">be</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぼ')"><div class="hira">ぼ</div><div class="kata">ボ</div><div class="romaji">bo</div></td>
+            </tr>
+            <tr>
+              <th class="row-label" style="background: rgba(245, 158, 11, 0.06); color: #B45309;">ぱ行</th>
+              <td class="kana-cell" onclick="JP.speak('ぱ')"><div class="hira">ぱ</div><div class="kata">パ</div><div class="romaji">pa</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぴ')"><div class="hira">ぴ</div><div class="kata">ピ</div><div class="romaji">pi</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぷ')"><div class="hira">ぷ</div><div class="kata">プ</div><div class="romaji">pu</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぺ')"><div class="hira">ぺ</div><div class="kata">ペ</div><div class="romaji">pe</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぽ')"><div class="hira">ぽ</div><div class="kata">ポ</div><div class="romaji">po</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 浊拗音 -->
+      <div>
+        <div class="kana-section-title">浊拗音 <span class="en">Daku-youon</span></div>
+        <table class="kana-table">
+          <thead>
+            <tr>
+              <th class="row-label"></th>
+              <th class="col-label">ゃ</th>
+              <th class="col-label">ゅ</th>
+              <th class="col-label">ょ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th class="row-label">ぎ</th>
+              <td class="kana-cell" onclick="JP.speak('ぎゃ')"><div class="hira">ぎゃ</div><div class="kata">ギャ</div><div class="romaji">gya</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぎゅ')"><div class="hira">ぎゅ</div><div class="kata">ギュ</div><div class="romaji">gyu</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぎょ')"><div class="hira">ぎょ</div><div class="kata">ギョ</div><div class="romaji">gyo</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">じ</th>
+              <td class="kana-cell" onclick="JP.speak('じゃ')"><div class="hira">じゃ</div><div class="kata">ジャ</div><div class="romaji">ja</div></td>
+              <td class="kana-cell" onclick="JP.speak('じゅ')"><div class="hira">じゅ</div><div class="kata">ジュ</div><div class="romaji">ju</div></td>
+              <td class="kana-cell" onclick="JP.speak('じょ')"><div class="hira">じょ</div><div class="kata">ジョ</div><div class="romaji">jo</div></td>
+            </tr>
+            <tr>
+              <th class="row-label">び</th>
+              <td class="kana-cell" onclick="JP.speak('びゃ')"><div class="hira">びゃ</div><div class="kata">ビャ</div><div class="romaji">bya</div></td>
+              <td class="kana-cell" onclick="JP.speak('びゅ')"><div class="hira">びゅ</div><div class="kata">ビュ</div><div class="romaji">byu</div></td>
+              <td class="kana-cell" onclick="JP.speak('びょ')"><div class="hira">びょ</div><div class="kata">ビョ</div><div class="romaji">byo</div></td>
+            </tr>
+            <tr>
+              <th class="row-label" style="background: rgba(245, 158, 11, 0.06); color: #B45309;">ぴ</th>
+              <td class="kana-cell" onclick="JP.speak('ぴゃ')"><div class="hira">ぴゃ</div><div class="kata">ピャ</div><div class="romaji">pya</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぴゅ')"><div class="hira">ぴゅ</div><div class="kata">ピュ</div><div class="romaji">pyu</div></td>
+              <td class="kana-cell" onclick="JP.speak('ぴょ')"><div class="hira">ぴょ</div><div class="kata">ピョ</div><div class="romaji">pyo</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="legend">
+      <b>说明</b>：<br>
+      ・括号 (i) (e) (u) 是<b>历史假名</b>，现代日语已不用，发音同 い/え/う<br>
+      ・<b>を</b>现代只用于助词，读 "o"（不是 "wo"）<br>
+      ・<b>ぢ/ヂ</b>和 <b>じ/ジ</b> 发音相同（ji）；<b>づ/ヅ</b>和 <b>ず/ズ</b> 发音相同（zu）<br>
+      ・点任意假名 = 听发音
+    </div>
+
+    <div style="height: 100px;"></div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../nhk-daily.js"></script>
+</body>
+</html>
