@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>動詞活用表 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 0; }
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .form-hero {
+    background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+    color: white;
+    padding: 24px 20px 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .form-hero::after {
+    content: "動";
+    position: absolute;
+    right: -10px;
+    bottom: -50px;
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    font-family: "Noto Sans JP", serif;
+  }
+  .form-hero h1 {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0 0 4px 0;
+  }
+  .form-hero p {
+    font-size: 13px;
+    margin: 0;
+    opacity: 0.95;
+  }
+
+  /* 变形总表 */
+  .verb-selector {
+    display: flex;
+    gap: 6px;
+    padding: 0 16px;
+    margin: 12px 0;
+  }
+  .verb-chip {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 10px 8px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--sumi);
+    border: 1.5px solid transparent;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .verb-chip.active {
+    border-color: var(--n5);
+    background: linear-gradient(135deg, #F0FDF4 0%, white 100%);
+    color: var(--n5);
+  }
+
+  /* 主表 - 10 种活用形 × 3 类动词 */
+  .big-table {
+    margin: 0 16px 16px 16px;
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  }
+  .big-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .big-table th, .big-table td {
+    padding: 8px 6px;
+    text-align: center;
+    border-bottom: 1px solid rgba(15,23,42,0.05);
+    border-right: 1px solid rgba(15,23,42,0.05);
+  }
+  .big-table th:last-child, .big-table td:last-child { border-right: none; }
+  .big-table thead th {
+    background: rgba(15,23,42,0.04);
+    color: var(--sumi);
+    font-weight: 700;
+    font-size: 11px;
+  }
+  .big-table th.form-num {
+    background: rgba(188,78,81,0.06);
+    color: var(--akane);
+    width: 30px;
+  }
+  .big-table th.form-name {
+    background: rgba(15,23,42,0.02);
+    text-align: left;
+    font-size: 12px;
+    color: var(--sumi);
+  }
+  .big-table th.form-zh {
+    background: rgba(15,23,42,0.02);
+    font-size: 10px;
+    color: var(--hae);
+    font-weight: 500;
+  }
+  .big-table td.form-result {
+    color: var(--akane);
+    font-weight: 600;
+  }
+  .big-table tr.row-verb td {
+    background: rgba(16,185,129,0.04);
+    font-size: 12px;
+    color: var(--n5);
+    font-weight: 600;
+  }
+  .big-table tr.row-verb td.label {
+    color: var(--sumi);
+    background: rgba(15,23,42,0.02);
+    font-weight: 500;
+    text-align: left;
+  }
+  .big-table tr:nth-child(even) td.form-result {
+    background: rgba(188,78,81,0.02);
+  }
+  .big-table .grp1 { background: rgba(16, 185, 129, 0.06) !important; }
+  .big-table .grp2 { background: rgba(14, 165, 233, 0.06) !important; }
+  .big-table .grp3 { background: rgba(245, 158, 11, 0.06) !important; }
+
+  /* 类动词说明 */
+  .verb-class-card {
+    margin: 0 16px 12px 16px;
+    background: white;
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  }
+  .verb-class-card .head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .verb-class-card .head .pill {
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+  }
+  .verb-class-card .head .name { font-weight: 700; font-size: 13px; }
+  .verb-class-card .head .desc { font-size: 11px; color: var(--hae); margin-top: 2px; }
+  .verb-class-card .examples { font-size: 11px; color: var(--hae); margin-top: 4px; }
+
+  .play-btn-sm {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(188,78,81,0.12);
+    color: var(--akane);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    cursor: pointer;
+    margin-left: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <div class="nav-header">
+      <div class="flex items-center gap-3">
+        <a href="verb-index.html" class="back-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
+        <div>
+          <h1>動詞活用表</h1>
+          <p class="text-xs text-muted" style="margin-top: 2px;">3 类动词 × 10 种形</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 等级 Stepper -->
+    <div data-auto-stepper></div>
+
+    <div class="form-hero">
+      <h1>3 类動詞 × 10 種活用形</h1>
+      <p>点行听发音 · 切换动词看变形</p>
+    </div>
+
+    <!-- 动词切换 -->
+    <div class="verb-selector">
+      <div class="verb-chip active" data-verb="食べる" onclick="selectVerb(this)">食べる</div>
+      <div class="verb-chip" data-verb="行く" onclick="selectVerb(this)">行く</div>
+      <div class="verb-chip" data-verb="する" onclick="selectVerb(this)">する</div>
+    </div>
+
+    <!-- 变形表 -->
+    <div class="big-table">
+      <table>
+        <thead>
+          <tr>
+            <th class="form-num" rowspan="2">#</th>
+            <th class="form-name" rowspan="2">活用形</th>
+            <th class="form-zh" rowspan="2">含义</th>
+            <th class="grp1">第1类</th>
+            <th class="grp2">第2类</th>
+            <th class="grp3">第3类</th>
+          </tr>
+          <tr>
+            <th style="font-size: 10px; background: rgba(16,185,129,0.08);">五段</th>
+            <th style="font-size: 10px; background: rgba(14,165,233,0.08);">一段</th>
+            <th style="font-size: 10px; background: rgba(245,158,11,0.08);">不规则</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-verb">
+            <td class="label" colspan="3">原型</td>
+            <td data-verb-form="base" class="grp1">食べる</td>
+            <td data-verb-form="base2" class="grp2">食べる</td>
+            <td data-verb-form="base3" class="grp3">する</td>
+          </tr>
+          <tr>
+            <td class="form-num">01</td>
+            <td class="form-name">ます形</td>
+            <td class="form-zh">礼貌体</td>
+            <td class="form-result grp1" data-form="masu1"></td>
+            <td class="form-result grp2" data-form="masu2"></td>
+            <td class="form-result grp3" data-form="masu3"></td>
+          </tr>
+          <tr>
+            <td class="form-num">02</td>
+            <td class="form-name">て形</td>
+            <td class="form-zh">连接</td>
+            <td class="form-result grp1" data-form="te1"></td>
+            <td class="form-result grp2" data-form="te2"></td>
+            <td class="form-result grp3" data-form="te3"></td>
+          </tr>
+          <tr>
+            <td class="form-num">03</td>
+            <td class="form-name">た形</td>
+            <td class="form-zh">过去</td>
+            <td class="form-result grp1" data-form="ta1"></td>
+            <td class="form-result grp2" data-form="ta2"></td>
+            <td class="form-result grp3" data-form="ta3"></td>
+          </tr>
+          <tr>
+            <td class="form-num">04</td>
+            <td class="form-name">ない形</td>
+            <td class="form-zh">否定</td>
+            <td class="form-result grp1" data-form="nai1"></td>
+            <td class="form-result grp2" data-form="nai2"></td>
+            <td class="form-result grp3" data-form="nai3"></td>
+          </tr>
+          <tr>
+            <td class="form-num">05</td>
+            <td class="form-name">ば形</td>
+            <td class="form-zh">条件</td>
+            <td class="form-result grp1" data-form="eba1"></td>
+            <td class="form-result grp2" data-form="eba2"></td>
+            <td class="form-result grp3" data-form="eba3"></td>
+          </tr>
+          <tr>
+            <td class="form-num">06</td>
+            <td class="form-name">命令形</td>
+            <td class="form-zh">命令</td>
+            <td class="form-result grp1" data-form="imei1"></td>
+            <td class="form-result grp2" data-form="imei2"></td>
+            <td class="form-result grp3" data-form="imei3"></td>
+          </tr>
+          <tr>
+            <td class="form-num">07</td>
+            <td class="form-name">可能形</td>
+            <td class="form-zh">能力/可能</td>
+            <td class="form-result grp1" data-form="kanou1"></td>
+            <td class="form-result grp2" data-form="kanou2"></td>
+            <td class="form-result grp3" data-form="kanou3"></td>
+          </tr>
+          <tr>
+            <td class="form-num">08</td>
+            <td class="form-name">被动形</td>
+            <td class="form-zh">被动</td>
+            <td class="form-result grp1" data-form="hudou1"></td>
+            <td class="form-result grp2" data-form="hudou2"></td>
+            <td class="form-result grp3" data-form="hudou3"></td>
+          </tr>
+          <tr>
+            <td class="form-num">09</td>
+            <td class="form-name">使役形</td>
+            <td class="form-zh">使役/允许</td>
+            <td class="form-result grp1" data-form="shieki1"></td>
+            <td class="form-result grp2" data-form="shieki2"></td>
+            <td class="form-result grp3" data-form="shieki3"></td>
+          </tr>
+          <tr>
+            <td class="form-num">10</td>
+            <td class="form-name">使役被动</td>
+            <td class="form-zh">被迫做</td>
+            <td class="form-result grp1" data-form="shiekiH1"></td>
+            <td class="form-result grp2" data-form="shiekiH2"></td>
+            <td class="form-result grp3" data-form="shiekiH3"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 动词类型说明 -->
+    <div class="verb-class-card">
+      <div class="head">
+        <span class="pill" style="background: #10B981;">第1类</span>
+        <span class="name">五段动词</span>
+      </div>
+      <p class="desc">词尾是う段假名（〜う/く/ぐ/す/つ/ぬ/ぶ/む/る）</p>
+      <p class="examples jp">例：食べる・行く・話す・書く・泳ぐ・死ぬ</p>
+    </div>
+
+    <div class="verb-class-card">
+      <div class="head">
+        <span class="pill" style="background: #0EA5E9;">第2类</span>
+        <span class="name">一段动词</span>
+      </div>
+      <p class="desc">词尾是「る」，前一假名是 い/え 段</p>
+      <p class="examples jp">例：食べる・見る・寝る・起きる・教える</p>
+    </div>
+
+    <div class="verb-class-card">
+      <div class="head">
+        <span class="pill" style="background: #F59E0B;">第3类</span>
+        <span class="name">不规则动词</span>
+      </div>
+      <p class="desc">只有 する 和 来る（くる）</p>
+      <p class="examples jp">例：する・勉強する・来る</p>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <div class="tab-bar">
+      <a class="tab-bar-item" href="home.html">
+        <i class="fas fa-home"></i><span>首页</span>
+      </a>
+      <a class="tab-bar-item active" href="verb-index.html">
+        <i class="fas fa-graduation-cap"></i><span>学习</span>
+      </a>
+      <a class="tab-bar-item" href="wordbook.html">
+        <i class="fas fa-bookmark"></i><span>单词本</span>
+      </a>
+      <a class="tab-bar-item" href="profile.html">
+        <i class="far fa-user"></i><span>我的</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../nhk-daily.js"></script>
+<script>
+  // 动词变形表数据
+  const VERB_TABLE = {
+    '食べる': { group: 2, forms: {
+      masu1: '食べる', masu2: '食べます', masu3: 'します',
+      te1: '食べて', te2: '食べて', te3: 'して',
+      ta1: '食べた', ta2: '食べた', ta3: 'した',
+      nai1: '食べる', nai2: '食べない', nai3: 'しない',
+      eba1: '食べる', eba2: '食べれば', eba3: 'すれば',
+      imei1: '食べろ', imei2: '食べる', imei3: 'しろ',
+      kanou1: '食べられる', kanou2: '食べられる', kanou3: 'できる',
+      hudou1: '食べられる', hudou2: '食べられる', hudou3: 'される',
+      shieki1: '食べさせる', shieki2: '食べさせる', shieki3: 'させる',
+      shiekiH1: '食べさせられる', shiekiH2: '食べさせられる', shiekiH3: 'させられる'
+    }},
+    '行く': { group: 1, forms: {
+      masu1: '行く', masu2: '行きます', masu3: 'します',
+      te1: '行って', te2: '行って', te3: 'して',
+      ta1: '行った', ta2: '行った', ta3: 'した',
+      nai1: '行く', nai2: '行かない', nai3: 'しない',
+      eba1: '行く', eba2: '行けば', eba3: 'すれば',
+      imei1: '行け', imei2: '行く', imei3: 'しろ',
+      kanou1: '行ける', kanou2: '行ける', kanou3: 'できる',
+      hudou1: '行かれる', hudou2: '行かれる', hudou3: 'される',
+      shieki1: '行かせる', shieki2: '行かせる', shieki3: 'させる',
+      shiekiH1: '行かせられる', shiekiH2: '行かせられる', shiekiH3: 'させられる'
+    }},
+    'する': { group: 3, forms: {
+      masu1: 'する', masu2: 'します', masu3: 'します',
+      te1: 'して', te2: 'して', te3: 'して',
+      ta1: 'した', ta2: 'した', ta3: 'した',
+      nai1: 'しない', nai2: 'しない', nai3: 'しない',
+      eba1: 'すれば', eba2: 'すれば', eba3: 'すれば',
+      imei1: 'しろ', imei2: 'しろ', imei3: 'しろ',
+      kanou1: 'できる', kanou2: 'できる', kanou3: 'できる',
+      hudou1: 'される', hudou2: 'される', hudou3: 'される',
+      shieki1: 'させる', shieki2: 'させる', shieki3: 'させる',
+      shiekiH1: 'させられる', shiekiH2: 'させられる', shiekiH3: 'させられる'
+    }}
+  };
+
+  function renderVerbTable(verb) {
+    const data = VERB_TABLE[verb];
+    if (!data) return;
+
+    // 原型行
+    document.querySelector('[data-verb-form="base"]').textContent = verb;
+    document.querySelector('[data-verb-form="base2"]').textContent = verb.endsWith('る') && verb.length > 2 ? verb : verb;
+    document.querySelector('[data-verb-form="base3"]').textContent = 'する';
+
+    // 变形结果
+    Object.keys(data.forms).forEach(key => {
+      const el = document.querySelector(`[data-form="${key}"]`);
+      if (el) el.textContent = data.forms[key];
+    });
+  }
+
+  function selectVerb(el) {
+    document.querySelectorAll('.verb-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    renderVerbTable(el.dataset.verb);
+  }
+
+  // 默认显示
+  renderVerbTable('食べる');
+
+  // URL ?form= 高亮某行
+  const formParam = new URLSearchParams(location.search).get('form');
+  if (formParam) {
+    const nameMap = {
+      'ます形': 0, 'て形': 1, 'た形': 2, 'ない形': 3, 'ば形': 4,
+      '命令形': 5, '意志形': 6, '可能形': 7, '被动形': 8, '使役形': 9
+    };
+    const idx = nameMap[formParam];
+    if (idx !== undefined) {
+      const rows = document.querySelectorAll('.big-table tbody tr');
+      const targetRow = rows[idx + 1]; // +1 因为第一行是原型
+      if (targetRow) {
+        targetRow.style.background = 'rgba(188,78,81,0.1)';
+        targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }
+
+  // 点击单元格发音
+  document.querySelectorAll('.form-result').forEach(cell => {
+    cell.style.cursor = 'pointer';
+    cell.addEventListener('click', () => JP.speak(cell.textContent));
+  });
+</script>
+</body>
+</html>
