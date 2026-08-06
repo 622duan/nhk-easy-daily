@@ -1,7 +1,7 @@
 {
   "version": "2026-08-06",
   "source": "https://www3.nhk.or.jp/news/easy/",
-  "fetched_at": "2026-08-06T13:59:00.024158+09:00",
+  "fetched_at": "2026-08-06T14:00:02.114745+09:00",
   "by_level": {
     "N2": 2,
     "N3": 2
@@ -18,7 +18,7 @@
       "plays": "new",
       "thumb": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
       "externalUrl": "https://www3.nhk.or.jp/news/ne2026080516421.html",
-      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/ne2026080516421.mp3",
+      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080516421.mp3",
       "body": [
         "大きな地震が起こったときは、次のことに気をつけてください。 地震のときは、テーブルの下などに入って揺れるのが止まるまで待ちましょう。 ..."
       ],
@@ -35,7 +35,7 @@
       "plays": "new",
       "thumb": "https://news.web.nhk/news/html/20260805/K10015196631_2608051912_0805191340_01_02.jpg",
       "externalUrl": "https://www3.nhk.or.jp/news/ne2026080512490.html",
-      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/ne2026080512490.mp3",
+      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080512490.mp3",
       "body": [
         "気象庁によると、台風13号が沖縄県や鹿児島県の奄美地方に向かっています。大きくてとても強い台風です。 海では波が高くなりそうです。沖縄県..."
       ],
@@ -52,7 +52,7 @@
       "plays": "new",
       "thumb": "https://news.web.nhk/news/html/20260805/K10015196771_2608050525_0805053516_01_02.jpg",
       "externalUrl": "https://www3.nhk.or.jp/news/ne2026080512478.html",
-      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/ne2026080512478.mp3",
+      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080512478.mp3",
       "body": [
         "熊本県の震度7の地震から1週間以上が過ぎました。 気象庁は「地震の前と比べて、震度5強以上の強い地震が起こる確率が80倍ぐらいに上がっていま..."
       ],
@@ -69,7 +69,7 @@
       "plays": "new",
       "thumb": "https://news.web.nhk/news/html/20260804/K10015195731_2608041520_0804152415_01_03.jpg",
       "externalUrl": "https://www3.nhk.or.jp/news/ne2026080512455.html",
-      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/ne2026080512455.mp3",
+      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080512455.mp3",
       "body": [
         "外国人の「永住」についてのニュースです。 外国人が日本にずっと住むことを「永住」と言います。 日本の政府は、外国人の永住について、審査のルー..."
       ],
