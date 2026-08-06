@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>拼写练习 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .mode-card {
+    background: white;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+  }
+  .mode-card:active { transform: scale(0.98); }
+  .mode-card.active {
+    border-color: var(--n5);
+    background: linear-gradient(135deg, rgba(16,185,129,0.04) 0%, white 100%);
+  }
+
+  /* 假名输入槽 */
+  .slot-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 24px 0;
+  }
+  .slot {
+    width: 48px;
+    height: 56px;
+    border-radius: 12px;
+    background: white;
+    border: 2px solid rgba(15,23,42,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--sumi);
+    position: relative;
+    transition: all 0.2s;
+  }
+  .slot.filled {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: var(--n5);
+  }
+  .slot.hint {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: var(--warning);
+    color: var(--warning);
+  }
+  .slot.correct {
+    background: var(--n5);
+    border-color: var(--n5);
+    color: white;
+    animation: pop 0.4s;
+  }
+  .slot.wrong {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: white;
+    animation: shake 0.3s;
+  }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  /* 假名键盘 */
+  .kana-keyboard {
+    background: white;
+    border-radius: 18px 18px 0 0;
+    padding: 12px 8px;
+    box-shadow: 0 -4px 20px rgba(15,23,42,0.05);
+  }
+  .kana-row {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+  .kana-key {
+    flex: 1;
+    height: 44px;
+    border-radius: 8px;
+    background: rgba(15,23,42,0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--sumi);
+    transition: all 0.1s;
+    cursor: pointer;
+  }
+  .kana-key:active { transform: scale(0.94); background: var(--n5); color: white; }
+  .kana-key.used { opacity: 0.3; }
+  .kana-key.action {
+    background: rgba(15,23,42,0.08);
+    color: var(--hae);
+    font-size: 14px;
+  }
+  .kana-key.confirm {
+    background: var(--n5);
+    color: white;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen bg-gradient-jp" style="display: flex; flex-direction: column;">
+    <div class="nav-header">
+      <div class="flex items-center gap-3">
+        <a href="home.html" class="back-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
+        <div>
+          <h1>拼写练习</h1>
+          <p class="text-xs text-muted" style="margin-top: 2px;">听音 · 假名提示 · 拼写</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="badge badge-n5">N5</span>
+      </div>
+    </div>
+
+    <!-- 等级 Tab -->
+    <div data-auto-stepper></div>
+
+    <!-- 顶部进度 -->
+    <div class="px-5 mt-3">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs text-muted">进度</span>
+        <span class="text-xs font-semi">3 / 10 · 阶段 2/3</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width: 30%;"></div>
+      </div>
+    </div>
+
+    <!-- 当前阶段提示 -->
+    <div class="px-5 mt-4">
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1" style="opacity: 0.4;">
+          <div class="btn-icon" style="width: 28px; height: 28px; background: var(--n5); color: white;">
+            <i class="fas fa-check text-xs"></i>
+          </div>
+          <span class="text-xs">听音四选一</span>
+        </div>
+        <div class="flex-1" style="height: 2px; background: var(--n5); margin: 0 8px; opacity: 0.3;"></div>
+        <div class="flex items-center gap-1">
+          <div class="btn-icon pulse" style="width: 28px; height: 28px; background: var(--n5); color: white;">
+            <i class="fas fa-pen text-xs"></i>
+          </div>
+          <span class="text-xs font-semi">首字提示</span>
+        </div>
+        <div class="flex-1" style="height: 2px; background: rgba(15,23,42,0.1); margin: 0 8px;"></div>
+        <div class="flex items-center gap-1" style="opacity: 0.4;">
+          <div class="btn-icon" style="width: 28px; height: 28px; background: rgba(15,23,42,0.08);">
+            <i class="fas fa-keyboard text-xs"></i>
+          </div>
+          <span class="text-xs">裸拼</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 主区 -->
+    <div class="px-5 mt-6" style="flex: 1;">
+
+      <!-- 大播放按钮 -->
+      <div class="flex justify-center mb-3">
+        <button class="record-btn" onclick="JP.speak('学校')" style="width: 88px; height: 88px;">
+          <i class="fas fa-volume-up"></i>
+        </button>
+      </div>
+      <p class="text-center text-xs text-muted mb-1">听单词</p>
+      <p class="text-center text-xs text-akane mb-1" style="font-size: 11px;" id="hintLine">💡 已经提示首字：<strong id="hintChar">が</strong></p>
+
+      <!-- 词义提示 -->
+      <div class="text-center mb-4">
+        <span class="badge badge-gray" style="font-size: 13px; padding: 6px 14px;" id="meaningBadge">学校</span>
+      </div>
+
+      <!-- 拼写槽位（动态渲染） -->
+      <div class="slot-row" id="slotRow"></div>
+
+      <!-- 输入框：直接打字 (替代假名键盘) -->
+      <div class="px-2 mb-3" style="margin-top: 16px;">
+        <input
+          type="text"
+          id="spellInput"
+          class="spell-input"
+          placeholder="ここに入力してください"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          inputmode="text"
+          style="font-family: 'Noto Sans JP', sans-serif;"
+        />
+        <p class="text-center text-xs text-muted mt-2" style="font-size: 11px;">
+          <i class="fas fa-keyboard"></i> 直接用键盘打日语
+        </p>
+      </div>
+
+      <!-- 主要操作: 确定按钮 (检查答案) -->
+      <div class="px-5 mb-3">
+        <button id="confirmBtn" class="btn btn-primary" style="width: 100%; padding: 14px; font-size: 15px; font-weight: 600; background: var(--n5);">
+          <i class="fas fa-check"></i> 確定する (确认)
+        </button>
+      </div>
+
+      <!-- 辅助操作 -->
+      <div class="flex justify-center gap-2 mb-3">
+        <button id="reListenBtn" class="btn btn-secondary" style="font-size: 12px; padding: 8px 14px;">
+          <i class="fas fa-redo text-xs"></i> 重听
+        </button>
+        <button id="hintBtn" class="btn btn-secondary" style="font-size: 12px; padding: 8px 14px;">
+          <i class="fas fa-lightbulb text-xs"></i> 再提示
+        </button>
+        <button id="skipBtn" class="btn btn-secondary" style="font-size: 12px; padding: 8px 14px;">
+          <i class="fas fa-forward text-xs"></i> 跳过
+        </button>
+      </div>
+
+      <!-- 反馈区 -->
+      <div id="feedback" class="px-5" style="text-align: center; min-height: 60px;"></div>
+    </div>
+
+    <div style="height: 100px;"></div>
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../data.js"></script>
+<script src="../nhk-daily.js"></script>
+<script>
+  // ============================================
+  // 拼写练习 - 完整游戏逻辑
+  // ============================================
+  (function() {
+    // 从当前 level 取 10 个词
+    const level = (window.JP && window.JP.State && window.JP.State.level) || 'N5';
+    const data = (window.JP_DATA && window.JP_DATA[level]) || { vocabList: [] };
+    const allWords = data.vocabList || [];
+    // 优先选中等长度 (3-6 字符) 词, 适合拼写练习
+    const candidates = allWords.filter(w => w.word && w.word.length >= 2 && w.word.length <= 6);
+    const wordPool = candidates.length >= 10 ? candidates : allWords;
+    if (wordPool.length === 0) {
+      document.getElementById('feedback').innerHTML = '<p style="color: var(--akane);">没有可用单词</p>';
+      return;
+    }
+    // 随机抽 10 个不重复
+    const shuffled = wordPool.slice().sort(() => Math.random() - 0.5);
+    const words = shuffled.slice(0, 10);
+
+    let idx = 0;            // 当前词 index (0-9)
+    let hintsUsed = 0;      // 已用提示数
+    let correctCount = 0;   // 答对数
+    let wrongCount = 0;     // 答错数
+    let currentWord = null; // 当前词对象
+
+    // DOM
+    const slotRow = document.getElementById('slotRow');
+    const input = document.getElementById('spellInput');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const reListenBtn = document.getElementById('reListenBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const skipBtn = document.getElementById('skipBtn');
+    const feedback = document.getElementById('feedback');
+    const hintLine = document.getElementById('hintLine');
+    const hintChar = document.getElementById('hintChar');
+    const meaningBadge = document.getElementById('meaningBadge');
+    const progressText = document.querySelector('.text-xs.font-semi'); // "3 / 10"
+    const progressFill = document.querySelector('.progress-fill');
+
+    // 进度更新
+    function updateProgress() {
+      if (progressText) progressText.textContent = (idx + 1) + ' / 10';
+      if (progressFill) progressFill.style.width = ((idx + 1) * 10) + '%';
+    }
+
+    // 渲染 slot-row
+    function renderSlots(word) {
+      slotRow.innerHTML = '';
+      for (let i = 0; i < word.length; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'slot' + (i < hintsUsed ? ' hint' : '');
+        slot.textContent = i < hintsUsed ? word[i] : '';
+        slotRow.appendChild(slot);
+      }
+    }
+
+    // 加载一题
+    function loadWord() {
+      if (idx >= words.length) {
+        // 完成
+        showResult();
+        return;
+      }
+      currentWord = words[idx];
+      hintsUsed = 0;
+
+      // 渲染
+      renderSlots(currentWord.word);
+      input.value = '';
+      input.disabled = false;
+      confirmBtn.disabled = false;
+      input.focus();
+
+      // 提示: 显示首字
+      if (hintChar) hintChar.textContent = currentWord.word[0];
+
+      // 词义
+      if (meaningBadge) meaningBadge.textContent = currentWord.meaning || '?';
+
+      // 清空反馈
+      feedback.innerHTML = '';
+
+      // 进度
+      updateProgress();
+
+      // 自动发音
+      setTimeout(() => speakCurrent(), 300);
+    }
+
+    function speakCurrent() {
+      if (currentWord && window.JP && window.JP.speak) {
+        try { window.JP.speak(currentWord.word); } catch(e) {}
+      }
+    }
+
+    // 答对/答错反馈
+    function showFeedback(correct, userAnswer) {
+      const color = correct ? 'var(--n5)' : 'var(--akane)';
+      const icon = correct ? '✓' : '✗';
+      feedback.innerHTML = `
+        <div style="display:inline-block;padding:12px 24px;background:${color};color:white;border-radius:12px;font-weight:600;">
+          ${icon} ${correct ? '正解！' : '不对哦'}
+        </div>
+        <p class="text-xs text-muted mt-2">正确答案: <strong>${currentWord.word}</strong> ${currentWord.kana ? `(${currentWord.kana})` : ''}</p>
+      `;
+    }
+
+    // 确认按钮
+    confirmBtn.addEventListener('click', checkAnswer);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        checkAnswer();
+      }
+    });
+
+    // 输入时更新 slot
+    input.addEventListener('input', e => {
+      const val = e.target.value;
+      const slots = slotRow.querySelectorAll('.slot');
+      for (let i = 0; i < slots.length; i++) {
+        slots[i].textContent = val[i] || '';
+      }
+    });
+
+    function checkAnswer() {
+      if (!currentWord) return;
+      const answer = input.value.trim();
+      if (!answer) {
+        feedback.innerHTML = '<p style="color: var(--akane); font-size: 12px;">请先输入答案</p>';
+        return;
+      }
+      // 容错比较: 忽略前后空白
+      const correct = answer === currentWord.word;
+      if (correct) {
+        correctCount++;
+        showFeedback(true, answer);
+      } else {
+        wrongCount++;
+        showFeedback(false, answer);
+      }
+      // 禁用输入, 2秒后下一题
+      input.disabled = true;
+      confirmBtn.disabled = true;
+      setTimeout(() => {
+        idx++;
+        loadWord();
+      }, 1800);
+    }
+
+    // 重听
+    reListenBtn.addEventListener('click', speakCurrent);
+
+    // 再提示 - 揭示下一个字符
+    hintBtn.addEventListener('click', () => {
+      if (!currentWord || hintsUsed >= currentWord.word.length) return;
+      hintsUsed++;
+      renderSlots(currentWord.word);
+      // 同步 input box
+      const slots = slotRow.querySelectorAll('.slot');
+      let partial = '';
+      for (let i = 0; i < slots.length; i++) {
+        partial += slots[i].textContent || '';
+      }
+      // 不覆盖用户已输入, 只展示提示
+      feedback.innerHTML = '<p class="text-xs" style="color: var(--warning);">💡 已揭示第 ' + hintsUsed + ' 个字符</p>';
+    });
+
+    // 跳过
+    skipBtn.addEventListener('click', () => {
+      if (!currentWord) return;
+      wrongCount++;
+      feedback.innerHTML = `<p class="text-xs" style="color: var(--hae);">跳过: 正确答案 <strong>${currentWord.word}</strong></p>`;
+      input.disabled = true;
+      confirmBtn.disabled = true;
+      setTimeout(() => {
+        idx++;
+        loadWord();
+      }, 1200);
+    });
+
+    // 完成结果
+    function showResult() {
+      slotRow.innerHTML = '';
+      input.style.display = 'none';
+      confirmBtn.style.display = 'none';
+      reListenBtn.style.display = 'none';
+      hintBtn.style.display = 'none';
+      skipBtn.style.display = 'none';
+      const accuracy = Math.round(correctCount / words.length * 100);
+      const color = accuracy >= 80 ? 'var(--n5)' : accuracy >= 60 ? 'var(--warning)' : 'var(--akane)';
+      feedback.innerHTML = `
+        <div style="padding:32px 20px;">
+          <div style="font-size:64px;">${accuracy >= 80 ? '🎉' : accuracy >= 60 ? '👍' : '💪'}</div>
+          <h2 class="jp font-bold text-xl mt-3">练习完成！</h2>
+          <p class="text-sm text-muted mt-2">${correctCount} 正解 / ${wrongCount} 错误</p>
+          <div style="font-size:48px;font-weight:900;color:${color};margin-top:12px;">${accuracy}%</div>
+          <button onclick="location.reload()" class="btn btn-primary mt-4" style="background:${color};color:white;padding:10px 20px;border-radius:10px;border:none;font-weight:600;">
+            <i class="fas fa-redo"></i> 再来一组
+          </button>
+        </div>
+      `;
+      if (progressText) progressText.textContent = '完成';
+      if (progressFill) progressFill.style.width = '100%';
+    }
+
+    // 开始
+    loadWord();
+  })();
+</script>
+</body>
+</html>
