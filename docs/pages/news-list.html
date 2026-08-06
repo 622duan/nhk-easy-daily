@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>ニュース - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .news-banner {
+    background: linear-gradient(135deg, #BC4E51 0%, #E76F72 100%);
+    color: white;
+    border-radius: 20px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .news-banner::after {
+    content: "NHK";
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    font-size: 80px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    font-family: "Noto Sans JP", serif;
+  }
+  .news-banner .meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    opacity: 0.85;
+    margin-bottom: 4px;
+  }
+
+  .news-item {
+    background: white;
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    display: flex;
+    gap: 12px;
+    transition: all 0.15s;
+  }
+  .news-item:active { transform: scale(0.98); }
+
+  .news-thumb {
+    width: 88px;
+    height: 88px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .news-thumb .play-badge {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    color: white;
+    font-size: 18px;
+  }
+  .news-thumb .dur {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 9px;
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <div class="nav-header">
+      <div class="flex items-center gap-3">
+        <a href="home.html" class="back-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
+        <div>
+          <h1>每日新闻</h1>
+          <p class="text-xs text-muted" style="margin-top: 2px;">NHK 真实广播 · 振假名</p>
+        </div>
+      </div>
+      <button class="btn-icon" style="width: 36px; height: 36px;">
+        <i class="fas fa-calendar"></i>
+      </button>
+    </div>
+
+    <!-- 等级 Tab -->
+    <div data-auto-stepper></div>
+
+    <div class="px-5 mt-4">
+      <!-- 今日推荐 -->
+      <div class="news-banner" id="todayNewsBanner">
+        <div class="meta">
+          <i class="fas fa-circle" style="font-size: 6px;"></i>
+          <span>今日 · 7月27日 · NHK ニュース</span>
+        </div>
+        <h2 class="jp font-bold text-lg" style="line-height: 1.5; position: relative; z-index: 2;" data-bind-html="todayNewsTitle"></h2>
+        <p class="text-xs mt-2" style="opacity: 0.9;" data-bind="todayNewsTitleZh"></p>
+        <div class="flex items-center gap-2 mt-3" style="position: relative; z-index: 2;">
+          <a href="news-detail.html" class="btn" style="background: white; color: var(--akane); font-size: 13px; padding: 8px 16px;">
+            <i class="fas fa-play"></i> 收听
+          </a>
+          <button onclick="localStorage.removeItem('jp_wordbook');localStorage.removeItem('nhk_daily_cache');localStorage.removeItem('nhk_daily_cache_v2');location.reload();" style="background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.3);padding:8px 12px;font-size:11px;border-radius:8px;cursor:pointer;">
+            <i class="fas fa-rotate"></i> 清缓存刷新
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分类 -->
+    <div class="px-5 mt-5">
+      <div class="section-head">
+        <h2>本周新闻 · <span data-bind="levelName">N5</span></h2>
+        <span class="more text-muted" style="font-size: 12px; color: var(--hae);" id="newsCountText">3 篇</span>
+      </div>
+
+      <div id="newsListContainer"></div>
+
+      
+
+      <p class="text-center text-xs text-muted mt-4">— 已加载 5 篇 / 共 7 篇 —</p>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <div class="tab-bar">
+      <a class="tab-bar-item" href="home.html">
+        <i class="fas fa-home"></i><span>首页</span>
+      </a>
+      <a class="tab-bar-item active" href="vocab-list.html">
+        <i class="fas fa-graduation-cap"></i><span>学习</span>
+      </a>
+      <a class="tab-bar-item" href="wordbook.html">
+        <i class="fas fa-bookmark"></i><span>单词本</span>
+      </a>
+      <a class="tab-bar-item" href="profile.html">
+        <i class="far fa-user"></i><span>我的</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../data.js"></script>
+<script src="../nhk-daily.js"></script>
+<script>
+  function renderNewsList() {
+    const level = JP.State.level;
+    const data = JP_DATA[level];
+    if (!data) return;
+
+    function get(path) {
+      if (path === 'levelName') return level;
+      return path.split('.').reduce((o, k) => o && o[k], data);
+    }
+
+    // data-bind 同步
+    document.querySelectorAll('[data-bind]').forEach(el => {
+      const v = get(el.dataset.bind);
+      if (v !== undefined) el.textContent = v;
+    });
+    document.querySelectorAll('[data-bind-html]').forEach(el => {
+      const v = get(el.dataset.bindHtml);
+      if (v !== undefined) el.innerHTML = v;
+    });
+
+    const list = data.newsList || [];
+    const container = document.getElementById('newsListContainer');
+    if (!container) return;
+
+    container.innerHTML = list.map(n => `
+      <a href="news-detail.html?id=${n.id}" class="news-item">
+        <div class="news-thumb" style="background-image: url('${n.thumb}');">
+          <div class="play-badge"><i class="fas fa-play"></i></div>
+          <div class="dur">${n.duration}</div>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="badge badge-${n.badge.toLowerCase()}">${n.badge}</span>
+            <span class="text-xs text-muted">${n.date}</span>
+          </div>
+          <h3 class="jp font-bold text-sm" style="line-height: 1.5;">${n.title_jp}</h3>
+          <p class="text-xs text-muted mt-1">${n.title_zh}</p>
+          <div class="flex items-center gap-3 mt-2 text-xs text-muted">
+            <span><i class="far fa-clock"></i> ${n.duration}</span>
+            <span><i class="fas fa-headphones"></i> ${n.plays} 收听</span>
+          </div>
+        </div>
+      </a>
+    `).join('');
+
+    const counter = document.getElementById('newsCountText');
+    if (counter) counter.textContent = `${list.length} 篇`;
+  }
+
+  window.addEventListener('levelchange', renderNewsList);
+  window.addEventListener('nhk-daily-loaded', renderNewsList);
+  renderNewsList();
+</script>
+</body>
+</html>
