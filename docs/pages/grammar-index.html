@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>文法 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 0; }
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .grammar-hero {
+    background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%);
+    color: white;
+    padding: 24px 20px 30px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .grammar-hero::after {
+    content: "文";
+    position: absolute;
+    right: -10px;
+    bottom: -50px;
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    font-family: "Noto Sans JP", serif;
+  }
+
+  .grammar-item {
+    background: white;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.15s;
+  }
+  .grammar-item:active { transform: scale(0.98); background: var(--kinari); }
+  .grammar-item .num-badge {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #7C3AED, #A78BFA);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .grammar-item .title-jp {
+    font-size: 15px; font-weight: 600;
+    color: var(--sumi);
+  }
+  .grammar-item .title-zh {
+    font-size: 11px;
+    color: var(--hae);
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <div class="nav-header">
+      <div class="flex items-center gap-3">
+        <a href="home.html" class="back-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
+        <div>
+          <h1>文法</h1>
+          <p class="text-xs text-muted" style="margin-top: 2px;">语法点 · 句型详解</p>
+        </div>
+      </div>
+      <button class="btn-icon" style="width: 36px; height: 36px;" onclick="JP.speak('日本語の文法を勉強しましょう')">
+        <i class="fas fa-volume-up"></i>
+      </button>
+    </div>
+
+    <!-- 等级 Tab -->
+    <div data-auto-stepper></div>
+
+    <!-- 顶部介绍 -->
+    <div class="grammar-hero">
+      <h1 class="text-xl font-bold">语法 · 文法</h1>
+      <p class="text-sm mt-2" style="opacity: 0.95; line-height: 1.5;">掌握 N5-N1 必考句型，每个语法点配经典例句</p>
+      <p class="text-xs mt-2" style="opacity: 0.85;" id="grammarCount">12 个语法点</p>
+    </div>
+
+    <!-- 语法列表 -->
+    <div class="px-5 mt-5">
+      <div class="section-head">
+        <h2>本等级语法点</h2>
+        <span class="more text-muted" style="color: var(--hae);">点开看例句</span>
+      </div>
+      <div id="grammarList"></div>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <div class="tab-bar">
+      <a class="tab-bar-item" href="home.html">
+        <i class="fas fa-home"></i><span>首页</span>
+      </a>
+      <a class="tab-bar-item active" href="vocab-list.html">
+        <i class="fas fa-graduation-cap"></i><span>学习</span>
+      </a>
+      <a class="tab-bar-item" href="wordbook.html">
+        <i class="fas fa-bookmark"></i><span>单词本</span>
+      </a>
+      <a class="tab-bar-item" href="profile.html">
+        <i class="far fa-user"></i><span>我的</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../data.js"></script>
+<script src="../nhk-daily.js"></script>
+<script>
+  function renderGrammar() {
+    const level = JP.State.level;
+    const data = JP_DATA[level];
+    if (!data) return;
+
+    const points = data.grammarPoints || [];
+    const container = document.getElementById('grammarList');
+    const counter = document.getElementById('grammarCount');
+    if (!container) return;
+
+    counter.textContent = `${points.length} 个语法点`;
+
+    if (points.length === 0) {
+      container.innerHTML = '<p class="text-center text-muted text-sm" style="padding: 40px 0;">本等级暂无语法数据</p>';
+      return;
+    }
+
+    container.innerHTML = points.map((p, i) => `
+      <a href="grammar-detail.html?id=${encodeURIComponent(p.id)}" class="grammar-item">
+        <div class="num-badge">${(i + 1).toString().padStart(2, '0')}</div>
+        <div class="flex-1 min-w-0">
+          <p class="title-jp">${p.title}</p>
+          <p class="title-zh">${p.zh}</p>
+        </div>
+        <i class="fas fa-chevron-right text-xs text-muted"></i>
+      </a>
+    `).join('');
+  }
+
+  window.addEventListener('levelchange', renderGrammar);
+  renderGrammar();
+</script>
+</body>
+</html>
