@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>敬語 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 0; }
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .keigo-hero {
+    background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+    color: white;
+    padding: 24px 20px 30px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .keigo-hero::after {
+    content: "敬";
+    position: absolute;
+    right: -10px;
+    bottom: -50px;
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    font-family: "Noto Sans JP", serif;
+  }
+  .keigo-hero h1 {
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0 0 4px 0;
+  }
+  .keigo-hero p {
+    font-size: 13px;
+    margin: 0;
+    opacity: 0.95;
+    line-height: 1.5;
+  }
+
+  .keigo-branch {
+    background: white;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    transition: all 0.2s;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  .keigo-branch:active { transform: scale(0.98); }
+  .keigo-branch .branch-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 18px;
+    margin-bottom: 10px;
+  }
+  .keigo-branch .title-jp {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--sumi);
+  }
+  .keigo-branch .title-zh {
+    font-size: 12px;
+    color: var(--hae);
+    margin-top: 2px;
+  }
+  .keigo-branch .desc {
+    font-size: 12px;
+    color: var(--hae);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  .compare-table {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  }
+  .compare-table table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .compare-table th, .compare-table td {
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(15,23,42,0.05);
+  }
+  .compare-table th { background: rgba(15,23,42,0.04); color: var(--sumi); font-weight: 700; font-size: 12px; }
+  .compare-table td.head { background: rgba(15,23,42,0.02); color: var(--hae); font-size: 12px; text-align: left; }
+  .compare-table td.respect { background: rgba(188,78,81,0.06); color: var(--akane); font-weight: 600; }
+  .compare-table td.humble { background: rgba(27,58,92,0.06); color: var(--ai-iro); font-weight: 600; }
+
+  .scenario-card {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <div data-auto-stepper></div>
+
+    <div class="nav-header">
+      <div class="flex items-center gap-3">
+        <a href="home.html" class="back-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
+        <div>
+          <h1>敬語</h1>
+          <p class="text-xs text-muted" style="margin-top: 2px;">日本职场生存的第一课</p>
+        </div>
+      </div>
+      <div></div>
+    </div>
+
+    <!-- 顶部介绍 -->
+    <div class="keigo-hero">
+      <h1>敬語の3大体系</h1>
+      <p>尊敬語・謙譲語・丁寧語</p>
+      <p style="margin-top: 6px; font-size: 12px;">学会敬语 = 学会在职场、餐厅、电话里"不犯错"</p>
+    </div>
+
+    <!-- 三大体系 -->
+    <div class="px-5 mt-5">
+      <div class="section-head">
+        <h2>三大体系</h2>
+      </div>
+
+      <a href="keigo-detail.html?type=sonkei" class="keigo-branch block">
+        <div class="branch-icon" style="background: linear-gradient(135deg, #BC4E51, #E76F72);">
+          <i class="fas fa-arrow-up"></i>
+        </div>
+        <div class="title-jp jp">尊敬語</div>
+        <div class="title-zh">そんけいご · 抬高对方</div>
+        <p class="desc jp">用于抬高对方（上司、客户、长辈）。<br>动词变成「お + V + になる」或专用敬语动词。</p>
+      </a>
+
+      <a href="keigo-detail.html?type=kenjou" class="keigo-branch block">
+        <div class="branch-icon" style="background: linear-gradient(135deg, #1B3A5C, #3A5F87);">
+          <i class="fas fa-arrow-down"></i>
+        </div>
+        <div class="title-jp jp">謙譲語</div>
+        <div class="title-zh">けんじょうご · 压低自己</div>
+        <p class="desc jp">用于压低自己（对上司、客户说话时）。<br>动词变成「お + V + する」或专用谦让语动词。</p>
+      </a>
+
+      <a href="keigo-detail.html?type=teinei" class="keigo-branch block">
+        <div class="branch-icon" style="background: linear-gradient(135deg, #10B981, #34D399);">
+          <i class="fas fa-comment"></i>
+        </div>
+        <div class="title-jp jp">丁寧語</div>
+        <div class="title-zh">ていねいご · 抬高场合</div>
+        <p class="desc jp">用于让话语本身更礼貌（对谁都能用）。<br>句尾用「です・ます」，句中加「お・ご」。</p>
+      </a>
+    </div>
+
+    <!-- 速查表 -->
+    <div class="px-5 mt-6">
+      <div class="section-head">
+        <h2>常用对照表（ます型）</h2>
+        <span class="more text-muted" style="color: var(--hae);">尊敬 ⇄ 谦让</span>
+      </div>
+      <div class="compare-table">
+        <table>
+          <thead>
+            <tr>
+              <th>普通</th>
+              <th>尊敬語（ます）</th>
+              <th>謙譲語（ます）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="head jp">食べる</td>
+              <td class="respect jp">召し上がります</td>
+              <td class="humble jp">いただきます</td>
+            </tr>
+            <tr>
+              <td class="head jp">言う</td>
+              <td class="respect jp">おっしゃいます</td>
+              <td class="humble jp">申します・申し上げます</td>
+            </tr>
+            <tr>
+              <td class="head jp">行く・来る</td>
+              <td class="respect jp">いらっしゃいます</td>
+              <td class="humble jp">参ります・伺います</td>
+            </tr>
+            <tr>
+              <td class="head jp">見る</td>
+              <td class="respect jp">ご覧になります</td>
+              <td class="humble jp">拝見します</td>
+            </tr>
+            <tr>
+              <td class="head jp">知る</td>
+              <td class="respect jp">お知りになります</td>
+              <td class="humble jp">存じます</td>
+            </tr>
+            <tr>
+              <td class="head jp">する</td>
+              <td class="respect jp">なさいます</td>
+              <td class="humble jp">いたします</td>
+            </tr>
+            <tr>
+              <td class="head jp">聞く</td>
+              <td class="respect jp">お聞きになります</td>
+              <td class="humble jp">伺います・承ります</td>
+            </tr>
+            <tr>
+              <td class="head jp">与える</td>
+              <td class="respect jp">お与えになります</td>
+              <td class="humble jp">差し上げます</td>
+            </tr>
+            <tr>
+              <td class="head jp">会う</td>
+              <td class="respect jp">お会いになります</td>
+              <td class="humble jp">お目にかかります</td>
+            </tr>
+            <tr>
+              <td class="head jp">伝える</td>
+              <td class="respect jp">お伝えになります</td>
+              <td class="humble jp">申し伝えます</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 场景练习 -->
+    <div class="px-5 mt-6">
+      <div class="section-head">
+        <h2>场景练习</h2>
+        <span class="more text-muted" style="color: var(--hae);">4 个场景</span>
+      </div>
+
+      <a href="keigo-detail.html?type=sonkei" class="scenario-card block" style="background: linear-gradient(135deg, #FFF5F5 0%, white 100%); text-decoration: none; color: inherit;">
+        <div class="flex items-center gap-3">
+          <div style="font-size: 32px;">🏢</div>
+          <div class="flex-1">
+            <p class="font-bold">职场：对上司说话</p>
+            <p class="text-xs text-muted mt-1">报告、会议、出差申请</p>
+          </div>
+          <i class="fas fa-chevron-right text-xs text-muted"></i>
+        </div>
+      </a>
+
+      <a href="keigo-detail.html?type=kenjou" class="scenario-card block" style="background: linear-gradient(135deg, #F5F3FF 0%, white 100%); text-decoration: none; color: inherit;">
+        <div class="flex items-center gap-3">
+          <div style="font-size: 32px;">🍜</div>
+          <div class="flex-1">
+            <p class="font-bold">餐厅：点餐 / 服务客人</p>
+            <p class="text-xs text-muted mt-1">いらっしゃいませ〜</p>
+          </div>
+          <i class="fas fa-chevron-right text-xs text-muted"></i>
+        </div>
+      </a>
+
+      <a href="keigo-detail.html?type=teinei" class="scenario-card block" style="background: linear-gradient(135deg, #FFFBEB 0%, white 100%); text-decoration: none; color: inherit;">
+        <div class="flex items-center gap-3">
+          <div style="font-size: 32px;">📞</div>
+          <div class="flex-1">
+            <p class="font-bold">电话：商务第一通</p>
+            <p class="text-xs text-muted mt-1">お忙しいところ失礼します</p>
+          </div>
+          <i class="fas fa-chevron-right text-xs text-muted"></i>
+        </div>
+      </a>
+
+      <a href="keigo-detail.html?type=teinei" class="scenario-card block" style="background: linear-gradient(135deg, #F0FDF4 0%, white 100%); text-decoration: none; color: inherit;">
+        <div class="flex items-center gap-3">
+          <div style="font-size: 32px;">🏠</div>
+          <div class="flex-1">
+            <p class="font-bold">家庭：对长辈</p>
+            <p class="text-xs text-muted mt-1">おじいちゃん・おばあちゃん</p>
+          </div>
+          <i class="fas fa-chevron-right text-xs text-muted"></i>
+        </div>
+      </a>
+    </div>
+
+    <!-- 句尾礼貌度 -->
+    <div class="px-5 mt-6">
+      <div class="section-head">
+        <h2>句尾礼貌度对比</h2>
+      </div>
+      <div class="compare-table">
+        <table>
+          <thead>
+            <tr>
+              <th>普通形</th>
+              <th>丁寧形（ます）</th>
+              <th>最高敬语（ます）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="head jp">食べる</td>
+              <td class="respect jp">食べます</td>
+              <td class="humble jp">召し上がります</td>
+            </tr>
+            <tr>
+              <td class="head jp">行く</td>
+              <td class="respect jp">行きます</td>
+              <td class="humble jp">いらっしゃいます</td>
+            </tr>
+            <tr>
+              <td class="head jp">だ</td>
+              <td class="respect jp">です</td>
+              <td class="humble jp">でございます</td>
+            </tr>
+            <tr>
+              <td class="head jp">ある</td>
+              <td class="respect jp">あります</td>
+              <td class="humble jp">ございます</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <div class="tab-bar">
+      <a class="tab-bar-item" href="home.html">
+        <i class="fas fa-home"></i><span>首页</span>
+      </a>
+      <a class="tab-bar-item active" href="vocab-list.html">
+        <i class="fas fa-graduation-cap"></i><span>学习</span>
+      </a>
+      <a class="tab-bar-item" href="wordbook.html">
+        <i class="fas fa-bookmark"></i><span>单词本</span>
+      </a>
+      <a class="tab-bar-item" href="profile.html">
+        <i class="far fa-user"></i><span>我的</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../nhk-daily.js"></script>
+</body>
+</html>
