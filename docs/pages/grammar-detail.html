@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>文法 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 0; }
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .grammar-hero {
+    background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%);
+    color: white;
+    padding: 32px 20px 80px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .grammar-hero::after {
+    content: "文";
+    position: absolute;
+    right: -10px;
+    bottom: -40px;
+    font-size: 200px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    font-family: "Noto Sans JP", serif;
+  }
+
+  .pattern-card {
+    background: white;
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  }
+  .pattern-card .label {
+    display: inline-block;
+    background: linear-gradient(135deg, #7C3AED, #A78BFA);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+  .pattern-card .pattern {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--sumi);
+    margin-bottom: 6px;
+  }
+  .pattern-card .desc {
+    font-size: 13px;
+    color: var(--hae);
+    line-height: 1.6;
+  }
+
+  .example-block {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(167, 139, 250, 0.03));
+    border-left: 3px solid #7C3AED;
+    padding: 14px 16px;
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 10px;
+  }
+  .example-block .jp {
+    font-size: 16px;
+    color: var(--sumi);
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+  .example-block .jp ruby rt {
+    font-size: 10px;
+    color: var(--hae);
+  }
+  .example-block .zh {
+    font-size: 12px;
+    color: var(--hae);
+    line-height: 1.5;
+  }
+  .example-block .speak {
+    margin-top: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #7C3AED;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen bg-gradient-jp">
+    <div data-auto-stepper></div>
+
+    <div class="grammar-hero">
+      <div class="flex items-center justify-between mb-3" style="position: relative; z-index: 2;">
+        <a href="grammar-index.html" class="back-btn" style="background: rgba(255,255,255,0.2); color: white;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </a>
+        <div class="flex items-center gap-2">
+          <button class="btn-icon" id="bookmarkBtn" style="width: 36px; height: 36px; background: rgba(255,255,255,0.2); color: white;">
+            <i class="far fa-bookmark"></i>
+          </button>
+        </div>
+      </div>
+      <p class="text-xs" id="levelLabel" style="opacity: 0.85; position: relative; z-index: 2;">N5 · 文法</p>
+      <h1 class="jp text-2xl font-bold mt-1" id="grammarTitle" style="line-height: 1.3;">名词 + は + 名词 + です</h1>
+      <p class="text-sm mt-2" id="grammarZh" style="opacity: 0.95; position: relative; z-index: 2;">A 是 B（判断句）</p>
+    </div>
+
+    <div style="margin-top: -50px; position: relative; z-index: 3; padding-bottom: 100px;">
+
+      <!-- 句型说明 -->
+      <div class="px-5">
+        <div class="pattern-card">
+          <span class="label">句型</span>
+          <p class="pattern jp" id="patternTitle">〜は〜です</p>
+          <p class="desc" id="patternDesc"></p>
+        </div>
+      </div>
+
+      <!-- 例句 -->
+      <div class="px-5 mt-5">
+        <div class="section-head">
+          <h2>例句</h2>
+          <span class="more text-muted" style="color: var(--hae);">点击听发音</span>
+        </div>
+        <div id="examplesContainer"></div>
+      </div>
+
+      <!-- 收藏/上一句/下一句 -->
+      <div class="px-5 mt-5">
+        <div class="grid grid-cols-2 gap-2">
+          <button class="btn btn-secondary" style="font-size: 12px; padding: 10px;" id="prevBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg> 上一句型
+          </button>
+          <button class="btn btn-secondary" style="font-size: 12px; padding: 10px;" id="nextBtn">
+            下一句型 <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../data.js"></script>
+<script src="../nhk-daily.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const grammarId = params.get('id');
+
+  function findGrammar() {
+    const level = JP.State.level;
+    const data = JP_DATA[level];
+    if (!data) return null;
+    const points = data.grammarPoints || [];
+    if (grammarId) {
+      const found = points.find(p => p.id === grammarId);
+      if (found) return { level, grammar: found, points };
+    }
+    return points.length > 0 ? { level, grammar: points[0], points } : null;
+  }
+
+  function render() {
+    const result = findGrammar();
+    if (!result) {
+      document.getElementById('grammarTitle').textContent = '暂无数据';
+      return;
+    }
+    const { level, grammar, points } = result;
+
+    document.getElementById('levelLabel').textContent = level + ' · 文法';
+    document.getElementById('grammarTitle').textContent = grammar.title;
+    document.getElementById('grammarZh').textContent = grammar.zh;
+    document.getElementById('patternTitle').textContent = grammar.title;
+    document.getElementById('patternDesc').textContent = grammar.desc;
+
+    // 例句
+    const ec = document.getElementById('examplesContainer');
+    ec.innerHTML = (grammar.examples || []).map(ex => `
+      <div class="example-block">
+        <p class="jp">${ex.jp}</p>
+        <p class="zh">${ex.zh}</p>
+        <span class="speak" onclick="JP.speak('${ex.jp.replace(/'/g, "、").replace(/<[^>]+>/g, '')}')">
+          <i class="fas fa-volume-up"></i> 听发音
+        </span>
+      </div>
+    `).join('');
+
+    // 收藏
+    const bm = document.getElementById('bookmarkBtn');
+    const id = 'grammar-' + grammar.id;
+    if (JP.WordBook.has(id)) {
+      bm.innerHTML = '<i class="fas fa-bookmark"></i>';
+    }
+    bm.onclick = () => {
+      if (JP.WordBook.has(id)) {
+        JP.WordBook.remove(id);
+        bm.innerHTML = '<i class="far fa-bookmark"></i>';
+      } else {
+        JP.WordBook.add({ id, word: grammar.title, kana: 'ぶんぽう', pitch: '0', level, meaning_zh: grammar.zh, pos: '文法', source: 'grammar', status: 'new' });
+        bm.innerHTML = '<i class="fas fa-bookmark"></i>';
+      }
+    };
+
+    // 上一句/下一句
+    const cur = points.findIndex(p => p.id === grammar.id);
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (cur > 0) {
+      prevBtn.onclick = () => location.href = 'grammar-detail.html?id=' + points[cur - 1].id;
+    } else {
+      prevBtn.disabled = true;
+      prevBtn.style.opacity = 0.4;
+    }
+    if (cur < points.length - 1) {
+      nextBtn.onclick = () => location.href = 'grammar-detail.html?id=' + points[cur + 1].id;
+    } else {
+      nextBtn.disabled = true;
+      nextBtn.style.opacity = 0.4;
+    }
+  }
+
+  render();
+  window.addEventListener('levelchange', render);
+</script>
+</body>
+</html>
