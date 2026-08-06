@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>发音纠正 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  /* 词语显示 */
+  .word-stage {
+    background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
+    color: white;
+    border-radius: 24px;
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .word-stage::after {
+    content: "N1";
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    font-size: 120px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    font-family: "Noto Sans JP", serif;
+  }
+  .word-display {
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    position: relative;
+    z-index: 2;
+  }
+  .word-display ruby rt {
+    font-size: 18px;
+    color: rgba(255,255,255,0.7);
+  }
+  .word-meaning {
+    font-size: 14px;
+    margin-top: 12px;
+    opacity: 0.85;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* 录音动画 */
+  .record-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 0;
+  }
+
+  /* 评分 */
+  .score-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(var(--n5) 0% 87%, rgba(255,255,255,0.1) 87% 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .score-circle::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    background: white;
+    border-radius: 50%;
+  }
+  .score-num {
+    position: relative;
+    z-index: 2;
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--n5);
+  }
+  .score-label {
+    position: relative;
+    z-index: 2;
+    font-size: 10px;
+    color: var(--hae);
+    margin-top: -4px;
+  }
+
+  /* 音素反馈 */
+  .phoneme-row {
+    display: flex;
+    gap: 6px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+  .phoneme {
+    width: 44px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+  }
+  .phoneme.good { background: var(--n5); }
+  .phoneme.ok { background: var(--warning); }
+  .phoneme.bad { background: var(--danger); }
+  .phoneme.gray { background: rgba(15,23,42,0.1); color: var(--hae); }
+
+  /* 音调对比图 */
+  .pitch-compare {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 80px;
+    padding: 8px 16px;
+    background: rgba(15,23,42,0.04);
+    border-radius: 12px;
+    margin: 12px 0;
+  }
+  .pitch-curve {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+  .pitch-curve .label {
+    font-size: 10px;
+    color: var(--hae);
+    margin-bottom: 4px;
+  }
+  .pitch-curve .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 50px;
+  }
+  .pitch-curve .bar {
+    width: 8px;
+    border-radius: 2px;
+  }
+
+  /* 提示卡 */
+  .hint-card {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.04) 100%);
+    border: 1.5px dashed var(--warning);
+    border-radius: 14px;
+    padding: 14px;
+    margin: 12px 0;
+  }
+
+  /* 浮动控制条 */
+  .control-bar {
+    background: white;
+    border-radius: 24px;
+    padding: 14px 16px;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 16px 0;
+  }
+  .ctrl-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 12px;
+    color: var(--hae);
+    transition: all 0.15s;
+  }
+  .ctrl-btn:active { transform: scale(0.94); }
+  .ctrl-btn .icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .ctrl-btn.hint .icon-wrap { background: rgba(245, 158, 11, 0.12); color: var(--warning); }
+  .ctrl-btn.skip .icon-wrap { background: rgba(100, 116, 139, 0.12); color: var(--hae); }
+  .ctrl-btn.listen .icon-wrap { background: rgba(27, 58, 92, 0.12); color: var(--ai-iro); }
+  .ctrl-btn.add .icon-wrap { background: rgba(188, 78, 81, 0.12); color: var(--akane); }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen bg-gradient-jp">
+    <div class="nav-header">
+      <div class="flex items-center gap-3">
+        <a href="home.html" class="back-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
+        <div>
+          <h1>发音纠正</h1>
+          <p class="text-xs text-muted" style="margin-top: 2px;">录音 · AI 评分 · 音素级反馈</p>
+        </div>
+      </div>
+      <span class="badge badge-n1">N1</span>
+    </div>
+
+    <!-- 等级 Tab -->
+    <div data-auto-stepper></div>
+
+    <!-- 顶部进度 -->
+    <div class="px-5 mt-3">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs text-muted">进度</span>
+        <span class="text-xs font-semi">5 / 10 · 已跳过 1</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width: 50%; background: var(--n2);"></div>
+      </div>
+    </div>
+
+    <!-- 词语显示（数据驱动） -->
+    <div class="px-5 mt-4">
+      <div class="word-stage" id="wordStage">
+        <p class="text-xs" style="opacity: 0.85; position: relative; z-index: 2;">第 <span id="wordIdx">1</span> 个词 · 请读出</p>
+        <div class="word-display jp" style="margin-top: 8px;" id="wordDisplay"></div>
+        <p class="word-meaning" id="wordMeaning"></p>
+      </div>
+    </div>
+
+    <!-- 提示卡（用户点了"提示"后显示） -->
+    <div class="px-5">
+      <div class="hint-card">
+        <div class="flex items-start gap-2">
+          <i class="fas fa-lightbulb text-warning mt-0.5"></i>
+          <div>
+            <p class="text-sm font-semi">第 1 次提示</p>
+            <p class="text-xs text-muted mt-1">首字：<span class="jp font-bold text-warning" style="font-size: 16px;">あ</span> · 4 个假名 · あい<span class="text-akane">ま</span>い</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 录音主区 -->
+    <div class="record-stage">
+      <button class="record-btn" id="recBtn" onclick="toggleRecord()">
+        <i class="fas fa-microphone" id="recIcon"></i>
+      </button>
+      <p class="text-xs text-muted mt-3" id="recStatus">点击录音 · 说出 "あいまい"</p>
+      <p class="text-xs mt-1" style="color: var(--n2);">建议在安静环境下录制</p>
+    </div>
+
+    <!-- 浮动控制条 -->
+    <div class="px-5">
+      <div class="control-bar">
+        <div class="ctrl-btn hint" onclick="showHint()">
+          <div class="icon-wrap"><i class="fas fa-lightbulb"></i></div>
+          <span class="text-xs">提示 1/3</span>
+        </div>
+        <div class="ctrl-btn listen" onclick="JP.speak('曖昧')">
+          <div class="icon-wrap"><i class="fas fa-headphones"></i></div>
+          <span class="text-xs">再听</span>
+        </div>
+        <div class="ctrl-btn skip" onclick="skipWord()">
+          <div class="icon-wrap"><i class="fas fa-forward"></i></div>
+          <span class="text-xs">跳过</span>
+        </div>
+        <div class="ctrl-btn add" onclick="addToBook()">
+          <div class="icon-wrap"><i class="fas fa-bookmark"></i></div>
+          <span class="text-xs">加词本</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 评分卡（录音后显示） -->
+    <div class="px-5">
+      <div class="solid-card" style="background: linear-gradient(135deg, #F5F3FF 0%, white 100%); border: 1px solid rgba(139, 92, 246, 0.2);">
+        <div class="flex items-center gap-4">
+          <div class="score-circle">
+            <div class="text-center">
+              <div class="score-num">87</div>
+              <div class="score-label">分</div>
+            </div>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-bold text-n2" style="color: var(--n2);">优秀！</p>
+            <p class="text-xs text-muted mt-1">音准极佳，音调接近原声</p>
+            <p class="text-xs mt-2" style="color: var(--n2);">
+              <i class="fas fa-check-circle"></i> 再读一遍听听原音
+            </p>
+          </div>
+        </div>
+
+        <!-- 音素级 -->
+        <div class="mt-3">
+          <p class="text-xs text-muted mb-2">音素分析</p>
+          <div class="phoneme-row">
+            <div class="phoneme good">あ</div>
+            <div class="phoneme good">い</div>
+            <div class="phoneme ok">ま</div>
+            <div class="phoneme good">い</div>
+          </div>
+          <p class="text-xs text-muted">🟢 完美 · 🟡 良好 · 🔴 需改进</p>
+        </div>
+
+        <!-- 音调对比 -->
+        <div class="mt-3">
+          <p class="text-xs text-muted mb-1">音调轮廓对比</p>
+          <div class="pitch-compare">
+            <div class="pitch-curve">
+              <span class="label">原音</span>
+              <div class="bars">
+                <div class="bar" style="height: 18px; background: var(--n2);"></div>
+                <div class="bar" style="height: 12px; background: var(--n2);"></div>
+                <div class="bar" style="height: 8px; background: var(--n2);"></div>
+                <div class="bar" style="height: 8px; background: var(--n2);"></div>
+              </div>
+            </div>
+            <div class="pitch-curve">
+              <span class="label">你的</span>
+              <div class="bars">
+                <div class="bar" style="height: 20px; background: var(--akane);"></div>
+                <div class="bar" style="height: 14px; background: var(--akane);"></div>
+                <div class="bar" style="height: 14px; background: var(--akane);"></div>
+                <div class="bar" style="height: 10px; background: var(--akane);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 成功回放 -->
+        <div class="mt-3 pt-3" style="border-top: 1px dashed rgba(15,23,42,0.1);">
+          <div class="flex items-center gap-2 mb-2">
+            <i class="fas fa-trophy" style="color: var(--warning);"></i>
+            <p class="text-sm font-bold">≥ 85 分：听一遍标准发音 🎉</p>
+          </div>
+          <div class="audio-player" style="padding: 12px;">
+            <div class="flex items-center">
+              <button class="play-btn" style="width: 40px; height: 40px; font-size: 16px;" onclick="JP.speak('曖昧')">
+                <i class="fas fa-play"></i>
+              </button>
+              <div class="flex-1">
+                <p class="text-xs" style="opacity: 0.9;">あいまい · 标准发音</p>
+                <div class="flex items-center gap-1 mt-1" style="height: 16px;">
+                  <div class="wave" style="height: 8px;"></div>
+                  <div class="wave" style="height: 12px;"></div>
+                  <div class="wave" style="height: 14px;"></div>
+                  <div class="wave" style="height: 10px;"></div>
+                  <div class="wave" style="height: 6px;"></div>
+                  <div class="wave" style="height: 12px;"></div>
+                </div>
+              </div>
+              <span class="text-xs" style="opacity: 0.85;">NHK</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 下一步 -->
+        <div class="flex gap-2 mt-3">
+          <button class="btn btn-secondary flex-1" style="font-size: 13px; padding: 10px;">
+            <i class="fas fa-redo"></i> 再录一次
+          </button>
+          <button class="btn btn-primary flex-1" style="font-size: 13px; padding: 10px; background: var(--n2);">
+            下一词 <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../data.js"></script>
+<script src="../nhk-daily.js"></script>
+<script>
+  let recording = false;
+  let recTimer = null;
+  let hardIdx = 0;
+
+  function getCurrentHardWord() {
+    const level = JP.State.level;
+    const data = JP_DATA[level];
+    if (!data || !data.spellWords || data.spellWords.length === 0) return null;
+    return data.spellWords[hardIdx % data.spellWords.length];
+  }
+
+  function renderSpellHard() {
+    hardIdx = 0;
+    const w = getCurrentHardWord();
+    if (!w) return;
+    document.getElementById('wordIdx').textContent = '1';
+    document.getElementById('wordDisplay').innerHTML = '<ruby>' + w.kanji + '<rt>' + w.kana + '</rt></ruby>';
+    document.getElementById('wordMeaning').textContent = w.meaning;
+  }
+
+  function nextHardWord() {
+    hardIdx++;
+    const level = JP.State.level;
+    const data = JP_DATA[level];
+    if (!data) return;
+    if (hardIdx >= data.spellWords.length) hardIdx = 0;
+    document.getElementById('wordIdx').textContent = (hardIdx + 1);
+    const w = data.spellWords[hardIdx];
+    document.getElementById('wordDisplay').innerHTML = '<ruby>' + w.kanji + '<rt>' + w.kana + '</rt></ruby>';
+    document.getElementById('wordMeaning').textContent = w.meaning;
+  }
+
+  function toggleRecord() {
+    recording = !recording;
+    const btn = document.getElementById('recBtn');
+    const icon = document.getElementById('recIcon');
+    const status = document.getElementById('recStatus');
+
+    if (recording) {
+      btn.classList.add('recording');
+      icon.className = 'fas fa-stop';
+      status.textContent = '正在录音... 说出 "あいまい"';
+
+      // 模拟录音时长
+      recTimer = setTimeout(() => {
+        toggleRecord();
+        // 录音完成 → 显示评分
+        status.textContent = '录音完成 · 评分 87 分';
+      }, 2500);
+    } else {
+      btn.classList.remove('recording');
+      icon.className = 'fas fa-microphone';
+      status.textContent = '点击录音 · 说出 "あいまい"';
+      clearTimeout(recTimer);
+    }
+  }
+
+  function showHint() {
+    alert('💡 第 2 次提示：あい + まい · "ま" 是难点');
+  }
+
+  function skipWord() {
+    if (confirm('跳过这个词？会加入"待复习"清单')) {
+      window.location.reload();
+    }
+  }
+
+  function addToBook() {
+    JP.WordBook.add({
+      id: 'aimai',
+      word: '曖昧',
+      kana: 'あいまい',
+      pitch: '0',
+      level: 'N1',
+      meaning_zh: '模棱两可',
+      pos: 'だ形容詞',
+      source: 'manual',
+      status: 'new'
+    });
+    alert('✅ 已加入单词本');
+  }
+</script>
+<script>window.addEventListener("levelchange", renderSpellHard);renderSpellHard();</script>
+</body>
+</html>
