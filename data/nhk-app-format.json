@@ -1,77 +1,77 @@
 {
-  "version": "2026-08-05",
+  "version": "2026-08-06",
   "source": "https://www3.nhk.or.jp/news/easy/",
-  "fetched_at": "2026-08-05T17:20:52.452406+09:00",
+  "fetched_at": "2026-08-06T12:09:41.593582+09:00",
   "by_level": {
-    "N4": 3,
-    "N2": 1
+    "N2": 2,
+    "N3": 2
   },
   "default_level": "N3",
   "items": [
     {
-      "id": "nhk-ne2026080413003",
-      "badge": "N4",
-      "date": "8月4日",
-      "title_jp": "4万4000以上の家や建物で水道が止まっている",
-      "title_zh": "",
-      "duration": "1:00",
-      "plays": "new",
-      "thumb": "https://news.web.nhk/news/html/20260804/K10015195871_2608041604_0804163240_01_02.jpg",
-      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080413003.html",
-      "audioUrl": null,
-      "body": [
-        "熊本県では、4万4000以上の家や建物で水道が止まっています。 このため、いろいろな場所に水をもらうことができる給水所をつくっています。 ..."
-      ],
-      "words": [],
-      "source": "NHK Easy News"
-    },
-    {
-      "id": "nhk-ne2026080412568",
-      "badge": "N4",
-      "date": "8月4日",
-      "title_jp": "梅雨が終わった　西日本などで厳しい暑さが続く",
-      "title_zh": "",
-      "duration": "1:00",
-      "plays": "new",
-      "thumb": "https://news.web.nhk/news/html/20260804/K10015195591_2608041900_0804190304_01_02.jpg",
-      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080412568.html",
-      "audioUrl": null,
-      "body": [
-        "気象庁は4日、北陸地方と東北地方の梅雨が終わったようだと言いました。 北海道は梅雨がないので、これで日本の全部の場所で梅雨が終わりました。..."
-      ],
-      "words": [],
-      "source": "NHK Easy News"
-    },
-    {
-      "id": "nhk-ne2026080412537",
+      "id": "nhk-ne2026080516421",
       "badge": "N2",
-      "date": "8月4日",
-      "title_jp": "東京の動物園でライオン3頭が死んだ　熱中症か",
+      "date": "8月5日",
+      "title_jp": "地震のときは頭を守ってください",
       "title_zh": "",
       "duration": "1:00",
       "plays": "new",
-      "thumb": "https://news.web.nhk/news/html/20260804/K10015195681_2608041830_0804183050_01_03.jpg",
-      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080412537.html",
+      "thumb": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
+      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080516421.html",
       "audioUrl": null,
       "body": [
-        "東京の多摩動物公園には、たくさんのライオンがいます。 見る人は特別なバスでライオンの近くに行くことができて、人気があります。 しかし、最近、..."
+        "大きな地震が起こったときは、次のことに気をつけてください。 地震のときは、テーブルの下などに入って揺れるのが止まるまで待ちましょう。 ..."
       ],
       "words": [],
       "source": "NHK Easy News"
     },
     {
-      "id": "nhk-ne2026080412043",
-      "badge": "N4",
-      "date": "8月4日",
-      "title_jp": "熊本の地震　「このあとも1週間ぐらいは強い地震に気をつけて」",
+      "id": "nhk-ne2026080512490",
+      "badge": "N3",
+      "date": "8月5日",
+      "title_jp": "台風13号　沖縄県などでは雨と風に気をつけて",
       "title_zh": "",
       "duration": "1:00",
       "plays": "new",
-      "thumb": "https://news.web.nhk/news/html/20260804/K10015195771_2608041635_0804164909_01_02.jpg",
-      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080412043.html",
+      "thumb": "https://news.web.nhk/news/html/20260804/K10015195361_2608042208_0804221113_01_03.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080512490.html",
       "audioUrl": null,
       "body": [
-        "熊本県で起こった震度7の地震から、4日で1週間です。 熊本県によると、38人が亡くなりました。この中には、地震と関係があるかまだはっきりわ..."
+        "気象庁によると、台風13号が沖縄県や鹿児島県の奄美地方に向かっています。大きくてとても強い台風です。 海では波が高くなりそうです。沖縄県と..."
+      ],
+      "words": [],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-ne2026080512478",
+      "badge": "N3",
+      "date": "8月5日",
+      "title_jp": "熊本の地震　これからも強い地震に気をつけて",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://news.web.nhk/news/html/20260805/K10015196771_2608050525_0805053516_01_02.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080512478.html",
+      "audioUrl": null,
+      "body": [
+        "熊本県の震度7の地震から1週間以上が過ぎました。 気象庁は「地震の前と比べて、震度5強以上の強い地震が起こる確率が80倍ぐらいに上がっていま..."
+      ],
+      "words": [],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-ne2026080512455",
+      "badge": "N2",
+      "date": "8月5日",
+      "title_jp": "政府「日本にずっと住む外国人の審査のルールを変える」",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://news.web.nhk/news/html/20260804/K10015195731_2608041520_0804152415_01_03.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/ne2026080512455.html",
+      "audioUrl": null,
+      "body": [
+        "外国人の「永住」についてのニュースです。 外国人が日本にずっと住むことを「永住」と言います。 日本の政府は、外国人の永住について、審査のルー..."
       ],
       "words": [],
       "source": "NHK Easy News"
