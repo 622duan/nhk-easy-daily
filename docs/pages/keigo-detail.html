@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>敬語 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 0; }
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .topic-hero {
+    color: white;
+    padding: 32px 20px 60px 20px;
+    position: relative;
+  }
+  .topic-hero.sonkei { background: linear-gradient(135deg, #BC4E51 0%, #E76F72 100%); }
+  .topic-hero.kenjou { background: linear-gradient(135deg, #1B3A5C 0%, #3A5F87 100%); }
+  .topic-hero.teinei { background: linear-gradient(135deg, #10B981 0%, #34D399 100%); }
+  .topic-hero::after {
+    position: absolute;
+    right: -10px; bottom: -40px;
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    font-family: "Noto Sans JP", serif;
+    line-height: 1;
+  }
+  .topic-hero.sonkei::after { content: "尊"; }
+  .topic-hero.kenjou::after { content: "謙"; }
+  .topic-hero.teinei::after { content: "丁"; }
+
+  .transform-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  }
+  .verb-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+  }
+  .verb-form .original {
+    flex: 1;
+    background: rgba(15,23,42,0.04);
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .verb-form .arrow {
+    color: var(--akane);
+    font-size: 18px;
+  }
+  .verb-form .keigo {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .verb-form .keigo.sonkei {
+    background: linear-gradient(135deg, rgba(188,78,81,0.08), rgba(188,78,81,0.04));
+    border: 1px solid rgba(188,78,81,0.2);
+  }
+  .verb-form .keigo.kenjou {
+    background: linear-gradient(135deg, rgba(27,58,92,0.08), rgba(27,58,92,0.04));
+    border: 1px solid rgba(27,58,92,0.2);
+  }
+  .verb-form .keigo.teinei {
+    background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.04));
+    border: 1px solid rgba(16,185,129,0.2);
+  }
+  .verb-form .keigo .keigo-text { font-weight: 600; }
+  .verb-form .keigo.sonkei .keigo-text { color: var(--akane); }
+  .verb-form .keigo.kenjou .keigo-text { color: var(--ai-iro); }
+  .verb-form .keigo.teinei .keigo-text { color: var(--n5); }
+  .verb-form .label {
+    font-size: 10px;
+    color: var(--hae);
+    margin-bottom: 2px;
+  }
+
+  .scenario-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+  }
+  .scenario-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(15,23,42,0.1);
+    margin-bottom: 12px;
+  }
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 16px;
+  }
+  .avatar.boss { background: linear-gradient(135deg, #1B3A5C, #3A5F87); }
+  .avatar.you { background: linear-gradient(135deg, #BC4E51, #E76F72); }
+  .avatar.chief { background: linear-gradient(135deg, #F59E0B, #FBBF24); }
+  .avatar.client { background: linear-gradient(135deg, #10B981, #34D399); }
+
+  .dialogue {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .dialogue .bubble {
+    background: rgba(15,23,42,0.04);
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.5;
+    max-width: 80%;
+  }
+  .dialogue.boss .bubble { border-top-left-radius: 4px; }
+  .dialogue.you { flex-direction: row-reverse; }
+  .dialogue.you .bubble {
+    background: rgba(188,78,81,0.08);
+    color: var(--sumi);
+    border-top-right-radius: 4px;
+  }
+  .dialogue.you.kenjou .bubble {
+    background: rgba(27,58,92,0.08);
+  }
+  .dialogue.you.teinei .bubble {
+    background: rgba(16,185,129,0.08);
+  }
+  .dialogue.you.kenjou { flex-direction: row-reverse; }
+  .dialogue.you.teinei { flex-direction: row-reverse; }
+
+  .note-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(245, 158, 11, 0.12);
+    color: #B45309;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .note-tag.kenjou { background: rgba(27,58,92,0.12); color: var(--ai-iro); }
+  .note-tag.teinei { background: rgba(16,185,129,0.12); color: var(--n5); }
+
+  .solid-word-card {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen bg-gradient-jp">
+    <div data-auto-stepper></div>
+
+    <div class="topic-hero" id="topicHero">
+      <div class="flex items-center justify-between mb-3" style="position: relative; z-index: 2;">
+        <a href="keigo-index.html" class="back-btn" style="background: rgba(0,0,0,0.25); color: white; font-size: 16px; backdrop-filter: blur(10px);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </a>
+        <div></div>
+      </div>
+      <p class="text-xs" id="heroSub" style="opacity: 0.85; position: relative; z-index: 2;">敬語の3大体系 · 第1课</p>
+      <h1 class="jp text-3xl font-bold mt-1" id="heroTitle" style="line-height: 1.2;">尊敬語</h1>
+      <p class="text-sm mt-2" id="heroDesc" style="opacity: 0.9; position: relative; z-index: 2;">抬高对方（上司、客户、长辈）的表达</p>
+    </div>
+
+    <div style="margin-top: -40px; position: relative; z-index: 3; padding-bottom: 100px;">
+
+      <!-- 变形规则 -->
+      <div class="px-5">
+        <div class="solid-card" id="ruleCard">
+          <h2 class="text-md font-bold mb-3" id="ruleTitle">
+            <i class="fas fa-magic text-akane"></i> 两种变形方式
+          </h2>
+          <div id="ruleContent"></div>
+        </div>
+      </div>
+
+      <!-- 专用敬语动词 -->
+      <div class="px-5 mt-5" id="specialWordsSection">
+        <div class="solid-card">
+          <h2 class="text-md font-bold mb-3" id="specialTitle">专用动词对照</h2>
+          <div class="grid grid-cols-2 gap-2" id="specialWords"></div>
+        </div>
+      </div>
+
+      <!-- 场景 -->
+      <div class="px-5 mt-5">
+        <div class="section-head">
+          <h2 id="scenarioTitle">🏢 场景：办公室</h2>
+        </div>
+        <div id="scenarioContainer"></div>
+      </div>
+
+      <!-- 小贴士 -->
+      <div class="px-5 mt-5" id="tipSection">
+        <div class="solid-card" id="tipCard">
+          <div class="flex items-start gap-3">
+            <div style="font-size: 28px;">💡</div>
+            <div>
+              <p class="font-bold text-sm" id="tipTitle">使用场景</p>
+              <p class="text-xs text-muted mt-2" id="tipBody" style="line-height: 1.6;"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="position: sticky; bottom: 90px; padding: 0 20px; margin-top: -90px;">
+      <div class="glass-card" style="padding: 10px 16px; display: flex; align-items: center; gap: 12px;">
+        <button class="btn-icon" id="audioPlay" style="width: 36px; height: 36px; background: var(--akane); color: white;">
+          <i class="fas fa-volume-up text-sm"></i>
+        </button>
+        <div class="flex-1">
+          <p class="text-xs font-semi">播放整段教学</p>
+          <p class="text-xs text-muted">NHK 播音员示范</p>
+        </div>
+        <i class="fas fa-chevron-right text-muted text-xs"></i>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../nhk-daily.js"></script>
+<script>
+  // 读取 URL 参数
+  const params = new URLSearchParams(location.search);
+  const type = params.get('type') || 'sonkei';
+
+  // 三种敬语内容（全部使用 ます 型 / 礼貌形）
+  const KEIGO_CONTENT = {
+    sonkei: {
+      heroClass: 'sonkei',
+      sub: '敬語の3大体系 · 第1课',
+      title: '尊敬語',
+      desc: '抬高对方（上司、客户、长辈）的动作 / 状态',
+      ruleTitle: '两种变形方式（ます型）',
+      ruleMode: 'o-masu-ni-naru',
+      ruleExamples: [
+        { plain: '食べる', keigo: 'お食べになります', sentence: '先生がたはお昼にお寿司を<strong>お食べになります</strong>。', note: '二类动词：食べ = ます形词干' },
+        { plain: '読む', keigo: 'お読みになります', sentence: '社長は毎日新聞を<strong>お読みになります</strong>。', note: '一类动词：読み = ます形词干' },
+        { plain: '言う', keigo: 'おっしゃいます', sentence: '先生は何と<strong>おっしゃいました</strong>か。', note: '特殊：言う → おっしゃる → ます形 おっしゃいます' }
+      ],
+      specialWords: [
+        { plain: '食べる・飲む', keigo: '召し上がります', sentence: 'どうぞ<strong>召し上がってください</strong>。' },
+        { plain: '言う', keigo: 'おっしゃいます', sentence: '会長はそう<strong>おっしゃいました</strong>。' },
+        { plain: '行く・来る・いる', keigo: 'いらっしゃいます', sentence: '社長はまだ<strong>いらっしゃいません</strong>。' },
+        { plain: '見る', keigo: 'ご覧になります', sentence: 'こちらの資料を<strong>ご覧ください</strong>。' },
+        { plain: '知る', keigo: 'お知りになります', sentence: 'もう<strong>お知りになりました</strong>か。' },
+        { plain: '寝る', keigo: 'お休みになります', sentence: '早く<strong>お休みになってください</strong>。' },
+        { plain: 'する', keigo: 'なさいます', sentence: '何を<strong>なさいます</strong>か。' },
+        { plain: '聞く', keigo: 'お聞きになります', sentence: '音楽を<strong>お聞きになります</strong>か。' },
+        { plain: '与える', keigo: 'お与えになります', sentence: '本を<strong>お与えになりました</strong>。' },
+        { plain: '会う', keigo: 'お会いになります', sentence: 'お<strong>会いになりたい</strong>です。' },
+        { plain: '伝える', keigo: 'お伝えになります', sentence: '私に<strong>お伝えになってください</strong>。' }
+      ],
+      scenario: 'office',
+      tipTitle: '使用场景',
+      tipBody: '尊敬语用于抬高对方的动作。出现时机：上司做某事、客户询问、长辈提出要求。绝对不用于自己或同事。注意：お + V + になる 中的 V 必须是「ます形词干」（食べ、読み…），变形后是 お食べ**になる** → ます形 お食べ**になります**。',
+      color: 'akane',
+      audioText: '尊敬語は、相手の動作を高める表現です'
+    },
+
+    kenjou: {
+      heroClass: 'kenjou',
+      sub: '敬語の3大体系 · 第2课',
+      title: '謙譲語',
+      desc: '压低自己（对上司、客户说话时）以抬高对方的动作',
+      ruleTitle: '两种变形方式（ます型）',
+      ruleMode: 'o-masu-suru',
+      ruleExamples: [
+        { plain: '食べる', keigo: 'お食べします', sentence: '私もお寿司を<strong>お食べします</strong>。', note: '二类动词：食べ = ます形词干 + 谦让语I します' },
+        { plain: '読む', keigo: 'お読みします', sentence: '資料を<strong>お読みします</strong>。', note: '一类动词：読み = ます形词干 + します' },
+        { plain: '説明する', keigo: 'ご説明いたします', sentence: '企画を<strong>ご説明いたします</strong>。', note: 'いたす = する 的谦让语 → ます形 いたします' }
+      ],
+      specialWords: [
+        { plain: '食べる・飲む', keigo: 'いただきます', sentence: 'お寿司を<strong>いただきました</strong>。' },
+        { plain: '言う', keigo: '申します・申し上げます', sentence: '私は鈴木と<strong>申します</strong>。' },
+        { plain: '行く・来る', keigo: '参ります・伺います', sentence: '明日<strong>伺います</strong>。' },
+        { plain: '見る', keigo: '拝見します', sentence: '資料を<strong>拝見しました</strong>。' },
+        { plain: '知る', keigo: '存じます・存じます', sentence: 'それは<strong>存じております</strong>。' },
+        { plain: '聞く', keigo: '伺います・承ります', sentence: '詳細を<strong>伺います</strong>。' },
+        { plain: '会う', keigo: 'お目にかかります', sentence: '会長に<strong>お目にかかりたい</strong>です。' },
+        { plain: '与える', keigo: '差し上げます', sentence: 'これをあなたに<strong>差し上げます</strong>。' },
+        { plain: '伝える', keigo: '申し伝えます', sentence: '彼に<strong>申し伝えます</strong>。' },
+        { plain: 'する', keigo: 'いたします', sentence: '私が<strong>いたします</strong>。' },
+        { plain: '思う', keigo: '存じます', sentence: 'そのように<strong>存じます</strong>。' },
+        { plain: '訪問する', keigo: '伺います', sentence: '明日<strong>伺います</strong>。' }
+      ],
+      scenario: 'visit-client',
+      tipTitle: '使用场景',
+      tipBody: '谦让语用于压低自己的动作以抬高对方。出现时机：自己向对方做某事。关键：谦让语的对象永远是"对方"或"对方的物品"。例：お客様の資料を<strong>拝見しました</strong>。',
+      color: 'ai-iro',
+      audioText: '謙譲語は、自分の動作をへりくだらせる表現です'
+    },
+
+    teinei: {
+      heroClass: 'teinei',
+      sub: '敬語の3大体系 · 第3课',
+      title: '丁寧語',
+      desc: '让话语本身更礼貌（对谁都能用）的表达。**只有这一种会带「ます」**',
+      ruleTitle: '两种变形方式',
+      ruleMode: 'teinei',
+      ruleExamples: [
+        { plain: '食べる', keigo: '食べます', sentence: '毎日<strong>食べます</strong>。', note: '句尾 字典形→ます形' },
+        { plain: '行った', keigo: '行きました', sentence: '昨日東京へ<strong>行きました</strong>。', note: '句尾 た形→ました形' },
+        { plain: 'だ', keigo: 'です', sentence: '学生<strong>です</strong>。', note: '判断助词 だ→です' }
+      ],
+      specialWords: [
+        { plain: 'ある', keigo: 'ございます', sentence: '資料が<strong>ございます</strong>。' },
+        { plain: '食べる', keigo: '食べます', sentence: 'お寿司を<strong>食べます</strong>。' },
+        { plain: '行く', keigo: '行きます', sentence: '明日<strong>行きます</strong>。' },
+        { plain: '知っている', keigo: '存じております', sentence: 'それは<strong>存じております</strong>。' },
+        { plain: '言う', keigo: '申します', sentence: '鈴木と<strong>申します</strong>。' },
+        { plain: 'する', keigo: 'いたします', sentence: '私が<strong>いたします</strong>。' },
+        { plain: '名刺', keigo: 'お名刺', sentence: '<strong>お名刺</strong>をどうぞ。' },
+        { plain: '名前', keigo: 'お名前', sentence: '<strong>お名前</strong>をお願いします。' },
+        { plain: '連絡', keigo: 'ご連絡', sentence: '<strong>ご連絡</strong>ありがとうございます。' },
+        { plain: '質問', keigo: 'ご質問', sentence: '<strong>ご質問</strong>があります。' },
+        { plain: '茶', keigo: 'お茶', sentence: '<strong>お茶</strong>をどうぞ。' },
+        { plain: '返事', keigo: 'ご返事', sentence: '<strong>ご返事</strong>をお待ちしております。' }
+      ],
+      scenario: 'phone',
+      tipTitle: '使用场景',
+      tipBody: '礼貌语是「礼貌的底色」，对谁都能用，不会出错。三个规则：① 句尾用「です・ます・ございます」② 句中名词前加「お / ご」（お名前、ご連絡）③ 和語名词用「お」，漢語名词用「ご」（例外：お茶、お花、お寺）。注意：礼貌语是独立的"礼貌度"，可以和尊敬/谦让语叠加。',
+      color: 'n5',
+      audioText: '丁寧語は、話し言葉を丁寧にする表現です'
+    }
+  };
+
+  // 三种场景
+  const SCENARIOS = {
+    'office': {
+      title: '🏢 场景：办公室',
+      cards: [
+        {
+          who: 'boss', name: '部長', sub: '田中部长',
+          typeClass: 'boss',
+          bubble: '鈴木さん、この<ruby>資料<rt>しりょう</rt></ruby>を<ruby>見<rt>み</rt></ruby>ましたか。',
+          note: '普通询问',
+          noteClass: ''
+        },
+        {
+          who: 'you', name: '你（鈴木さん）', sub: '对部长回答',
+          typeClass: 'you sonkei',
+          bubble: 'はい、<ruby>申<rt>もう</rt></ruby>し<ruby>訳<rt>わけ</rt></ruby>ございません。<ruby>部<rt>ぶ</rt></ruby>の<ruby>長<rt>ちょう</rt></ruby>にはもう<ruby>既<rt>すで</rt></ruby>に<ruby>拝<rt>はい</rt></ruby><ruby>見<rt>けん</rt></ruby>になりました。',
+          note: '用了谦让语"拝見"抬高对方',
+          noteClass: 'kenjou'
+        },
+        {
+          who: 'boss', name: '部長', sub: '',
+          typeClass: 'boss',
+          bubble: 'そうか。では、<ruby>明日<rt>あした</rt></ruby>の<ruby>会議<rt>かいぎ</rt></ruby>までに<ruby>意見<rt>いけん</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてください。',
+          note: '',
+          noteClass: ''
+        },
+        {
+          who: 'you', name: '你', sub: '',
+          typeClass: 'you',
+          bubble: 'かしこまりました。<ruby>明日<rt>あした</rt></ruby>までには<ruby>必<rt>かなら</rt></ruby>ず<ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げます。',
+          note: '用"かしこまりました"代替"了解しました"，更尊敬',
+          noteClass: ''
+        }
+      ]
+    },
+
+    'visit-client': {
+      title: '🤝 场景：拜访客户',
+      cards: [
+        {
+          who: 'client', name: '客户', sub: '佐藤課長',
+          typeClass: 'client',
+          bubble: '<ruby>鈴木<rt>すずき</rt></ruby>さん、お<ruby>疲<rt>つか</rt></ruby>れさまです。<ruby>今日<rt>きょう</rt></ruby>はわざわざ<ruby>来<rt>き</rt></ruby>てくれてありがとう。',
+          note: '客户对你说，抬高了你的"来"',
+          noteClass: ''
+        },
+        {
+          who: 'you', name: '你（鈴木）', sub: '对客户',
+          typeClass: 'you kenjou',
+          bubble: 'お<ruby>忙<rt>いそが</rt></ruby>しいところを<ruby>恐<rt>おそれ</rt></ruby>いります。<ruby>本日<rt>ほんじつ</rt></ruby>は<ruby>新<rt>あら</rt></ruby>しい<ruby>企画<rt>きかく</rt></ruby>の<ruby>御<rt>ご</rt></ruby><ruby>説明<rt>せつめい</rt></ruby>に<ruby>参<rt>ま い</rt></ruby>りました。',
+          note: '谦让语：参る（来）/ 恐縮する（不好意思）',
+          noteClass: 'kenjou'
+        },
+        {
+          who: 'client', name: '客户', sub: '',
+          typeClass: 'client',
+          bubble: 'そうか。では、まず<ruby>資料<rt>しりょう</rt></ruby>を<ruby>見<rt>み</rt></ruby>せてくれますか。',
+          note: '',
+          noteClass: ''
+        },
+        {
+          who: 'you', name: '你', sub: '递交资料',
+          typeClass: 'you kenjou',
+          bubble: 'はい、<ruby>恐<rt>おそれ</rt></ruby>いりながら、<ruby>御<rt>ご</rt></ruby><ruby>確認<rt>かくにん</rt></ruby>のほど、<ruby>宜<rt>よろ</rt></ruby>しく<ruby>お願い<rt>おねがい</rt></ruby><ruby>申<rt>もう</rt></ruby>し<ruby>上<rt>あ</rt></ruby>げます。',
+          note: '完整敬语句型：恐れ入りますが...お願い申し上げます',
+          noteClass: 'kenjou'
+        }
+      ]
+    },
+
+    'phone': {
+      title: '📞 场景：电话第一通',
+      cards: [
+        {
+          who: 'you', name: '你（鈴木）', sub: '打电话给客户公司',
+          typeClass: 'you teinei',
+          bubble: 'お<ruby>疲<rt>つか</rt></ruby>れさまでございます。いつもお<ruby>世話<rt>せわ</rt></ruby>になっております。',
+          note: '电话问候的固定开场白',
+          noteClass: 'teinei'
+        },
+        {
+          who: 'client', name: '客户公司', sub: '前台',
+          typeClass: 'client',
+          bubble: 'お<ruby>電話<rt>でんわ</rt></ruby>ありがとうございます。',
+          note: '',
+          noteClass: ''
+        },
+        {
+          who: 'you', name: '你', sub: '',
+          typeClass: 'you teinei',
+          bubble: '<ruby>私<rt>わたし</rt></ruby>、<ruby>山田商事<rt>やまだしょうじ</rt></ruby>の<ruby>鈴木<rt>すずき</rt></ruby>と<ruby>申<rt>もう</rt></ruby>します。<ruby>佐藤<rt>さとう</rt></ruby>さまはいらっしゃいますか。',
+          note: '自报家门用"申します"，问对方在用"いらっしゃいます"',
+          noteClass: 'teinei'
+        },
+        {
+          who: 'client', name: '客户公司', sub: '',
+          typeClass: 'client',
+          bubble: '<ruby>佐藤<rt>さとう</rt></ruby>はただいま<ruby>席<rt>せき</rt></ruby>を<ruby>外<rt>はず</rt></ruby>しておりますが。',
+          note: '',
+          noteClass: ''
+        },
+        {
+          who: 'you', name: '你', sub: '',
+          typeClass: 'you teinei',
+          bubble: 'それでは、お<ruby>戻<rt>もど</rt></ruby>り<ruby>次第<rt>しだい</rt></ruby>、お<ruby>電話<rt>でんわ</rt></ruby>を<ruby>頂<rt>いただ</rt></ruby>くよう、お<ruby>伝<rt>つた</rt></ruby>えいただけますでしょうか。',
+          note: '礼貌请求："〜いただけますでしょうか"（能否麻烦您...）',
+          noteClass: 'teinei'
+        }
+      ]
+    }
+  };
+
+  function render() {
+    const data = KEIGO_CONTENT[type] || KEIGO_CONTENT.sonkei;
+    const hero = document.getElementById('topicHero');
+    hero.className = 'topic-hero ' + data.heroClass;
+
+    document.getElementById('heroSub').textContent = data.sub;
+    document.getElementById('heroTitle').textContent = data.title;
+    document.getElementById('heroDesc').textContent = data.desc;
+
+    // 规则区
+    const ruleEl = document.getElementById('ruleCard');
+    const ruleTitleEl = document.getElementById('ruleTitle');
+    if (type === 'teinei') {
+      ruleTitleEl.innerHTML = '<i class="fas fa-magic" style="color: var(--n5);"></i> 句尾 + お/ご + 名词';
+    } else {
+      ruleTitleEl.innerHTML = '<i class="fas fa-magic text-akane"></i> 两种变形方式';
+    }
+
+    let modeLabel = '';
+    if (type === 'sonkei') modeLabel = '方式一：お + 动词ます形词干 + になる';
+    if (type === 'kenjou') modeLabel = '方式一：お + 动词ます形词干 + する';
+    if (type === 'teinei') modeLabel = '规则一：句尾 + です・ます・ございます';
+
+    const ruleContent = document.getElementById('ruleContent');
+    if (type === 'teinei') {
+      ruleContent.innerHTML = `
+        <p class="text-xs text-muted mb-2">${modeLabel}</p>
+        ${data.ruleExamples.map(ex => `
+          <div style="padding: 10px 0; border-bottom: 1px dashed rgba(15,23,42,0.06);">
+            <div class="verb-form">
+              <div class="original">
+                <div class="label">普通</div>
+                <span class="jp font-semi">${ex.plain}</span>
+              </div>
+              <i class="fas fa-arrow-right arrow" style="color: var(--n5);"></i>
+              <div class="keigo teinei">
+                <div class="label">丁寧語</div>
+                <span class="jp keigo-text">${ex.keigo}</span>
+              </div>
+              <button class="btn-icon" style="width: 36px; height: 36px;" onclick="JP.speak('${ex.keigo}')">
+                <i class="fas fa-volume-up text-sm"></i>
+              </button>
+            </div>
+            ${ex.sentence ? `<p class="text-xs jp" style="margin: 6px 0 0 0; padding: 6px 8px; background: rgba(16,185,129,0.04); border-radius: 6px; line-height: 1.5;">📖 ${ex.sentence}</p>` : ''}
+            ${ex.note ? `<p class="text-xs text-muted" style="margin: 4px 0 0 0; padding-left: 4px;">💡 ${ex.note}</p>` : ''}
+          </div>
+        `).join('')}
+        <div class="divider"></div>
+        <p class="text-xs text-muted mb-2">规则二：名词前 + お/ご</p>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="solid-word-card" style="background: rgba(16,185,129,0.04);">
+            <p class="text-xs text-muted">名前 →</p>
+            <p class="jp font-bold" style="color: var(--n5);">お名前</p>
+          </div>
+          <div class="solid-word-card" style="background: rgba(16,185,129,0.04);">
+            <p class="text-xs text-muted">連絡 →</p>
+            <p class="jp font-bold" style="color: var(--n5);">ご連絡</p>
+          </div>
+          <div class="solid-word-card" style="background: rgba(16,185,129,0.04);">
+            <p class="text-xs text-muted">茶 →</p>
+            <p class="jp font-bold" style="color: var(--n5);">お茶</p>
+          </div>
+          <div class="solid-word-card" style="background: rgba(16,185,129,0.04);">
+            <p class="text-xs text-muted">質問 →</p>
+            <p class="jp font-bold" style="color: var(--n5);">ご質問</p>
+          </div>
+        </div>
+      `;
+    } else {
+      ruleContent.innerHTML = `
+        <div class="transform-card" style="margin: 0; box-shadow: none; padding: 0;">
+          <p class="text-xs text-muted mb-2">${modeLabel}</p>
+          ${data.ruleExamples.map(ex => `
+            <div style="padding: 10px 0; border-bottom: 1px dashed rgba(15,23,42,0.06);">
+              <div class="verb-form">
+                <div class="original">
+                  <div class="label">普通</div>
+                  <span class="jp font-semi">${ex.plain}</span>
+                </div>
+                <i class="fas fa-arrow-right arrow"></i>
+                <div class="keigo ${type}">
+                  <div class="label">${type === 'sonkei' ? '尊敬语' : '谦让语'}</div>
+                  <span class="jp keigo-text">${ex.keigo}</span>
+                </div>
+                <button class="btn-icon" style="width: 36px; height: 36px;" onclick="JP.speak('${ex.keigo}')">
+                  <i class="fas fa-volume-up text-sm"></i>
+                </button>
+              </div>
+              ${ex.sentence ? `<p class="text-xs jp" style="margin: 6px 0 0 0; padding: 6px 8px; background: rgba(15,23,42,0.03); border-radius: 6px; line-height: 1.5;">📖 ${ex.sentence}</p>` : ''}
+              ${ex.note ? `<p class="text-xs text-muted" style="margin: 4px 0 0 0; padding-left: 4px;">💡 ${ex.note}</p>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // 专用词
+    const sw = document.getElementById('specialWords');
+    const swSection = document.getElementById('specialWordsSection');
+    if (type === 'teinei') {
+      swSection.style.display = '';
+      document.getElementById('specialTitle').textContent = '句尾 · 词缀';
+      sw.innerHTML = data.specialWords.map(w => {
+        return `
+          <div class="solid-word-card" style="background: rgba(16,185,129,0.04); text-align: left; padding: 10px 12px;">
+            <p class="text-xs text-muted">${w.plain} →</p>
+            <p class="jp font-bold" style="color: var(--n5);">${w.keigo}</p>
+            ${w.sentence ? `<p class="text-xs jp" style="margin-top: 4px; line-height: 1.4; color: var(--sumi);">${w.sentence}</p>` : ''}
+            <button class="btn-icon" style="width: 24px; height: 24px; margin-top: 4px;" onclick="JP.speak('${w.keigo}')">
+              <i class="fas fa-volume-up" style="font-size: 10px; color: var(--n5);"></i>
+            </button>
+          </div>
+        `;
+      }).join('');
+    } else {
+      swSection.style.display = '';
+      document.getElementById('specialTitle').textContent = type === 'sonkei' ? '专用尊敬语动词' : '专用谦让语动词';
+      sw.innerHTML = data.specialWords.map(w => {
+        const bg = type === 'sonkei' ? 'rgba(188,78,81,0.04)' : 'rgba(27,58,92,0.04)';
+        const color = type === 'sonkei' ? 'var(--akane)' : 'var(--ai-iro)';
+        return `
+          <div class="solid-word-card" style="background: ${bg}; text-align: left; padding: 10px 12px;">
+            <p class="text-xs text-muted">${w.plain} →</p>
+            <p class="jp font-bold" style="color: ${color};">${w.keigo}</p>
+            ${w.sentence ? `<p class="text-xs jp" style="margin-top: 4px; line-height: 1.4; color: var(--sumi);">${w.sentence}</p>` : ''}
+            <button class="btn-icon" style="width: 24px; height: 24px; margin-top: 4px;" onclick="JP.speak('${w.keigo}')">
+              <i class="fas fa-volume-up" style="font-size: 10px; color: ${color};"></i>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 场景
+    const scenario = SCENARIOS[data.scenario];
+    document.getElementById('scenarioTitle').innerHTML = scenario.title;
+    const sc = document.getElementById('scenarioContainer');
+    sc.innerHTML = scenario.cards.map(card => `
+      <div class="scenario-card">
+        <div class="scenario-header">
+          <div class="avatar ${card.typeClass}">
+            <i class="fas fa-${card.who === 'you' ? 'user' : card.who === 'boss' ? 'user-tie' : card.who === 'client' ? 'handshake' : 'user'}"></i>
+          </div>
+          <div>
+            <p class="font-bold text-sm">${card.name}</p>
+            <p class="text-xs text-muted">${card.sub}</p>
+          </div>
+        </div>
+        <div class="dialogue ${card.who} ${card.typeClass.replace('you', '').trim()}">
+          <div class="bubble jp">${card.bubble}${card.note ? `<div class="note-tag ${card.noteClass}">${card.note}</div>` : ''}</div>
+        </div>
+      </div>
+    `).join('');
+
+    // 贴士
+    document.getElementById('tipTitle').textContent = data.tipTitle;
+    document.getElementById('tipBody').textContent = data.tipBody;
+
+    // 音频
+    document.getElementById('audioPlay').onclick = () => JP.speak(data.audioText);
+  }
+
+  render();
+</script>
+</body>
+</html>
