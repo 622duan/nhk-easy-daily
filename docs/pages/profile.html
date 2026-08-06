@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>我的 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .profile-hero {
+    background: linear-gradient(135deg, #BC4E51 0%, #E76F72 100%);
+    color: white;
+    padding: 32px 20px 40px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .profile-hero::after {
+    content: "人";
+    position: absolute;
+    right: -10px;
+    bottom: -50px;
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    font-family: "Noto Sans JP", serif;
+  }
+  .avatar-lg {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--akane);
+    font-size: 32px;
+    font-weight: 800;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .level-card {
+    background: white;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .stat-item {
+    text-align: center;
+    background: rgba(15,23,42,0.03);
+    border-radius: 12px;
+    padding: 10px 4px;
+  }
+  .stat-item .num {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--akane);
+    line-height: 1;
+  }
+  .stat-item .label {
+    font-size: 10px;
+    color: var(--hae);
+    margin-top: 4px;
+  }
+
+  .menu-item {
+    background: white;
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    transition: all 0.15s;
+  }
+  .menu-item:active { transform: scale(0.99); background: var(--kinari); }
+  .menu-item .ico {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .menu-item .label { flex: 1; font-size: 14px; font-weight: 500; }
+  .menu-item .val { font-size: 12px; color: var(--hae); }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <div data-auto-stepper></div>
+
+    <div class="profile-hero">
+      <div class="avatar-lg">张</div>
+      <h1 class="text-xl font-bold">张同学</h1>
+      <p class="text-sm mt-1" style="opacity: 0.9;">学了 87 天 · 已掌握 156 词</p>
+      <div class="stats-row">
+        <div class="stat-item" style="background: rgba(255,255,255,0.15);">
+          <div class="num" style="color: white;">23</div>
+          <div class="label" style="color: white; opacity: 0.9;">连续</div>
+        </div>
+        <div class="stat-item" style="background: rgba(255,255,255,0.15);">
+          <div class="num" style="color: white;">87</div>
+          <div class="label" style="color: white; opacity: 0.9;">总天数</div>
+        </div>
+        <div class="stat-item" style="background: rgba(255,255,255,0.15);">
+          <div class="num" style="color: white;">156</div>
+          <div class="label" style="color: white; opacity: 0.9;">单词</div>
+        </div>
+        <div class="stat-item" style="background: rgba(255,255,255,0.15);">
+          <div class="num" style="color: white;">42</div>
+          <div class="label" style="color: white; opacity: 0.9;">新闻</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-5" style="margin-top: -20px; position: relative; z-index: 2;">
+      <!-- 当前等级 -->
+      <div class="level-card">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <p class="text-sm font-bold">当前等级：N5 → N4 进阶中</p>
+            <p class="text-xs text-muted mt-1">还需 32 词解锁 N4</p>
+          </div>
+          <span class="badge badge-n5" style="font-size: 12px; padding: 4px 10px;">N5</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: 68%;"></div>
+        </div>
+      </div>
+
+      <!-- 学习统计 -->
+      <div class="section-head mt-4">
+        <h2>本周学习</h2>
+      </div>
+      <div class="level-card">
+        <div class="flex items-end justify-between" style="height: 100px; padding-top: 16px;">
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 70%; height: 40%; background: var(--akane); border-radius: 4px 4px 0 0;"></div>
+            <span class="text-xs text-muted mt-1">一</span>
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 70%; height: 60%; background: var(--akane); border-radius: 4px 4px 0 0;"></div>
+            <span class="text-xs text-muted mt-1">二</span>
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 70%; height: 80%; background: var(--akane); border-radius: 4px 4px 0 0;"></div>
+            <span class="text-xs text-muted mt-1">三</span>
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 70%; height: 50%; background: var(--akane); border-radius: 4px 4px 0 0;"></div>
+            <span class="text-xs text-muted mt-1">四</span>
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 70%; height: 70%; background: var(--akane); border-radius: 4px 4px 0 0;"></div>
+            <span class="text-xs text-muted mt-1">五</span>
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 70%; height: 90%; background: var(--akane); border-radius: 4px 4px 0 0;"></div>
+            <span class="text-xs text-muted mt-1">六</span>
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+            <div style="width: 70%; height: 30%; background: rgba(15,23,42,0.1); border-radius: 4px 4px 0 0;"></div>
+            <span class="text-xs text-muted mt-1">日</span>
+          </div>
+        </div>
+        <p class="text-center text-xs text-muted mt-3">本周累计 4.2 小时 · 32 词 · 5 篇文章</p>
+      </div>
+
+      <!-- 菜单 -->
+      <div class="section-head mt-5">
+        <h2>设置</h2>
+      </div>
+
+      <a href="wordbook.html" class="menu-item">
+        <div class="ico" style="background: rgba(236, 72, 153, 0.12); color: #EC4899;">
+          <i class="fas fa-bookmark"></i>
+        </div>
+        <span class="label">我的单词本</span>
+        <span class="val">67 词</span>
+        <i class="fas fa-chevron-right text-xs text-muted"></i>
+      </a>
+
+      <a href="kana.html" class="menu-item">
+        <div class="ico" style="background: rgba(27, 58, 92, 0.12); color: var(--ai-iro);">
+          <i class="fas fa-language"></i>
+        </div>
+        <span class="label">五十音图</span>
+        <span class="val">46 / 46</span>
+        <i class="fas fa-check text-xs text-success"></i>
+      </a>
+
+      <div class="menu-item">
+        <div class="ico" style="background: rgba(245, 158, 11, 0.12); color: var(--warning);">
+          <i class="fas fa-volume-up"></i>
+        </div>
+        <span class="label">发音设置</span>
+        <span class="val">NHK 女声</span>
+        <i class="fas fa-chevron-right text-xs text-muted"></i>
+      </div>
+
+      <div class="menu-item">
+        <div class="ico" style="background: rgba(16, 185, 129, 0.12); color: var(--n5);">
+          <i class="fas fa-bell"></i>
+        </div>
+        <span class="label">每日提醒</span>
+        <span class="val">21:00</span>
+        <i class="fas fa-chevron-right text-xs text-muted"></i>
+      </div>
+
+      <div class="menu-item">
+        <div class="ico" style="background: rgba(100, 116, 139, 0.12); color: var(--hae);">
+          <i class="fas fa-moon"></i>
+        </div>
+        <span class="label">外观</span>
+        <span class="val">跟随系统</span>
+        <i class="fas fa-chevron-right text-xs text-muted"></i>
+      </div>
+
+      <div class="menu-item">
+        <div class="ico" style="background: rgba(139, 92, 246, 0.12); color: var(--n2);">
+          <i class="fas fa-cloud"></i>
+        </div>
+        <span class="label">数据同步</span>
+        <span class="val">已开启</span>
+        <i class="fas fa-chevron-right text-xs text-muted"></i>
+      </div>
+
+      <div class="menu-item">
+        <div class="ico" style="background: rgba(239, 68, 68, 0.12); color: var(--danger);">
+          <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <span class="label">退出登录</span>
+        <i class="fas fa-chevron-right text-xs text-muted"></i>
+      </div>
+
+      <p class="text-center text-xs text-muted mt-6 mb-2">日本語ライフ v1.0.0</p>
+      <p class="text-center text-xs text-muted" style="margin-bottom: 80px;">Made with ❤️ in Tokyo</p>
+    </div>
+
+    <div class="tab-bar">
+      <a class="tab-bar-item" href="home.html">
+        <i class="fas fa-home"></i><span>首页</span>
+      </a>
+      <a class="tab-bar-item" href="vocab-list.html">
+        <i class="fas fa-graduation-cap"></i><span>学习</span>
+      </a>
+      <a class="tab-bar-item" href="wordbook.html">
+        <i class="fas fa-bookmark"></i><span>单词本</span>
+      </a>
+      <a class="tab-bar-item active" href="profile.html">
+        <i class="far fa-user"></i><span>我的</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../nhk-daily.js"></script>
+</body>
+</html>
