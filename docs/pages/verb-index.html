@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>動詞活用 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .verb-hero {
+    background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+    color: white;
+    border-radius: 20px;
+    padding: 24px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .verb-hero::after {
+    content: "動";
+    position: absolute;
+    right: -10px;
+    bottom: -50px;
+    font-size: 180px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    font-family: "Noto Sans JP", serif;
+  }
+
+  /* 动词活用大表 - 还原上传图片 */
+  .verb-master-table {
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    margin: 0 -20px;
+    width: calc(100% + 40px);
+  }
+  .verb-master-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10px;
+  }
+  .verb-master-table th, .verb-master-table td {
+    padding: 6px 4px;
+    text-align: center;
+    border: 1px solid rgba(15,23,42,0.08);
+    line-height: 1.3;
+  }
+  .verb-master-table thead th {
+    background: rgba(15,23,42,0.05);
+    color: var(--sumi);
+    font-weight: 700;
+    font-size: 9px;
+  }
+  .verb-master-table .cat-cell {
+    background: rgba(15,23,42,0.03);
+    color: var(--sumi);
+    font-weight: 600;
+    font-size: 11px;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 4px;
+  }
+  .verb-master-table .rule-cell {
+    background: rgba(188,78,81,0.06);
+    color: var(--akane);
+    font-weight: 700;
+    font-size: 10px;
+  }
+  .verb-master-table .form-name {
+    text-align: left;
+    background: rgba(15,23,42,0.02);
+    color: var(--sumi);
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .verb-master-table .form-zh {
+    text-align: left;
+    background: rgba(15,23,42,0.02);
+    color: var(--hae);
+    font-size: 9px;
+    font-weight: 500;
+  }
+  .verb-master-table .result {
+    color: var(--akane);
+    font-weight: 600;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .verb-master-table .result:hover { background: rgba(188,78,81,0.08); }
+  .verb-master-table .grp1 { background: rgba(16,185,129,0.04); }
+  .verb-master-table .grp2 { background: rgba(14,165,233,0.04); }
+  .verb-master-table .grp3 { background: rgba(245,158,11,0.04); }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .form-card {
+    background: white;
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    transition: all 0.15s;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .form-card:active { transform: scale(0.97); }
+  .form-card .form-num {
+    position: absolute;
+    top: 10px; right: 12px;
+    font-size: 11px;
+    color: var(--hae);
+    font-weight: 700;
+  }
+  .form-card .form-name {
+    font-size: 11px;
+    color: var(--hae);
+    margin-bottom: 2px;
+  }
+  .form-card .form-jp {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--sumi);
+  }
+  .form-card .form-zh {
+    font-size: 11px;
+    color: var(--hae);
+    margin-top: 2px;
+  }
+  .form-card .form-ex {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(15,23,42,0.08);
+    font-size: 11px;
+    color: var(--akane);
+  }
+  .form-card .form-ex ruby rt {
+    font-size: 8px;
+  }
+  .form-card::after {
+    content: "\f054";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    font-size: 9px;
+    color: var(--hae);
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <div class="nav-header">
+      <div class="flex items-center gap-3">
+        <a href="home.html" class="back-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a>
+        <div>
+          <h1>動詞活用</h1>
+          <p class="text-xs text-muted" style="margin-top: 2px;">10 种形 × 3 类动词</p>
+        </div>
+      </div>
+      <button class="btn-icon" style="width: 36px; height: 36px;">
+        <i class="fas fa-filter"></i>
+      </button>
+    </div>
+
+    <!-- 等级 Tab -->
+    <div data-auto-stepper></div>
+
+    <!-- 顶部介绍 -->
+    <div class="px-5 mt-4">
+      <div class="verb-hero">
+        <div class="text-xs" style="opacity: 0.9;">10 种活用形</div>
+        <h2 class="text-xl font-bold mt-2 jp">ます・て・た・ない・ば...</h2>
+        <p class="text-sm mt-2" style="opacity: 0.9; line-height: 1.5;">3 类动词 × 10 种形 = 30 条规则。点开每条听真人发音 + 场景例句</p>
+      </div>
+    </div>
+
+    <!-- 动词分类 -->
+    <div class="px-5 mt-5">
+      <div class="section-head">
+        <h2>动词类型</h2>
+      </div>
+      <div class="flex gap-2">
+        <div class="solid-card" style="flex: 1; padding: 10px 12px; background: linear-gradient(135deg, #FFF5F5 0%, white 100%);">
+          <p class="text-xs text-muted">第1类</p>
+          <p class="jp font-bold text-akane" style="font-size: 15px;">五段活用</p>
+          <p class="text-xs text-muted mt-1">〜う・〜く・〜ぐ・〜す・〜つ・〜ぬ・〜ぶ・〜む・〜る</p>
+        </div>
+        <div class="solid-card" style="flex: 1; padding: 10px 12px; background: linear-gradient(135deg, #F0F9FF 0%, white 100%);">
+          <p class="text-xs text-muted">第2类</p>
+          <p class="jp font-bold" style="color: var(--ai-iro); font-size: 15px;">一段活用</p>
+          <p class="text-xs text-muted mt-1">〜る（前一假名是い/え段）</p>
+        </div>
+        <div class="solid-card" style="flex: 1; padding: 10px 12px; background: linear-gradient(135deg, #F0FDF4 0%, white 100%);">
+          <p class="text-xs text-muted">第3类</p>
+          <p class="jp font-bold" style="color: var(--n5); font-size: 15px;">不规则</p>
+          <p class="text-xs text-muted mt-1">する・来る</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 动词活用大表 -->
+    <div class="px-5 mt-5">
+      <div class="section-head">
+        <h2>动词活用总表</h2>
+        <span class="more text-muted" style="color: var(--hae);">3 类 × 10 形</span>
+      </div>
+
+      <div class="verb-master-table" style="overflow-x: auto;">
+        <table style="min-width: 100%;">
+          <thead>
+            <tr>
+              <th rowspan="2" style="width:30px;">类别</th>
+              <th rowspan="2" style="width:60px;">基本形<br>辞书形</th>
+              <th rowspan="2" style="width:30px;">ます形</th>
+              <th rowspan="2" style="width:30px;">て/た形</th>
+              <th rowspan="2" style="width:30px;">否定形<br>(ない形)</th>
+              <th rowspan="2" style="width:30px;">命令形</th>
+              <th rowspan="2" style="width:30px;">意志形</th>
+              <th rowspan="2" style="width:30px;">假定形<br>(ば形)</th>
+              <th rowspan="2" style="width:30px;">可能形</th>
+              <th rowspan="2" style="width:30px;">被动形<br>尊敬/自发</th>
+              <th rowspan="2" style="width:30px;">使役形</th>
+            </tr>
+            <tr></tr>
+            <tr>
+              <th colspan="3" style="background:rgba(15,23,42,0.06); font-size:9px;">う段</th>
+              <th colspan="2" style="background:rgba(188,78,81,0.08); font-size:9px; color:var(--akane);">1段+ます</th>
+              <th colspan="2" style="background:rgba(15,23,42,0.06); font-size:9px;">え段</th>
+              <th style="background:rgba(15,23,42,0.06); font-size:9px;">お段+う</th>
+              <th style="background:rgba(15,23,42,0.06); font-size:9px;">え段+ば</th>
+              <th style="background:rgba(15,23,42,0.06); font-size:9px;">え段+る</th>
+              <th style="background:rgba(188,78,81,0.08); font-size:9px; color:var(--akane);">あ段+れる</th>
+              <th style="background:rgba(188,78,81,0.08); font-size:9px; color:var(--akane);">あ段+せる</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- 一类动词 -->
+            <tr>
+              <td class="cat-cell" rowspan="9" style="background:rgba(16,185,129,0.06); color:var(--n5); font-weight:700;">一类动词</td>
+              <td class="jp grp1">書く</td>
+              <td class="jp grp1">書きます</td>
+              <td class="jp grp1">書いて<br>書いた</td>
+              <td class="jp grp1">書かない</td>
+              <td class="jp grp1">書け</td>
+              <td class="jp grp1">書こう</td>
+              <td class="jp grp1">書けば</td>
+              <td class="jp grp1">書ける</td>
+              <td class="jp grp1">書かれる</td>
+              <td class="jp grp1">書かせる</td>
+            </tr>
+            <tr>
+              <td class="jp grp1">泳ぐ</td>
+              <td class="jp grp1">泳ぎます</td>
+              <td class="jp grp1">泳いで<br>泳いだ</td>
+              <td class="jp grp1">泳がない</td>
+              <td class="jp grp1">泳げ</td>
+              <td class="jp grp1">泳ごう</td>
+              <td class="jp grp1">泳げば</td>
+              <td class="jp grp1">泳げる</td>
+              <td class="jp grp1">泳がれる</td>
+              <td class="jp grp1">泳がせる</td>
+            </tr>
+            <tr>
+              <td class="jp grp1">洗う</td>
+              <td class="jp grp1">洗います</td>
+              <td class="jp grp1">洗って<br>洗った</td>
+              <td class="jp grp1">洗わない</td>
+              <td class="jp grp1">洗え</td>
+              <td class="jp grp1">洗おう</td>
+              <td class="jp grp1">洗えば</td>
+              <td class="jp grp1">洗える</td>
+              <td class="jp grp1">洗われる</td>
+              <td class="jp grp1">洗わせる</td>
+            </tr>
+            <tr>
+              <td class="jp grp1">待つ</td>
+              <td class="jp grp1">待ちます</td>
+              <td class="jp grp1">待って<br>待った</td>
+              <td class="jp grp1">待たない</td>
+              <td class="jp grp1">待て</td>
+              <td class="jp grp1">待とう</td>
+              <td class="jp grp1">待てば</td>
+              <td class="jp grp1">待てる</td>
+              <td class="jp grp1">待たれる</td>
+              <td class="jp grp1">待たせる</td>
+            </tr>
+            <tr>
+              <td class="jp grp1">帰る</td>
+              <td class="jp grp1">帰ります</td>
+              <td class="jp grp1">帰って<br>帰った</td>
+              <td class="jp grp1">帰らない</td>
+              <td class="jp grp1">帰れ</td>
+              <td class="jp grp1">帰ろう</td>
+              <td class="jp grp1">帰れば</td>
+              <td class="jp grp1">帰れる</td>
+              <td class="jp grp1">帰られる</td>
+              <td class="jp grp1">帰らせる</td>
+            </tr>
+            <tr>
+              <td class="jp grp1">死ぬ</td>
+              <td class="jp grp1">死にます</td>
+              <td class="jp grp1">死んで<br>死んだ</td>
+              <td class="jp grp1">死なない</td>
+              <td class="jp grp1">死ね</td>
+              <td class="jp grp1">死のう</td>
+              <td class="jp grp1">死ねば</td>
+              <td class="jp grp1">死ねる</td>
+              <td class="jp grp1">死なれる</td>
+              <td class="jp grp1">死なせる</td>
+            </tr>
+            <tr>
+              <td class="jp grp1">遊ぶ</td>
+              <td class="jp grp1">遊びます</td>
+              <td class="jp grp1">遊んで<br>遊んだ</td>
+              <td class="jp grp1">遊ばない</td>
+              <td class="jp grp1">遊べ</td>
+              <td class="jp grp1">遊ぼう</td>
+              <td class="jp grp1">遊べば</td>
+              <td class="jp grp1">遊べる</td>
+              <td class="jp grp1">遊ばれる</td>
+              <td class="jp grp1">遊ばせる</td>
+            </tr>
+            <tr>
+              <td class="jp grp1">読む</td>
+              <td class="jp grp1">読みます</td>
+              <td class="jp grp1">読んで<br>読んだ</td>
+              <td class="jp grp1">読まない</td>
+              <td class="jp grp1">読め</td>
+              <td class="jp grp1">読もう</td>
+              <td class="jp grp1">読めば</td>
+              <td class="jp grp1">読める</td>
+              <td class="jp grp1">読まれる</td>
+              <td class="jp grp1">読ませる</td>
+            </tr>
+            <tr>
+              <td class="jp grp1">消す</td>
+              <td class="jp grp1">消します</td>
+              <td class="jp grp1">消して<br>消した</td>
+              <td class="jp grp1">消さない</td>
+              <td class="jp grp1">消せ</td>
+              <td class="jp grp1">消そう</td>
+              <td class="jp grp1">消せば</td>
+              <td class="jp grp1">消せる</td>
+              <td class="jp grp1">消される</td>
+              <td class="jp grp1">消させる</td>
+            </tr>
+            <tr>
+              <td class="jp grp1">＊行く</td>
+              <td class="jp grp1">行きます</td>
+              <td class="jp grp1">行って<br>行った</td>
+              <td class="jp grp1" colspan="7" style="background:rgba(245,158,11,0.06); color:#B45309; font-size:9px;">＊五段特殊：行く的て/た形是行って，其他动词不能套这个规则</td>
+            </tr>
+            <tr>
+              <td class="jp grp1">＊ある</td>
+              <td class="jp grp1">あります</td>
+              <td class="jp grp1" colspan="8" style="background:rgba(245,158,11,0.06); color:#B45309; font-size:9px;">＊ある的否定形是 ない（没有）；其他动词的否定形是 〜ない</td>
+            </tr>
+
+            <!-- 二类动词 -->
+            <tr>
+              <td class="cat-cell" rowspan="2" style="background:rgba(14,165,233,0.06); color:#0EA5E9; font-weight:700;">二类动词</td>
+              <td class="jp grp2">食べる</td>
+              <td class="jp grp2">食べます</td>
+              <td class="jp grp2">食べて<br>食べた</td>
+              <td class="jp grp2">食べない</td>
+              <td class="jp grp2">食べろ</td>
+              <td class="jp grp2">食べよう</td>
+              <td class="jp grp2">食べれば</td>
+              <td class="jp grp2">食べられる</td>
+              <td class="jp grp2">食べられる</td>
+              <td class="jp grp2">食べさせる</td>
+            </tr>
+            <tr>
+              <td class="jp grp2">起きる</td>
+              <td class="jp grp2">起きます</td>
+              <td class="jp grp2">起きて<br>起きた</td>
+              <td class="jp grp2">起きない</td>
+              <td class="jp grp2">起きろ</td>
+              <td class="jp grp2">起きよう</td>
+              <td class="jp grp2">起きれば</td>
+              <td class="jp grp2">起きられる</td>
+              <td class="jp grp2">起きられる</td>
+              <td class="jp grp2">起きさせる</td>
+            </tr>
+
+            <!-- 三类动词 -->
+            <tr>
+              <td class="cat-cell" rowspan="2" style="background:rgba(245,158,11,0.06); color:#F59E0B; font-weight:700;">三类动词</td>
+              <td class="jp grp3">する</td>
+              <td class="jp grp3">します</td>
+              <td class="jp grp3">して<br>した</td>
+              <td class="jp grp3">しない</td>
+              <td class="jp grp3">しろ</td>
+              <td class="jp grp3">しよう</td>
+              <td class="jp grp3">すれば</td>
+              <td class="jp grp3">できる</td>
+              <td class="jp grp3">される</td>
+              <td class="jp grp3">させる</td>
+            </tr>
+            <tr>
+              <td class="jp grp3">来る</td>
+              <td class="jp grp3">きます</td>
+              <td class="jp grp3">きて<br>きた</td>
+              <td class="jp grp3">こない</td>
+              <td class="jp grp3">こい</td>
+              <td class="jp grp3">こよう</td>
+              <td class="jp grp3">くれば</td>
+              <td class="jp grp3">こられる</td>
+              <td class="jp grp3">こられる</td>
+              <td class="jp grp3">こさせる</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-xs text-muted mt-2" style="line-height:1.5;">点表里任何一格听发音 · 点卡片看例句</p>
+    </div>
+
+    <!-- 10 种形 -->
+    <div class="px-5 mt-5">
+      <div class="section-head">
+        <h2>动词活用形</h2>
+        <span class="more text-muted" style="color: var(--hae);" id="verbCountText">10 种</span>
+      </div>
+
+      <div class="form-grid" id="verbFormsContainer"></div>
+      <p class="text-center text-xs text-muted mt-3" id="verbFormsSummary"></p>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+    <div class="tab-bar">
+      <a class="tab-bar-item" href="home.html">
+        <i class="fas fa-home"></i><span>首页</span>
+      </a>
+      <a class="tab-bar-item active" href="vocab-list.html">
+        <i class="fas fa-graduation-cap"></i><span>学习</span>
+      </a>
+      <a class="tab-bar-item" href="wordbook.html">
+        <i class="fas fa-bookmark"></i><span>单词本</span>
+      </a>
+      <a class="tab-bar-item" href="profile.html">
+        <i class="far fa-user"></i><span>我的</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+<script src="../main.js"></script>
+<script src="../data.js"></script>
+<script src="../nhk-daily.js"></script>
+<script>
+  // 渲染动词活用形卡片
+  function renderVerbForms() {
+    const level = JP.State.level;
+    const data = JP_DATA[level];
+    if (!data) return;
+
+    const forms = data.verbForms || [];
+    const container = document.getElementById('verbFormsContainer');
+    const counter = document.getElementById('verbCountText');
+    const summary = document.getElementById('verbFormsSummary');
+    if (!container) return;
+
+    container.innerHTML = forms.map(f => `
+      <a href="verb-detail.html?form=${encodeURIComponent(f.name)}" class="form-card">
+        <span class="form-num">${f.num}</span>
+        <p class="form-name">${f.name}</p>
+        <p class="form-jp jp">${f.jp}</p>
+        <p class="form-zh">${f.zh}</p>
+        <p class="form-ex jp">${f.example_jp}</p>
+      </a>
+    `).join('');
+
+    if (counter) counter.textContent = `${forms.length} 种`;
+    if (summary) summary.textContent = `本等级 · ${forms.length} 种活用形，点击进详情听例句`;
+  }
+
+  // 表里的格子发音
+  document.addEventListener('click', (e) => {
+    const cell = e.target.closest('.verb-master-table .result');
+    if (cell && JP.speak) {
+      e.preventDefault();
+      JP.speak(cell.textContent.trim());
+    }
+  });
+
+  window.addEventListener('levelchange', renderVerbForms);
+  renderVerbForms();
+</script>
+</body>
+</html>
