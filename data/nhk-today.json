@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-08-06T12:10:06.958678+09:00",
+  "fetched_at": "2026-08-06T13:59:00.024158+09:00",
   "source": "https://www3.nhk.or.jp/news/easy/",
   "article_count": 4,
   "used_yesterday": false,
@@ -18,22 +18,22 @@
       "published_at": "2026-08-05T12:00:00+09:00",
       "word_count": 18,
       "level": "N2",
-      "fetched_at": "2026-08-06T12:10:02.451535+09:00"
+      "fetched_at": "2026-08-06T13:58:54.477618+09:00"
     },
     {
       "news_id": "ne2026080512490",
       "title": "台風13号　沖縄県などでは雨と風に気をつけて",
       "title_with_ruby": "<h1 class=\"_1j8ph3o5\" style=\"--_1j8ph3o0:calc(2.25rem * (var(--font-size-scale-factor, 1)));--_1j8ph3o1:calc(1.875rem * (var(--font-size-scale-factor, 1)))\">台風13号　沖縄県などでは雨と風に気をつけて | NHKやさしいことばニュース</h1>",
-      "body": "気象庁によると、台風13号が沖縄県や鹿児島県の奄美地方に向かっています。大きくてとても強い台風です。\n\n海では波が高くなりそうです。沖縄県と...",
-      "body_html": "<p class=\"esl7kn2s _1yvk0f68\" style=\"--_1yvk0f60:#1f1f20;--_1yvk0f61:#f9f9f9;--_1yvk0f62:normal;--_1yvk0f63:1.5;--_1yvk0f64:calc(1rem * (var(--font-size-scale-factor, 1)));--_1yvk0f65:calc(1rem * (var(--font-size-scale-factor, 1)))\">気象庁によると、台風13号が沖縄県や鹿児島県の奄美地方に向かっています。大きくてとても強い台風です。\n\n海では波が高くなりそうです。沖縄県と...</p>",
+      "body": "気象庁によると、台風13号が沖縄県や鹿児島県の奄美地方に向かっています。大きくてとても強い台風です。\n\n\n海では波が高くなりそうです。沖縄県...",
+      "body_html": "<p class=\"esl7kn2s _1yvk0f68\" style=\"--_1yvk0f60:#1f1f20;--_1yvk0f61:#f9f9f9;--_1yvk0f62:normal;--_1yvk0f63:1.5;--_1yvk0f64:calc(1rem * (var(--font-size-scale-factor, 1)));--_1yvk0f65:calc(1rem * (var(--font-size-scale-factor, 1)))\">気象庁によると、台風13号が沖縄県や鹿児島県の奄美地方に向かっています。大きくてとても強い台風です。\n\n\n海では波が高くなりそうです。沖縄県...</p>",
       "outline": "",
       "audio_url": null,
-      "image_url": "https://news.web.nhk/news/html/20260804/K10015195361_2608042208_0804221113_01_03.jpg",
+      "image_url": "https://news.web.nhk/news/html/20260805/K10015196631_2608051912_0805191340_01_02.jpg",
       "url": "https://news.web.nhk/news/easy/ne2026080512490/ne2026080512490.html",
       "published_at": "2026-08-05T12:00:00+09:00",
       "word_count": 18,
       "level": "N3",
-      "fetched_at": "2026-08-06T12:10:03.583721+09:00"
+      "fetched_at": "2026-08-06T13:58:56.046113+09:00"
     },
     {
       "news_id": "ne2026080512478",
@@ -48,7 +48,7 @@
       "published_at": "2026-08-05T12:00:00+09:00",
       "word_count": 18,
       "level": "N3",
-      "fetched_at": "2026-08-06T12:10:04.694342+09:00"
+      "fetched_at": "2026-08-06T13:58:57.552714+09:00"
     },
     {
       "news_id": "ne2026080512455",
@@ -63,7 +63,7 @@
       "published_at": "2026-08-05T12:00:00+09:00",
       "word_count": 18,
       "level": "N2",
-      "fetched_at": "2026-08-06T12:10:05.958247+09:00"
+      "fetched_at": "2026-08-06T13:58:59.023907+09:00"
     }
   ]
 }
