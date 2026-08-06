@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#FAFAF7">
+<title>ニュース詳細 - 日本語ライフ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { padding: 0; }
+  .jp { font-family: "Noto Sans JP", sans-serif; }
+
+  .article-hero {
+    position: relative;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+  }
+  .article-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.5) 100%);
+  }
+  .article-hero .meta {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    right: 20px;
+    z-index: 2;
+    color: white;
+  }
+
+  .audio-control {
+    background: linear-gradient(135deg, #1B3A5C 0%, #2D5A8C 100%);
+    color: white;
+    border-radius: 20px;
+    padding: 16px 20px;
+    box-shadow: 0 8px 24px rgba(27, 58, 92, 0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .audio-control::before {
+    content: "";
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 140px; height: 140px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+  }
+  .live-dot {
+    width: 8px; height: 8px;
+    background: #EF4444;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+    animation: pulse-red 1.4s ease-out infinite;
+  }
+  @keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+    100% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+  }
+  .play-btn {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: white;
+    color: var(--ai-iro);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .speed-btn {
+    padding: 3px 8px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    color: white;
+  }
+  .speed-btn.active { background: white; color: var(--ai-iro); }
+  .bookmark-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .bookmark-btn.active { background: #F59E0B; color: white; }
+  .bookmark-btn:active { transform: scale(0.92); }
+
+  .news-body {
+    font-size: 16px;
+    line-height: 2.2;
+    color: var(--sumi);
+  }
+  .news-body p { margin-bottom: 14px; }
+  .news-body ruby rt { font-size: 10px; color: var(--hae); }
+  .news-body .tappable {
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+  .news-body .tappable:active {
+    background: rgba(188, 78, 81, 0.15);
+  }
+
+  .dict-card {
+    position: fixed;
+    bottom: 100px;
+    left: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.25);
+    padding: 16px;
+    z-index: 50;
+    display: none;
+  }
+  .dict-card.show { display: block; animation: slideUp 0.3s ease; }
+  @keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="phone-screen">
+    <!-- 等级 Stepper（news-detail 也支持切换 N5-N1） -->
+    <div data-auto-stepper></div>
+
+    <!-- Hero -->
+    <div class="article-hero" id="articleHero">
+      <div class="nav-header" style="background: transparent; position: relative; z-index: 3;">
+        <a href="news-list.html" class="back-btn" style="background: rgba(255,255,255,0.9);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        </a>
+        <div></div>
+        <button class="btn-icon" style="width: 36px; height: 36px; background: rgba(255,255,255,0.9);" onclick="shareArticle()">
+          <i class="fas fa-share"></i>
+        </button>
+      </div>
+      <div class="meta">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="badge" id="newsBadge">N5</span>
+          <span class="badge" style="background: rgba(255,255,255,0.2); color: white;">NHK ニュース</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 标题 -->
+    <div class="px-5 mt-4">
+      <h1 class="jp font-bold text-xl" id="newsTitle" style="line-height: 1.6; letter-spacing: -0.01em;"></h1>
+      <p class="text-sm text-muted mt-2" id="newsTitleZh"></p>
+      <div class="flex items-center gap-3 mt-3 text-xs text-muted">
+        <span><i class="far fa-clock"></i> <span id="newsDate"></span></span>
+        <span><i class="fas fa-headphones"></i> <span id="newsDuration"></span></span>
+      </div>
+    </div>
+
+    <!-- 音频播放器 -->
+    <div class="px-5 mt-4">
+      <div class="audio-control">
+        <div class="flex items-center justify-between mb-3" style="position: relative; z-index: 2;">
+          <div class="flex items-center gap-2">
+            <div class="live-dot"></div>
+            <span class="text-xs" style="opacity: 0.9;">NHK 播音员</span>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="speed-btn" data-speed="0.75" onclick="setSpeed(0.75)">0.75x</span>
+            <span class="speed-btn active" data-speed="1.0" onclick="setSpeed(1.0)">1.0x</span>
+            <span class="speed-btn" data-speed="1.25" onclick="setSpeed(1.25)">1.25x</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3" style="position: relative; z-index: 2;">
+          <button class="play-btn" onclick="togglePlay()">
+            <i class="fas fa-play" id="playIcon"></i>
+          </button>
+          <div class="flex-1">
+            <div class="flex items-center justify-between text-xs" style="opacity: 0.9;">
+              <span id="curTime">0:00</span>
+              <span class="flex items-center gap-1">
+                <span id="audioSourceBadge" style="font-size:9px; padding:1px 5px; border-radius:4px; background:rgba(255,255,255,0.2);">加载中</span>
+                <span id="totalTime">0:00</span>
+              </span>
+            </div>
+            <div class="progress-track mt-1" style="background: rgba(255,255,255,0.2);">
+              <div class="progress-fill" id="progFill" style="width: 0%; background: white;"></div>
+            </div>
+          </div>
+          <button class="bookmark-btn" id="bookmarkBtn" onclick="toggleBookmark()">
+            <i class="far fa-bookmark"></i>
+          </button>
+        </div>
+
+        <a href="https://www3.nhk.or.jp/news/easy/" target="_blank" class="flex items-center gap-2 text-xs mt-3 pt-3" style="border-top: 1px solid rgba(255,255,255,0.15); opacity: 0.95; position: relative; z-index: 2;">
+          <i class="fas fa-external-link-alt"></i>
+          <span>在 NHK 网站收听原文</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- 文章正文 -->
+    <div class="px-5 mt-5">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-xs text-muted"><i class="fas fa-hand-pointer"></i> 点击任意词语查释义</span>
+      </div>
+      <div class="news-body jp" id="articleBody"></div>
+    </div>
+
+    <!-- 关联单词 -->
+    <div class="px-5 mt-6">
+      <div class="section-head">
+        <h2>本文出现的单词</h2>
+        <a href="wordbook.html" class="more text-muted" style="color: var(--hae);">查看全部</a>
+      </div>
+      <div class="flex gap-2 overflow-x-auto pb-2" id="articleWords" style="margin: 0 -20px; padding: 0 20px;"></div>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+  </div>
+</div>
+
+<!-- 词典卡片 -->
+<div class="dict-card" id="dictCard">
+  <div class="flex items-center justify-between mb-2">
+    <div>
+      <p class="jp text-lg font-bold" id="dictWord" style="line-height: 1.2;"></p>
+      <p class="text-xs text-muted" id="dictMeta"></p>
+    </div>
+    <button class="btn-icon" style="width: 32px; height: 32px;" onclick="closeDict()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <p class="text-md font-semi mb-2" id="dictMeaning"></p>
+  <div class="flex items-center gap-2 mt-3">
+    <button class="btn btn-primary" style="font-size: 12px; padding: 8px 14px;" id="dictSpeakBtn">
+      <i class="fas fa-volume-up"></i> 发音
+    </button>
+    <button class="btn btn-secondary" style="font-size: 12px; padding: 8px 14px;" id="dictBookmarkBtn">
+      <i class="far fa-bookmark"></i> 加入单词本
+    </button>
+  </div>
+</div>
+
+<script src="../main.js"></script>
+<script src="../data.js"></script>
+<script src="../nhk-daily.js"></script>
+<script>
+  // 读取 URL 参数
+  const urlParams = new URLSearchParams(window.location.search);
+  let currentNewsId = urlParams.get('id');
+  let currentNews = null;
+  let currentDictWord = null;
+
+  // 从 body 自动提取已知词 (NHK 无 ruby 时用 vocabList 反向匹配)
+  function extractWordsFromBody(bodyText, originalWords) {
+    if (!bodyText) return originalWords || [];
+    const seen = new Set();
+    const result = [];
+
+    // 1. 先用原文给的 words (如果有)
+    (originalWords || []).forEach(w => {
+      if (w.word && !seen.has(w.word)) {
+        result.push(w);
+        seen.add(w.word);
+      }
+    });
+
+    // 2. 从所有 level 的 vocabList 里找 body 中出现的词
+    for (const lv of Object.keys(JP_DATA)) {
+      const list = (JP_DATA[lv] && JP_DATA[lv].vocabList) || [];
+      for (const w of list) {
+        if (w.word && w.word.length >= 2 && bodyText.includes(w.word) && !seen.has(w.word)) {
+          result.push({ ...w, level: lv });
+          seen.add(w.word);
+        }
+      }
+    }
+    return result;
+  }
+
+  // 找当前 news - 跨 level 查找 (NHK 文章可能分到 N4/N3/N2, 但用户从任一等级进入都要能看)
+  function findCurrentNews() {
+    const level = JP.State.level;
+    const data = JP_DATA[level];
+    if (!data) return null;
+    const list = data.newsList || [];
+    if (currentNewsId) {
+      // 1. 先在当前 level 找
+      const found = list.find(n => n.id === currentNewsId);
+      if (found) return found;
+
+      // 2. 当前 level 找不到, 跨所有 level 找 (含 specialized)
+      for (const lv of Object.keys(JP_DATA)) {
+        const lvList = (JP_DATA[lv] && JP_DATA[lv].newsList) || [];
+        const found2 = lvList.find(n => n.id === currentNewsId);
+        if (found2) return found2;
+      }
+
+      // 3. 真的找不到
+      return { _notFound: true, _id: currentNewsId };
+    }
+    return list[0] || null;
+  }
+
+  function showNotFound() {
+    // 隐藏 hero + 标题区 + audio player + body + words
+    const hero = document.getElementById('articleHero');
+    if (hero) hero.removeProperty ? hero.removeProperty('display') : (hero.style.display = 'none');
+
+    // 隐藏所有相关元素
+    document.querySelectorAll('[id^="news"], #articleBody, #articleWords, .audio-player, [class*="audio"]').forEach(el => {
+      el.style.display = 'none';
+    });
+
+    // 在 main 容器里插入"未找到"提示 (不破坏现有 DOM 结构)
+    const main = document.querySelector('main') || document.body;
+    // 删掉之前的 notFoundPanel
+    const old = document.getElementById('notFoundPanel');
+    if (old) old.remove();
+
+    const notFoundDiv = document.createElement('div');
+    notFoundDiv.id = 'notFoundPanel';
+    notFoundDiv.style.cssText = 'padding: 40px 20px; text-align: center;';
+    notFoundDiv.innerHTML = `
+      <div style="font-size:48px;margin-bottom:16px;">😶</div>
+      <h2 class="jp font-bold text-xl mb-2">文章未找到</h2>
+      <p class="text-xs text-muted mb-4">ID: <code>${currentNewsId || '?'}</code></p>
+      <p class="text-sm" style="margin-bottom: 16px; color: #666;">可能的原因:</p>
+      <ul style="text-align:left; font-size:13px; color: #888; margin-bottom: 24px; max-width: 320px; margin-left: auto; margin-right: auto;">
+        <li>• 文章没抓到 (NHK 周末/节假日不发新闻)</li>
+        <li>• localStorage 缓存太旧, 需要刷新</li>
+        <li>• 切换 level 后该文章不在当前 level 的 list 里</li>
+      </ul>
+      <a href="news-list.html" class="btn btn-primary" style="display:inline-block;padding:10px 18px;background:#DC2626;color:white;border-radius:10px;text-decoration:none;margin-right:8px;font-weight:600;">← 返回新闻列表</a>
+      <button style="padding:10px 18px;background:#6B7280;color:white;border-radius:10px;border:none;cursor:pointer;font-weight:600;" onclick="localStorage.removeItem('nhk_daily_cache_v2');localStorage.removeItem('jp_wordbook');location.reload();">清缓存刷新</button>
+    `;
+    main.appendChild(notFoundDiv);
+  }
+
+  function renderNews() {
+    // 先清掉之前的 notFoundPanel (如果 NHK merge 后重新跑)
+    const oldNotFound = document.getElementById('notFoundPanel');
+    if (oldNotFound) oldNotFound.remove();
+    // 恢复 hero 和其他被隐藏元素 (display: '' 不恢复, 用 removeProperty)
+    const heroEl = document.getElementById('articleHero');
+    if (heroEl) heroEl.style.removeProperty('display');
+    document.querySelectorAll('[id^="news"], #articleBody, #articleWords, .audio-player, [class*="audio"]').forEach(el => {
+      el.style.removeProperty('display');
+    });
+
+    currentNews = findCurrentNews();
+    if (!currentNews) return;
+
+    if (currentNews._notFound) {
+      showNotFound();
+      return;
+    }
+
+    // Hero
+    const hero = document.getElementById('articleHero');
+    hero.style.backgroundImage = `url('${currentNews.thumb}')`;
+
+    // Badges
+    document.getElementById('newsBadge').className = 'badge ' + JP.LevelBadge[currentNews.badge];
+    document.getElementById('newsBadge').textContent = currentNews.badge;
+
+    // Title
+    document.getElementById('newsTitle').innerHTML = currentNews.title_jp;
+    document.getElementById('newsTitleZh').textContent = currentNews.title_zh;
+    document.getElementById('newsDate').textContent = currentNews.date;
+    document.getElementById('newsDuration').textContent = currentNews.duration;
+    document.getElementById('totalTime').textContent = currentNews.duration;
+
+    // 初始化 audio 播放
+    stopPlayback();
+    progress = 0;
+    updateProgressUI();
+    setupAudio();
+
+    // Article body
+    const bodyEl = document.getElementById('articleBody');
+    bodyEl.innerHTML = (currentNews.body || []).map(p => `<p>${p}</p>`).join('');
+
+    // Words - 自动从 body 提取已知词 (NHK 无 ruby 标签, 从 vocabList 反向匹配)
+    const wordsEl = document.getElementById('articleWords');
+    const bodyText = (currentNews.body || []).join(' ');
+    const extractedWords = extractWordsFromBody(bodyText, currentNews.words || []);
+
+    wordsEl.innerHTML = extractedWords.map(w => `
+      <div class="solid-card" style="min-width: 100px; cursor: pointer;" onclick="JP.speak('${(w.word || '').replace(/'/g, "\\'")}')">
+        <p class="jp font-bold text-md">${w.word || w.kanji || '?'}</p>
+        <p class="jp text-xs text-akane">${w.kana || ''}${w.pitch ? '<sup>' + w.pitch + '</sup>' : ''}</p>
+        <p class="text-xs text-muted mt-1">${w.meaning || w.meaning_zh || ''}</p>
+      </div>
+    `).join('');
+
+    // 更新"查看全部"链接, 带上 newsId 参数
+    const viewAllLink = document.querySelector('a.more[href*="wordbook"]');
+    if (viewAllLink) {
+      viewAllLink.href = `wordbook.html?from=news&newsId=${encodeURIComponent(currentNews.id)}`;
+      viewAllLink.textContent = '查看本新闻词 (' + extractedWords.length + ')';
+    }
+
+    // 绑定点击词
+    bindWordClicks();
+
+    // 收藏按钮
+    updateBookmarkBtn();
+
+    // 滚动到顶
+    document.querySelector('.phone-screen').scrollTop = 0;
+  }
+
+  // 绑定词语点击
+  function bindWordClicks() {
+    document.querySelectorAll('.news-body ruby, .news-body p').forEach(el => {
+      el.classList.add('tappable');
+    });
+    // 监听 body 整体
+    const body = document.getElementById('articleBody');
+    body.onclick = (e) => {
+      let target = e.target;
+      // 找到最近的 ruby 元素或直接取文本
+      const ruby = target.closest('ruby');
+      let wordText, kanaText;
+
+      if (ruby) {
+        // 提取汉字
+        wordText = ruby.firstChild ? ruby.firstChild.textContent.trim() : '';
+        // 提取假名（rt 标签）
+        const rt = ruby.querySelector('rt');
+        if (rt) kanaText = rt.textContent.trim();
+      } else {
+        // 直接取文本
+        const text = target.textContent.trim();
+        // 尝试匹配 "汉字（假名）" 格式
+        const m = text.match(/^([一-龥]+)（(.+?)）/);
+        if (m) {
+          wordText = m[1];
+          kanaText = m[2];
+        } else if (/^[一-龥]+$/.test(text)) {
+          wordText = text;
+        } else {
+          return;
+        }
+      }
+
+      if (!wordText) return;
+      showDict(wordText, kanaText);
+    };
+  }
+
+  // 显示词典卡
+  function showDict(word, kana) {
+    const newsWords = (currentNews && currentNews.words) || [];
+    // 在 newsWords 中找
+    let info = newsWords.find(w => w.word === word);
+    if (!info) {
+      // 在所有等级的 vocabList 中找
+      for (const lv of Object.keys(JP_DATA)) {
+        const found = (JP_DATA[lv].vocabList || []).find(w => w.word === word);
+        if (found) { info = found; break; }
+      }
+    }
+
+    currentDictWord = info || { word, kana: kana || '', pitch: '?', meaning: '（未收录）', pos: '' };
+
+    document.getElementById('dictWord').innerHTML = `<ruby>${currentDictWord.word}<rt>${currentDictWord.kana}</rt></ruby>`;
+    document.getElementById('dictMeta').textContent =
+      `${currentDictWord.kana}${currentDictWord.pitch ? ' ' + currentDictWord.pitch : ''} · ${currentDictWord.pos || ''}`;
+    document.getElementById('dictMeaning').textContent = currentDictWord.meaning;
+    document.getElementById('dictSpeakBtn').onclick = () => JP.speak(currentDictWord.word);
+    document.getElementById('dictBookmarkBtn').onclick = () => {
+      JP.WordBook.add({
+        id: currentDictWord.word,
+        word: currentDictWord.word,
+        kana: currentDictWord.kana,
+        pitch: currentDictWord.pitch || '0',
+        level: currentNews ? currentNews.badge : 'N5',
+        meaning_zh: currentDictWord.meaning,
+        pos: currentDictWord.pos || '',
+        source: 'news_tap',
+        status: 'new'
+      });
+      alert('已加入单词本');
+    };
+
+    document.getElementById('dictCard').classList.add('show');
+    JP.speak(currentDictWord.word);
+  }
+
+  function closeDict() {
+    document.getElementById('dictCard').classList.remove('show');
+  }
+
+  // 收藏/书签
+  function toggleBookmark() {
+    if (!currentNews) return;
+    const id = 'news-' + currentNews.id;
+    const exists = JP.WordBook.has(id);
+    if (exists) {
+      JP.WordBook.remove(id);
+    } else {
+      JP.WordBook.add({
+        id: id,
+        word: currentNews.title_zh,
+        kana: 'ニュース',
+        pitch: '0',
+        level: currentNews.badge,
+        meaning_zh: '新闻 · ' + currentNews.title_zh,
+        pos: 'ニュース',
+        source: 'fav',
+        status: 'new'
+      });
+    }
+    updateBookmarkBtn();
+  }
+
+  function updateBookmarkBtn() {
+    if (!currentNews) return;
+    const btn = document.getElementById('bookmarkBtn');
+    const isFav = JP.WordBook.has('news-' + currentNews.id);
+    btn.classList.toggle('active', isFav);
+    btn.innerHTML = `<i class="${isFav ? 'fas' : 'far'} fa-bookmark"></i>`;
+  }
+
+  function shareArticle() {
+    if (navigator.share) {
+      navigator.share({ title: '日本語ライフ', text: currentNews ? currentNews.title_zh : '' });
+    } else {
+      alert('已复制链接');
+    }
+  }
+
+  // 音频播放模拟
+  let playing = false;
+  let progress = 0;
+  let timer = null;
+  let audioEl = null;        // 真实 audio 元素 (有 audio_url 时)
+  let useWebSpeech = false;  // 无 audio_url 时用 TTS
+  let webSpeechText = '';    // TTS 读的内容
+  let ttsChunkIndex = 0;     // TTS 分段播放
+  let ttsChunks = [];        // TTS 句子数组
+  let totalDuration = 0;     // 总秒数 (用于进度)
+  let playbackRate = 1.0;
+
+  function setSpeed(rate) {
+    playbackRate = rate;
+    document.querySelectorAll('.speed-btn').forEach(b => {
+      b.classList.toggle('active', parseFloat(b.dataset.speed) === rate);
+    });
+    if (audioEl) audioEl.playbackRate = rate;
+    // TTS 模式: rate 直接影响速度, 但 progress 估算需要用 rate 反推
+  }
+
+  // 把新闻 body 切成句子 (TTS 一段一段播)
+  function splitForTTS(body) {
+    if (!body || !body.length) return [];
+    // 一段一个 utterance, 避免一句话太长 TTS 卡
+    return body.filter(p => p && p.length > 5);
+  }
+
+  // TTS 播放下一段
+  function playNextTTSChunk() {
+    if (!playing || !useWebSpeech) return;
+    if (ttsChunkIndex >= ttsChunks.length) {
+      // 全部播完
+      stopPlayback();
+      progress = totalDuration;
+      updateProgressUI();
+      return;
+    }
+    const text = ttsChunks[ttsChunkIndex];
+    JP.speak(text, { rate: playbackRate * 0.9 });  // 稍慢更自然
+    ttsChunkIndex++;
+  }
+
+  function stopPlayback() {
+    playing = false;
+    document.getElementById('playIcon').className = 'fas fa-play';
+    clearInterval(timer);
+    if (audioEl) {
+      audioEl.pause();
+    } else if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+  }
+
+  function updateProgressUI() {
+    if (!totalDuration) return;
+    const pct = Math.min(100, (progress / totalDuration * 100));
+    document.getElementById('progFill').style.width = pct + '%';
+    const cur = Math.floor(progress);
+    document.getElementById('curTime').textContent =
+      Math.floor(cur / 60) + ':' + (cur % 60 < 10 ? '0' : '') + (cur % 60);
+  }
+
+  function togglePlay() {
+    if (!currentNews) return;
+    if (playing) {
+      stopPlayback();
+      return;
+    }
+    playing = true;
+    document.getElementById('playIcon').className = 'fas fa-pause';
+
+    // 优先真实 audio (NHK mp3)
+    if (audioEl) {
+      audioEl.playbackRate = playbackRate;
+      audioEl.play().catch(e => {
+        console.warn('[audio] play failed', e);
+        // 降级到 TTS
+        startTTSPlayback();
+      });
+      return;
+    }
+
+    // TTS 兜底
+    startTTSPlayback();
+  }
+
+  function startTTSPlayback() {
+    useWebSpeech = true;
+    ttsChunks = splitForTTS(currentNews.body);
+    if (!ttsChunks.length) {
+      stopPlayback();
+      return;
+    }
+    // 估算总时长: 日语约 8 字/秒 (slow)
+    const totalChars = ttsChunks.reduce((s, t) => s + t.length, 0);
+    totalDuration = Math.max(10, Math.ceil(totalChars / (8 * playbackRate)));
+
+    // TTS 结束监听
+    if ('speechSynthesis' in window) {
+      // onend 不可靠, 用 timer 估算 + 每段播完调用 playNextTTSChunk
+      // 但 JP.speak 内部 cancel + speak, 我们需要 hook
+      // 简单方案: 用 timer 推进 progress, 段落数 = 时长 / 段落估算
+      ttsChunkIndex = 0;
+      const chunkDuration = totalDuration / ttsChunks.length;
+      timer = setInterval(() => {
+        progress += 1 * playbackRate;
+        if (progress >= totalDuration) {
+          stopPlayback();
+          progress = totalDuration;
+        }
+        updateProgressUI();
+        // 每 chunkDuration 秒进到下一段
+        const targetIdx = Math.min(ttsChunks.length - 1, Math.floor(progress / chunkDuration));
+        if (targetIdx !== ttsChunkIndex - (playing ? 0 : 1)) {
+          // restart TTS at target
+        }
+      }, 1000);
+      playNextTTSChunk();
+    }
+  }
+
+  // 初始化 audio 元素 (有 audio_url 时)
+  function setupAudio() {
+    if (audioEl) {
+      audioEl.pause();
+      audioEl = null;
+    }
+    // 支持多种字段名 (audio_url = 内建, audioUrl = NHK daily)
+    const audioSrc = (currentNews && (currentNews.audio_url || currentNews.audioUrl)) || '';
+    const badge = document.getElementById('audioSourceBadge');
+    if (!currentNews) {
+      if (badge) badge.textContent = '加载中';
+      return;
+    }
+    if (audioSrc) {
+      audioEl = new Audio();
+      audioEl.src = audioSrc;
+      audioEl.preload = 'auto';
+      audioEl.addEventListener('timeupdate', () => {
+        if (audioEl && audioEl.duration) {
+          progress = audioEl.currentTime;
+          totalDuration = audioEl.duration;
+          updateProgressUI();
+        }
+      });
+      audioEl.addEventListener('ended', stopPlayback);
+      audioEl.addEventListener('error', (e) => {
+        console.warn('[audio] load error, fallback to TTS', e);
+        audioEl = null;
+        if (badge) {
+          badge.textContent = 'TTS 朗读';
+          badge.title = '未找到官方音频, 使用浏览器 TTS';
+        }
+      });
+      if (badge) {
+        badge.textContent = 'NHK 原声';
+        badge.title = audioSrc;
+      }
+    } else {
+      if (badge) {
+        badge.textContent = 'TTS 朗读';
+        badge.title = 'NHK 官方音频暂未提供, 使用浏览器 TTS';
+      }
+    }
+  }
+
+  // 初始渲染
+  renderNews();
+
+  // 等级切换时重新渲染
+  window.addEventListener('levelchange', () => {
+    // 只有 URL 没有指定 id 时, 才重置 currentNewsId
+    // 否则保持当前文章, 在新 level 下找不到再走 not-found 流程
+    if (!new URLSearchParams(window.location.search).get('id')) {
+      currentNewsId = null;
+    }
+    renderNews();
+  });
+
+  // NHK 每日数据 merge 完后重新渲染 (否则第一次打开看不到 NHK 文章)
+  window.addEventListener('nhk-daily-loaded', () => {
+    renderNews();
+  });
+</script>
+</body>
+</html>
