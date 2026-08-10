@@ -146,6 +146,10 @@
 
     console.log('[NHK daily] merged to levels:', Object.keys(byLevel).map(lv => `${lv}=${byLevel[lv].length}`).join(', '));
 
+    // 暴露给 news-list 显示 "X 篇 NHK 最新"
+    window.JP_NHK_DAILY_TOTAL = totalMerged;
+    if (window.JP) window.JP.NHK_DAILY_TOTAL_COUNT = totalMerged;
+
     // 触发事件, 通知 UI 重新渲染
     window.dispatchEvent(new CustomEvent('nhk-daily-loaded', {
       detail: { byLevel: byLevel, totalCount: totalMerged }
