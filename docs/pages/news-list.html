@@ -136,7 +136,7 @@
 
       
 
-      <p class="text-center text-xs text-muted mt-4">— 已加载 5 篇 / 共 7 篇 —</p>
+      <p class="text-center text-xs text-muted mt-4" id="newsLoadingStatus">— 加载中... —</p>
     </div>
 
     <div style="height: 100px;"></div>
@@ -209,6 +209,15 @@
 
     const counter = document.getElementById('newsCountText');
     if (counter) counter.textContent = `${list.length} 篇`;
+
+    // 加载状态: 当前 level 篇数 / 总 NHK daily 篇数
+    const status = document.getElementById('newsLoadingStatus');
+    if (status) {
+      const totalNhk = (window.JP_NHK_DAILY_TOTAL) || 0;
+      status.textContent = totalNhk > 0
+        ? `— 本周共 ${list.length} 篇 (含 ${totalNhk} 篇 NHK 最新) —`
+        : `— 本周共 ${list.length} 篇 —`;
+    }
   }
 
   window.addEventListener('levelchange', renderNewsList);
