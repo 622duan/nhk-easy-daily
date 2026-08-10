@@ -442,6 +442,9 @@ def load_yesterday() -> List[NHKArticle]:
 
     优先级: yesterday.json > (空)
     注: 之前用 fallback.json, 现在改用 yesterday.json (前一天 commit 的内容)
+    支持两种格式:
+    - 原始抓取格式: {"articles": [{news_id, title, body, ...}]}
+    - app 转换格式: {"items": [{id, badge, date, title_jp, body, words, ...}]}
     """
     from pathlib import Path
     yesterday_path = Path(__file__).parent.parent / "data" / "yesterday.json"
@@ -450,9 +453,42 @@ def load_yesterday() -> List[NHKArticle]:
     try:
         with open(yesterday_path, "r", encoding="utf-8") as f:
             data = json.load(f)
-        articles = [NHKArticle(**a) for a in data.get("articles", [])]
-        print(f"YESTERDAY_LOADED: {len(articles)} 篇", file=sys.stderr)
-        return articles
+
+        # 情况 1: 原始 articles 格式
+        raw_articles = data.get("articles", [])
+        if raw_articles and isinstance(raw_articles[0], dict) and "news_id" in raw_articles[0]:
+            articles = [NHKArticle(**a) for a in raw_articles]
+            print(f"YESTERDAY_LOADED: {len(articles)} 篇 (raw format)", file=sys.stderr)
+            return articles
+
+        # 情况 2: app format (items), 转换为 NHKArticle
+        items = data.get("items", [])
+        if items:
+            articles = []
+            for it in items:
+                # items.id = "nhk-ne2026080712571", news_id 应该是 "ne2026080712571"
+                full_id = it.get("id", "")
+                if full_id.startswith("nhk-"):
+                    news_id = full_id[4:]
+                else:
+                    news_id = full_id
+                articles.append(NHKArticle(
+                    news_id=news_id,
+                    title=it.get("title_jp", ""),
+                    body="",  # 没法从 app format 拿 body, 用空 (格式数据已够 NHK 主页用)
+                    body_html="",
+                    url="",
+                    image_url=it.get("thumb", ""),
+                    word_count=sum(len(w) for w in it.get("words", [])) // 2,
+                    published_at="",
+                    lastmod="",
+                    level=it.get("badge", "N3"),
+                ))
+            print(f"YESTERDAY_LOADED: {len(articles)} 篇 (app format → converted)", file=sys.stderr)
+            return articles
+
+        print(f"YESTERDAY_LOADED: 0 篇 (no articles/items)", file=sys.stderr)
+        return []
     except Exception as e:
         print(f"YESTERDAY_LOAD_ERROR: {e}", file=sys.stderr)
         return []
