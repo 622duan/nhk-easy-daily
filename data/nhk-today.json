@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-08-10T09:37:38.227451+09:00",
+  "fetched_at": "2026-08-10T14:11:36.774981+09:00",
   "source": "https://www3.nhk.or.jp/news/easy/",
   "article_count": 4,
   "used_yesterday": true,
@@ -15,7 +15,7 @@
       "audio_url": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080712571.mp3",
       "image_url": "https://news.web.nhk/news/html/20260807/K10015198521_2608071845_0807185834_01_02.jpg",
       "url": "https://www3.nhk.or.jp/news/ne2026080712571.html",
-      "published_at": "8月7日",
+      "published_at": "",
       "word_count": 0,
       "level": "N4",
       "fetched_at": ""
@@ -30,7 +30,7 @@
       "audio_url": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080712529.mp3",
       "image_url": "https://news.web.nhk/news/html/20260807/K10015198731_2608071921_0807192146_01_02.jpg",
       "url": "https://www3.nhk.or.jp/news/ne2026080712529.html",
-      "published_at": "8月7日",
+      "published_at": "",
       "word_count": 0,
       "level": "N4",
       "fetched_at": ""
@@ -45,7 +45,7 @@
       "audio_url": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080712515.mp3",
       "image_url": "https://news.web.nhk/news/html/20260806/K10015198161_2608061442_0806154202_01_02.jpg",
       "url": "https://www3.nhk.or.jp/news/ne2026080712515.html",
-      "published_at": "8月7日",
+      "published_at": "",
       "word_count": 0,
       "level": "N3",
       "fetched_at": ""
@@ -60,7 +60,7 @@
       "audio_url": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080712485.mp3",
       "image_url": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
       "url": "https://www3.nhk.or.jp/news/ne2026080712485.html",
-      "published_at": "8月7日",
+      "published_at": "",
       "word_count": 0,
       "level": "N3",
       "fetched_at": ""
