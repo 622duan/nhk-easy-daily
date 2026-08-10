@@ -1,7 +1,7 @@
 {
-  "version": "2026-08-09",
+  "version": "2026-08-10",
   "source": "https://www3.nhk.or.jp/news/easy/",
-  "fetched_at": "2026-08-09T13:47:34.056170+09:00",
+  "fetched_at": "2026-08-10T09:37:38.227451+09:00",
   "by_level": {
     "N4": 2,
     "N3": 2
@@ -11,7 +11,7 @@
     {
       "id": "nhk-ne2026080712571",
       "badge": "N4",
-      "date": "8月7日",
+      "date": "",
       "title_jp": "台風13号が沖縄県や鹿児島県の奄美地方の近くを進んでいる",
       "title_zh": "",
       "duration": "1:00",
@@ -19,16 +19,14 @@
       "thumb": "https://news.web.nhk/news/html/20260807/K10015198521_2608071845_0807185834_01_02.jpg",
       "externalUrl": "https://www3.nhk.or.jp/news/ne2026080712571.html",
       "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080712571.mp3",
-      "body": [
-        "大きくてとても強い台風13号が、7日夜、沖縄県や鹿児島県の奄美地方の近くを進んでいます。 台風のまわりでは、とても強い風が吹いています。 ..."
-      ],
+      "body": [],
       "words": [],
       "source": "NHK Easy News"
     },
     {
       "id": "nhk-ne2026080712529",
       "badge": "N4",
-      "date": "8月7日",
+      "date": "",
       "title_jp": "熊本で暑い日が続く　強い風にも気をつけて",
       "title_zh": "",
       "duration": "1:00",
@@ -36,16 +34,14 @@
       "thumb": "https://news.web.nhk/news/html/20260807/K10015198731_2608071921_0807192146_01_02.jpg",
       "externalUrl": "https://www3.nhk.or.jp/news/ne2026080712529.html",
       "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080712529.mp3",
-      "body": [
-        "大きい地震があった熊本県では、今も3万6000以上の家や建物で水道が止まっています。熊本県は、全部の家で水道の水が出るのは今月の終わりごろに..."
-      ],
+      "body": [],
       "words": [],
       "source": "NHK Easy News"
     },
     {
       "id": "nhk-ne2026080712515",
       "badge": "N3",
-      "date": "8月7日",
+      "date": "",
       "title_jp": "「地震で怖い経験をした子どもにやさしくしてください」",
       "title_zh": "",
       "duration": "1:00",
@@ -53,16 +49,14 @@
       "thumb": "https://news.web.nhk/news/html/20260806/K10015198161_2608061442_0806154202_01_02.jpg",
       "externalUrl": "https://www3.nhk.or.jp/news/ne2026080712515.html",
       "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080712515.mp3",
-      "body": [
-        "大きい地震があると、怖くて心配になる子どもがたくさんいます。 国立成育医療研究センターは、いま熊本の子どもたちのために必要なことを、ホームペ..."
-      ],
+      "body": [],
       "words": [],
       "source": "NHK Easy News"
     },
     {
       "id": "nhk-ne2026080712485",
       "badge": "N3",
-      "date": "8月7日",
+      "date": "",
       "title_jp": "「仙台七夕まつり」たくさんの飾りがきれいです",
       "title_zh": "",
       "duration": "1:00",
@@ -70,9 +64,7 @@
       "thumb": "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
       "externalUrl": "https://www3.nhk.or.jp/news/ne2026080712485.html",
       "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/nhk-ne2026080712485.mp3",
-      "body": [
-        "宮城県の仙台市で、6日から「仙台七夕まつり」が始まりました。昔から続いている有名なお祭りです。 通りには、まわりの店などが、1400個の「吹..."
-      ],
+      "body": [],
       "words": [],
       "source": "NHK Easy News"
     }
