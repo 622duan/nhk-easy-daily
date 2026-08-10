@@ -475,13 +475,15 @@ def load_yesterday() -> List[NHKArticle]:
                 articles.append(NHKArticle(
                     news_id=news_id,
                     title=it.get("title_jp", ""),
+                    title_with_ruby=it.get("title_jp", ""),
                     body="",  # 没法从 app format 拿 body, 用空 (格式数据已够 NHK 主页用)
                     body_html="",
-                    url="",
+                    outline="",
+                    audio_url=it.get("audioUrl", ""),
                     image_url=it.get("thumb", ""),
+                    url=it.get("externalUrl", ""),
                     word_count=sum(len(w) for w in it.get("words", [])) // 2,
-                    published_at="",
-                    lastmod="",
+                    published_at=it.get("date", ""),
                     level=it.get("badge", "N3"),
                 ))
             print(f"YESTERDAY_LOADED: {len(articles)} 篇 (app format → converted)", file=sys.stderr)
