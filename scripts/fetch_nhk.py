@@ -527,12 +527,17 @@ def load_yesterday() -> List[NHKArticle]:
                     news_id = full_id[4:]
                 else:
                     news_id = full_id
+
+                # 从 body 数组重建 body_plain (用 "\n\n" 切段)
+                body_paragraphs = it.get("body", []) or []
+                body_plain = "\n\n".join(body_paragraphs)
+
                 articles.append(NHKArticle(
                     news_id=news_id,
                     title=it.get("title_jp", ""),
                     title_with_ruby=it.get("title_jp", ""),
-                    body="",  # 没法从 app format 拿 body, 用空 (格式数据已够 NHK 主页用)
-                    body_html="",
+                    body=body_plain,  # 现在用 items 里的 body 数组
+                    body_html="\n".join(f"<p>{p}</p>" for p in body_paragraphs),
                     outline="",
                     audio_url=it.get("audioUrl", ""),
                     image_url=it.get("thumb", ""),
@@ -541,7 +546,7 @@ def load_yesterday() -> List[NHKArticle]:
                     published_at=it.get("date", ""),
                     level=it.get("badge", "N3"),
                 ))
-            print(f"YESTERDAY_LOADED: {len(articles)} 篇 (app format → converted)", file=sys.stderr)
+            print(f"YESTERDAY_LOADED: {len(articles)} 篇 (app format → converted, 含 body)", file=sys.stderr)
             return articles
 
         print(f"YESTERDAY_LOADED: 0 篇 (no articles/items)", file=sys.stderr)
