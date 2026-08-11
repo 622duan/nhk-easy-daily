@@ -1,15 +1,15 @@
 {
   "version": "2026-08-11",
   "source": "NHK Easy News + Yahoo News Japan",
-  "fetched_at": "2026-08-11T10:44:46.573562+09:00",
+  "fetched_at": "2026-08-11T10:45:38.553583+09:00",
   "by_level": {
     "N4": 2,
     "N3": 2,
-    "N1": 15
+    "N1": 20
   },
   "default_level": "N3",
   "sources": {
-    "NHK Easy News": 14,
+    "NHK Easy News": 19,
     "Yahoo News · 読売新聞": 1,
     "Yahoo News · 朝日新聞": 2,
     "Yahoo News": 1,
@@ -235,6 +235,93 @@
       "body": [
         "中国国内に事業所がある日本企業社長ら複数の邦人が、レアアース（希土類）を含む軍民両用品などの対日輸出規制に関連して中国側に拘束されていたことが10日、判明した。",
         "日系事業所への立ち入り調査や企業関係者。"
+      ],
+      "words": [],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-yahoo-6591288",
+      "badge": "N1",
+      "date": "",
+      "title_jp": "減税に伴う地方減収 国穴埋め検討",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://news-pctr.c.yimg.jp/t/news-topics/images/tpc/2026/8/11/aa57c8e32118b1c92fe8cfa586e27e66c508d9e94b964bfb265e9d0e505b833b.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/yahoo-6591288.html",
+      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/yahoo-6591288.mp3",
+      "body": [
+        "政府は、食料品の消費税率を来年４月から２年間限定で１％に引き下げることに伴う地方の減収分について、原則として国が穴埋めする方向で検討に入った。",
+        "地方自治体の社会保障財源に穴が開きかねないという地方側の。"
+      ],
+      "words": [],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-yahoo-6591287",
+      "badge": "N1",
+      "date": "",
+      "title_jp": "横浜市長パワハラ説明へ 注目点は",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://news-pctr.c.yimg.jp/t/news-topics/images/tpc/2026/8/11/f34d3ef3c9b199d7dfb67de9241e9b976bc7818a45728641677cdfe144fa7d3b.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/yahoo-6591287.html",
+      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/yahoo-6591287.mp3",
+      "body": [
+        "山中竹春・横浜市長の職員へのパワーハラスメントが第三者調査で認定されたことを受け、横浜市議会は13日、市長本人に説明を求める。",
+        "傷つけられた職員や組織を再生させる処方箋（せん）は何なのか、パワハラの本。"
+      ],
+      "words": [],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-yahoo-6591284",
+      "badge": "N1",
+      "date": "",
+      "title_jp": "米大統領 イランの賠償要求に対抗",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://news-pctr.c.yimg.jp/t/news-topics/images/tpc/2026/8/11/34e499fa147a74b4249542f923baf64fc8254855d14ebfc6f7747c87e117503e.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/yahoo-6591284.html",
+      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/yahoo-6591284.mp3",
+      "body": [
+        "[１０日 ロイター] - トランプ米大統領は１０日、イラン‌が米国とイスラエルの⁠攻撃によって被った損害に対する賠償を求め​ているという情報を聞いたとし、自身も「‌イランが殺害し、重傷を負わせた全ての人。"
+      ],
+      "words": [],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-yahoo-6591289",
+      "badge": "N1",
+      "date": "",
+      "title_jp": "ANAが計58便欠航 台風がお盆直撃",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://news-pctr.c.yimg.jp/t/news-topics/images/tpc/2026/8/11/0c53b9c6258391f354e5e5f4e37425ae9c576ac7b335dc7bf99f74bec8c7d77b.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/yahoo-6591289.html",
+      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/yahoo-6591289.mp3",
+      "body": [
+        "◆全日空 羽田・成田空港発着の58便欠航 台風15号の影響で、全日空は羽田空港と成田空港を発着する計58便を欠航すると発表しました。"
+      ],
+      "words": [],
+      "source": "NHK Easy News"
+    },
+    {
+      "id": "nhk-yahoo-6591280",
+      "badge": "N1",
+      "date": "",
+      "title_jp": "母殺害疑い娘が投げ銭1千万円以上",
+      "title_zh": "",
+      "duration": "1:00",
+      "plays": "new",
+      "thumb": "https://news-pctr.c.yimg.jp/t/news-topics/images/tpc/2026/8/11/d5e0e1597afffb348cb58d2622329ace8f531c0b1f6ab68215ff8ca29b5d1bd2.jpg",
+      "externalUrl": "https://www3.nhk.or.jp/news/yahoo-6591280.html",
+      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/yahoo-6591280.mp3",
+      "body": [
+        "千葉県いすみ市の住宅で2024年8月、高齢女性が殺害された事件で、殺人容疑で逮捕された女性の長女の石上秀子容疑者（54）=千葉県茂原市茂原=が、母親の口座を管理し、その口座の資金をもとに1千万円以上。"
       ],
       "words": [],
       "source": "NHK Easy News"
