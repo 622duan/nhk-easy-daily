@@ -292,6 +292,61 @@ def parse_article(html: str, url: str, verbose: bool = True) -> Optional[NHKArti
     if news_id.startswith('k100'):
         audio_url = f'https://www3.nhk.or.jp/news/easy/{news_id}/{news_id}.mp3'
 
+    # ---- 抓 NHK News Web 完整版 (更长, 500+ 字) ----
+    # Easy News 给简易版 (73 chars 截断), News Web 完整版有全文
+    # URL 模式: https://www3.nhk.or.jp/news/html/YYYYMMDD/K100{...}_...html
+    # 我们从 image_url 推完整版 URL
+    full_body_paragraphs = []
+    if image_url and 'news/html' in image_url:
+        # image_url: https://news.web.nhk/news/html/20260807/K10015198521_2608071..._01_02.jpg
+        # 转: https://www3.nhk.or.jp/news/html/20260807/K10015198521_2608071...html
+        try:
+            m = re.search(r'(news/html/(\d{8})/K\d+_[a-z0-9_]+)', image_url)
+            if m:
+                full_path = m.group(1)
+                full_url = f'https://www3.nhk.or.jp/{full_path}.html'
+                if verbose:
+                    debug(f"try News Web full: {full_url}")
+                full_html = fetch_html(full_url, timeout=10)
+                full_soup = BeautifulSoup(full_html, "lxml")
+
+                # 找正文 - News Web 用 <p> 直接
+                # 排除 header/nav/footer
+                article_body = full_soup.find(class_=re.compile(r'content--body|article-body|news-text|body-text'))
+                if not article_body:
+                    article_body = full_soup.find('article') or full_soup
+
+                for p in article_body.find_all("p"):
+                    text = re.sub(r'\s+', ' ', p.get_text(strip=True))
+                    if not text or len(text) < 20:
+                        continue
+                    # 过滤 footer
+                    if any(skip in text for skip in [
+                        "NHK配信", "Copyright", "All rights reserved",
+                        "※", "出典", "写真", "提供", "画像", "AFP", "時事", "共同",
+                        "このサイトは", "プライバシー", "Cookie"
+                    ]):
+                        continue
+                    full_body_paragraphs.append(text)
+
+                if verbose and full_body_paragraphs:
+                    debug(f"News Web full body: {len(full_body_paragraphs)} 段, {sum(len(p) for p in full_body_paragraphs)} 字")
+        except Exception as e:
+            if verbose:
+                debug(f"News Web full fetch failed: {e}")
+
+    # 用 News Web 完整版 body 替换 body_plain/body_html
+    if full_body_paragraphs and len(full_body_paragraphs) > len(body_paragraphs):
+        body_paragraphs = full_body_paragraphs
+        body_plain = "\n\n".join(full_body_paragraphs)
+        body_html = "\n".join(f"<p>{p}</p>" for p in full_body_paragraphs)
+        # 重新估算 level
+        total_chars = sum(len(p) for p in full_body_paragraphs)
+        if total_chars > 600:
+            level = "N2" if not level or level == "N3" else level
+        if verbose:
+            debug(f"使用 News Web 完整版: {total_chars} 字")
+
     # ---- 提取图片: 新版 img.src = news/html/... ----
     image_url = None
     # 优先用带 alt 的主图
