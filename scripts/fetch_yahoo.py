@@ -280,15 +280,39 @@ def fetch_daily_articles(limit: int = 5, verbose: bool = True) -> List[YahooArti
             if not desc and item.get("description"):
                 desc = item["description"].strip()
 
-            article.body = desc
-            if desc:
-                # 切段 (按。切)
+            # === 尝试抓 articles/{hash} 完整版 ===
+            full_body = ""
+            try:
+                hash_id, hash_url, _ = extract_article_hash(pickup_url)
+                if hash_url:
+                    hash_html = fetch_url(hash_url, timeout=15)
+                    hash_soup = BeautifulSoup(hash_html, "lxml")
+                    # Yahoo 完整文章正文: 多个 <p class="sc-54nboa-0 ...">
+                    full_paras = []
+                    for p in hash_soup.find_all("p", class_=re.compile(r"sc-54nboa-0")):
+                        text = p.get_text(strip=True)
+                        if len(text) >= 20 and not any(skip in text for skip in ["みんなの意見", "コメント", "関連ニュース"]):
+                            full_paras.append(text)
+                    if full_paras:
+                        full_body = "\n\n".join(full_paras)
+                        if verbose:
+                            print(f"    → 完整版: {len(full_body)}字 ({len(full_paras)} 段)", file=sys.stderr)
+            except Exception as e:
+                if verbose:
+                    print(f"    [完整版抓取失败] {e}", file=sys.stderr)
+
+            # 优先用完整版, fallback 到 description
+            if full_body:
+                article.body = full_body
+                article.body_paragraphs = [p.strip() for p in full_body.split("\n\n") if p.strip()]
+            elif desc:
+                article.body = desc
                 article.body_paragraphs = [p.strip() for p in re.split(r"[。！？]", desc) if p.strip() and len(p.strip()) > 10]
 
             # 来源
             source = ""
             for src in ["読売新聞", "共同通信", "時事通信", "毎日新聞", "朝日新聞", "産経新聞", "日本経済新聞", "NHK", "FNN", "TBS", "ANN", "北海道新聞", "中日新聞", "西日本新聞"]:
-                if src in desc or src in html[:5000]:
+                if src in (article.body or "") or src in html[:5000]:
                     source = src
                     break
             article.source = source
