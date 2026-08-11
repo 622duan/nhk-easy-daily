@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-08-11T10:42:07.125360+09:00",
+  "fetched_at": "2026-08-11T10:44:46.511169+09:00",
   "source": "Yahoo News Japan",
   "article_count": 5,
   "items": [
@@ -62,18 +62,17 @@
       "level": "N1"
     },
     {
-      "article_id": "6591277",
-      "title": "中国で複数邦人の拘束が判明",
+      "article_id": "6591280",
+      "title": "母殺害疑い娘が投げ銭1千万円以上",
       "body_paragraphs": [
-        "中国国内に事業所がある日本企業社長ら複数の邦人が、レアアース（希土類）を含む軍民両用品などの対日輸出規制に関連して中国側に拘束されていたことが10日、判明した",
-        "日系事業所への立ち入り調査や企業関係者"
+        "千葉県いすみ市の住宅で2024年8月、高齢女性が殺害された事件で、殺人容疑で逮捕された女性の長女の石上秀子容疑者（54）=千葉県茂原市茂原=が、母親の口座を管理し、その口座の資金をもとに1千万円以上"
       ],
-      "body": "中国国内に事業所がある日本企業社長ら複数の邦人が、レアアース（希土類）を含む軍民両用品などの対日輸出規制に関連して中国側に拘束されていたことが10日、判明した。日系事業所への立ち入り調査や企業関係者",
-      "source": "毎日新聞",
-      "url": "https://news.yahoo.co.jp/pickup/6591277?source=rss",
-      "pickup_url": "https://news.yahoo.co.jp/pickup/6591277?source=rss",
-      "thumb": "https://news-pctr.c.yimg.jp/t/news-topics/images/tpc/eternal/2023/10/2/b91cf5cac6ada58f411f85ce01a222c50846cb2ef5ef0617e912960c9cca4526.jpg",
-      "published_at": "Mon, 10 Aug 2026 23:05:46 GMT",
+      "body": "千葉県いすみ市の住宅で2024年8月、高齢女性が殺害された事件で、殺人容疑で逮捕された女性の長女の石上秀子容疑者（54）=千葉県茂原市茂原=が、母親の口座を管理し、その口座の資金をもとに1千万円以上",
+      "source": "朝日新聞",
+      "url": "https://news.yahoo.co.jp/pickup/6591280?source=rss",
+      "pickup_url": "https://news.yahoo.co.jp/pickup/6591280?source=rss",
+      "thumb": "https://news-pctr.c.yimg.jp/t/news-topics/images/tpc/2026/8/11/d5e0e1597afffb348cb58d2622329ace8f531c0b1f6ab68215ff8ca29b5d1bd2.jpg",
+      "published_at": "Mon, 10 Aug 2026 23:26:37 GMT",
       "level": "N1"
     }
   ]
