@@ -59,13 +59,24 @@ jobs:
           python scripts/fetch_nhk.py --limit "${LIMIT}" --output data/nhk-today.json
         continue-on-error: true
 
-      - name: 转换为 app 格式
-        if: steps.fetch.outcome == 'success'
-        run: python scripts/format_data.py --input data/nhk-today.json --output data/nhk-app-format.json
+      - name: 抓取 Yahoo News Japan
+        id: fetch_yahoo
+        env:
+          LIMIT: ${{ github.event.inputs.limit || '4' }}
+        run: |
+          python scripts/fetch_yahoo.py --limit "${LIMIT}" --output data/yahoo-today.json
+        continue-on-error: true
+
+      - name: 转换为 app 格式 (NHK + Yahoo)
+        if: steps.fetch.outcome == 'success' || steps.fetch_yahoo.outcome == 'success'
+        run: |
+          python scripts/format_data.py \
+            --input data/nhk-today.json \
+            --yahoo-input data/yahoo-today.json \
+            --output data/nhk-app-format.json
 
       - name: 验证输出
-        # items 为空也 OK, 让 fetch_nhk.py 用 yesterday 兜底
-        if: steps.fetch.outcome == 'success'
+        if: steps.fetch.outcome == 'success' || steps.fetch_yahoo.outcome == 'success'
         run: |
           python -c "
           import json
@@ -73,10 +84,13 @@ jobs:
               data = json.load(f)
           items = data.get('items', [])
           if not items:
-              print('WARN: items is empty, using yesterday fallback')
+              print('WARN: items is empty')
           else:
-              total_words = sum(len(i['words']) for i in items)
-              print('OK: ' + str(len(items)) + ' articles, ' + str(total_words) + ' words')
+              sources = {}
+              for i in items:
+                  s = i.get('source', 'unknown')
+                  sources[s] = sources.get(s, 0) + 1
+              print('OK: ' + str(len(items)) + ' articles, sources=' + str(sources))
           "
 
       - name: 提交变更
