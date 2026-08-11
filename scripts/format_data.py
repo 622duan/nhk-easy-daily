@@ -178,6 +178,7 @@ def yahoo_to_news_dict(item: Dict[str, Any]) -> Dict[str, Any]:
     pickup_id = item.get("article_id", "")
     title = item.get("title", "")
     body = item.get("body", "")
+    body_paragraphs = item.get("body_paragraphs", [])
     source = item.get("source", "Yahoo News")
     pickup_url = item.get("pickup_url", "")
     url = item.get("url", "") or pickup_url
@@ -185,21 +186,26 @@ def yahoo_to_news_dict(item: Dict[str, Any]) -> Dict[str, Any]:
     pub = item.get("published_at", "")
     level = item.get("level", "N2")
 
-    # 切段
-    paragraphs = [p.strip() + "。" for p in body.split("。") if p.strip()]
-    if not paragraphs and body:
-        paragraphs = [body]
+    # 切段: 优先 body_paragraphs (完整版), fallback 到 body
+    if body_paragraphs and len(body_paragraphs) > 1:
+        paragraphs = [p.strip() + ("。" if not p.strip().endswith(("。", "！", "？")) else "") for p in body_paragraphs]
+    elif body:
+        paragraphs = [p.strip() + "。" for p in body.split("。") if p.strip()]
+    else:
+        paragraphs = []
 
-    # 字数估算 duration
+    # 字数估算 duration (更长)
     word_count = len(body)
     if word_count < 100:
         duration = "1:00"
-    elif word_count < 200:
+    elif word_count < 300:
         duration = "2:00"
-    elif word_count < 400:
+    elif word_count < 600:
         duration = "3:00"
-    else:
+    elif word_count < 1200:
         duration = "4:00"
+    else:
+        duration = f"{min(15, max(5, word_count // 300))}:00"
 
     return {
         "id": f"yahoo-{pickup_id}",
