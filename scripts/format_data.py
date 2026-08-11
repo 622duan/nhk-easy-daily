@@ -241,8 +241,18 @@ def main():
         with open(in_path, "r", encoding="utf-8") as f:
             data = json.load(f)
         articles = data.get("articles", [])
-        news_items.extend([article_to_news_dict(a) for a in articles])
-        print(f"  NHK: {len(articles)} 篇", file=sys.stderr)
+        # 过滤: 只保留真正的 NHK (news_id 以 ne/k100 开头, 不含 yahoo-)
+        nhk_only = [a for a in articles if a.get("news_id", "").startswith(("ne", "k100"))]
+        # 按 news_id 去重 (避免 yesterday fallback 把同一篇加多次)
+        seen_ids = set()
+        unique_nhk = []
+        for a in nhk_only:
+            nid = a.get("news_id", "")
+            if nid not in seen_ids:
+                seen_ids.add(nid)
+                unique_nhk.append(a)
+        news_items.extend([article_to_news_dict(a) for a in unique_nhk])
+        print(f"  NHK: {len(unique_nhk)} 篇 (去重前 {len(articles)}, 过滤 yahoo 后 {len(nhk_only)})", file=sys.stderr)
     else:
         print(f"  WARN: NHK 文件不存在 {in_path}", file=sys.stderr)
 
