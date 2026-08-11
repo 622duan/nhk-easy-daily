@@ -173,24 +173,84 @@ def article_to_news_dict(article: Dict[str, Any], level: Optional[str] = None) -
     }
 
 
+def yahoo_to_news_dict(item: Dict[str, Any]) -> Dict[str, Any]:
+    """Yahoo News Japan item → app newsList 元素"""
+    pickup_id = item.get("article_id", "")
+    title = item.get("title", "")
+    body = item.get("body", "")
+    source = item.get("source", "Yahoo News")
+    pickup_url = item.get("pickup_url", "")
+    url = item.get("url", "") or pickup_url
+    thumb = item.get("thumb", "")
+    pub = item.get("published_at", "")
+    level = item.get("level", "N2")
+
+    # 切段
+    paragraphs = [p.strip() + "。" for p in body.split("。") if p.strip()]
+    if not paragraphs and body:
+        paragraphs = [body]
+
+    # 字数估算 duration
+    word_count = len(body)
+    if word_count < 100:
+        duration = "1:00"
+    elif word_count < 200:
+        duration = "2:00"
+    elif word_count < 400:
+        duration = "3:00"
+    else:
+        duration = "4:00"
+
+    return {
+        "id": f"yahoo-{pickup_id}",
+        "badge": level,
+        "date": pub or datetime.now(JST).strftime("%m月%d日"),
+        "title_jp": title,
+        "title_zh": "",
+        "duration": duration,
+        "plays": "new",
+        "thumb": thumb or "https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=400&q=80",
+        "externalUrl": url,
+        # Yahoo 没公开 mp3, 用 TTS 录 (audioUrl 指向 jsdelivr)
+        "audioUrl": f"https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/yahoo-{pickup_id}.mp3",
+        "body": paragraphs,
+        "words": [],  # Yahoo 摘要没 ruby, 留给 UI 端 reverse-match
+        "source": f"Yahoo News · {source}" if source else "Yahoo News",
+    }
+
+
 def main():
-    parser = argparse.ArgumentParser(description="NHK 抓取数据 → app 格式")
+    parser = argparse.ArgumentParser(description="NHK + Yahoo 抓取数据 → app 格式")
     parser.add_argument("--input", "-i", default="data/nhk-today.json", help="fetch_nhk.py 输出")
+    parser.add_argument("--yahoo-input", default="data/yahoo-today.json", help="fetch_yahoo.py 输出 (可选)")
     parser.add_argument("--output", "-o", default="data/nhk-app-format.json", help="app 格式输出")
     parser.add_argument("--level", default="N3", help="默认 level (默认 N3, NHK Easy News 难度)")
     args = parser.parse_args()
 
+    news_items = []
+
+    # 1. NHK
     in_path = Path(args.input)
-    if not in_path.exists():
-        print(f"ERROR: 输入文件不存在: {in_path}", file=sys.stderr)
-        sys.exit(1)
+    if in_path.exists():
+        with open(in_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        articles = data.get("articles", [])
+        news_items.extend([article_to_news_dict(a) for a in articles])
+        print(f"  NHK: {len(articles)} 篇", file=sys.stderr)
+    else:
+        print(f"  WARN: NHK 文件不存在 {in_path}", file=sys.stderr)
 
-    with open(in_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    articles = data.get("articles", [])
-    # 每篇 article 用自己的 level 字段 (不传 level 参数, 内部取 article['level'])
-    news_items = [article_to_news_dict(a) for a in articles]
+    # 2. Yahoo News Japan
+    if args.yahoo_input:
+        yahoo_path = Path(args.yahoo_input)
+        if yahoo_path.exists():
+            with open(yahoo_path, "r", encoding="utf-8") as f:
+                yahoo_data = json.load(f)
+            yahoo_items = yahoo_data.get("items", [])
+            news_items.extend([yahoo_to_news_dict(it) for it in yahoo_items])
+            print(f"  Yahoo: {len(yahoo_items)} 篇", file=sys.stderr)
+        else:
+            print(f"  WARN: Yahoo 文件不存在 {yahoo_path}", file=sys.stderr)
 
     # 按 level 分组输出
     by_level = {}
@@ -198,12 +258,18 @@ def main():
         lv = item.get("badge", "N3")
         by_level.setdefault(lv, []).append(item)
 
+    sources = {}
+    for item in news_items:
+        s = item.get("source", "unknown")
+        sources[s] = sources.get(s, 0) + 1
+
     output = {
         "version": datetime.now(JST).strftime("%Y-%m-%d"),
-        "source": data.get("source", "https://www3.nhk.or.jp/news/easy/"),
-        "fetched_at": data.get("fetched_at", ""),
+        "source": "NHK Easy News + Yahoo News Japan",
+        "fetched_at": datetime.now(JST).isoformat(),
         "by_level": {lv: len(items) for lv, items in by_level.items()},
         "default_level": args.level,
+        "sources": sources,
         "items": news_items,
     }
 
@@ -213,8 +279,9 @@ def main():
         json.dump(output, f, ensure_ascii=False, indent=2)
 
     print(f"✓ 转换 {len(news_items)} 篇 → {out_path}", file=sys.stderr)
+    print(f"  sources: {sources}", file=sys.stderr)
     for item in news_items:
-        print(f"  - {item['id']}: {item['title_jp'][:50]}... ({len(item['words'])} 词)", file=sys.stderr)
+        print(f"  - {item['id']} [{item['source']}]: {item['title_jp'][:50]}...", file=sys.stderr)
 
 
 if __name__ == "__main__":
