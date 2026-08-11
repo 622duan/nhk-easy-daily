@@ -203,7 +203,7 @@
           </button>
         </div>
 
-        <a href="https://www3.nhk.or.jp/news/easy/" target="_blank" class="flex items-center gap-2 text-xs mt-3 pt-3" style="border-top: 1px solid rgba(255,255,255,0.15); opacity: 0.95; position: relative; z-index: 2;">
+        <a id="newsExternalLink" href="https://www3.nhk.or.jp/news/easy/" target="_blank" class="flex items-center gap-2 text-xs mt-3 pt-3" style="border-top: 1px solid rgba(255,255,255,0.15); opacity: 0.95; position: relative; z-index: 2;">
           <i class="fas fa-external-link-alt"></i>
           <span>在 NHK 网站收听原文</span>
         </a>
@@ -390,9 +390,42 @@
     updateProgressUI();
     setupAudio();
 
+    // 外部原文链接 (Yahoo / NHK)
+    const extLink = document.getElementById('newsExternalLink');
+    if (extLink && currentNews.externalUrl) {
+      extLink.href = currentNews.externalUrl;
+      // 改文案
+      const extSpan = extLink.querySelector('span');
+      if (extSpan) {
+        if (currentNews.id.startsWith('yahoo-')) {
+          extSpan.textContent = '在 Yahoo News 查看原文';
+        } else if (currentNews.id.startsWith('nhk-')) {
+          extSpan.textContent = '在 NHK 网站查看原文';
+        }
+      }
+    }
+
     // Article body
     const bodyEl = document.getElementById('articleBody');
-    bodyEl.innerHTML = (currentNews.body || []).map(p => `<p>${p}</p>`).join('');
+    const bodyParas = currentNews.body || [];
+    const bodyTotalChars = bodyParas.reduce((s, p) => s + (p ? p.length : 0), 0);
+
+    if (bodyParas.length > 0 && bodyTotalChars > 0) {
+      bodyEl.innerHTML = bodyParas.map(p => `<p>${p}</p>`).join('');
+    } else {
+      // body 缺失或太短 (NHK Easy News 全文需同意才能看) → 显示跳转原文 + 概要
+      bodyEl.innerHTML = `
+        <div class="text-center py-6 text-muted">
+          <div style="font-size:36px;margin-bottom:8px;">📰</div>
+          <p class="jp text-sm" style="line-height:1.6;">
+            ${currentNews.title_jp || '本文'}
+          </p>
+          <p class="text-xs mt-3" style="color:#888;">
+            NHK Easy News 全文需同意才能查看, 请点击下方"在 NHK 网站收听原文"收听完整版.
+          </p>
+        </div>
+      `;
+    }
 
     // Words - 自动从 body 提取已知词 (NHK 无 ruby 标签, 从 vocabList 反向匹配)
     const wordsEl = document.getElementById('articleWords');
@@ -634,7 +667,13 @@
 
   function startTTSPlayback() {
     useWebSpeech = true;
-    ttsChunks = splitForTTS(currentNews.body);
+    // TTS 内容: 标题 + body (body 太短时, 用 title + 重新构造的 prompt)
+    let ttsSource = currentNews.body || [];
+    if (ttsSource.reduce((s, t) => s + (t ? t.length : 0), 0) < 50) {
+      // body 太短或空, 用 title + 一段引导语, 让用户至少听到内容
+      ttsSource = [currentNews.title_jp || '日本語ライフ'].concat(ttsSource);
+    }
+    ttsChunks = splitForTTS(ttsSource);
     if (!ttsChunks.length) {
       stopPlayback();
       return;
