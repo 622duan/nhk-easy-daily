@@ -1,18 +1,17 @@
 {
   "version": "2026-08-14",
   "source": "NHK Easy News + Yahoo News Japan",
-  "fetched_at": "2026-08-14T17:10:27.260800+09:00",
+  "fetched_at": "2026-08-14T18:13:23.288883+09:00",
   "by_level": {
     "N4": 2,
     "N3": 2,
-    "N1": 5
+    "N1": 2
   },
   "default_level": "N3",
   "sources": {
     "NHK Easy News": 4,
-    "Yahoo News": 3,
-    "Yahoo News · TBS": 1,
-    "Yahoo News · 共同通信": 1
+    "Yahoo News": 1,
+    "Yahoo News · TBS": 1
   },
   "items": [
     {
@@ -86,6 +85,7 @@
     {
       "id": "yahoo-6591705",
       "badge": "N1",
+      "category": "top-picks",
       "date": "Fri, 14 Aug 2026 07:35:06 GMT",
       "title_jp": "関東 局地的に非常に激しい雨恐れ",
       "title_zh": "",
@@ -111,6 +111,7 @@
     {
       "id": "yahoo-6591698",
       "badge": "N1",
+      "category": "top-picks",
       "date": "Fri, 14 Aug 2026 06:46:45 GMT",
       "title_jp": "千葉豪雨で8人死亡 約7400人避難",
       "title_zh": "",
@@ -129,63 +130,6 @@
       ],
       "words": [],
       "source": "Yahoo News · TBS"
-    },
-    {
-      "id": "yahoo-6591699",
-      "badge": "N1",
-      "date": "Fri, 14 Aug 2026 07:10:00 GMT",
-      "title_jp": "阿蘇中岳 噴火警戒レベル3に",
-      "title_zh": "",
-      "duration": "3:00",
-      "plays": "new",
-      "thumb": "https://news-pctr.c.yimg.jp/t/news-topics/images/tpc/2026/8/14/79054e32d99ad6fe054a5d2e18607ed3d7229869273d14d98ebcffd06758d8a7.jpg",
-      "externalUrl": "https://news.yahoo.co.jp/pickup/6591699?source=rss",
-      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/yahoo-6591699.mp3",
-      "body": [
-        "気象庁は、阿蘇中岳（熊本県）の噴火警戒レベルを「2」の「火口周辺規制」から「3」の「入山規制」に引き上げました。\n福岡管区気象台は、火山活動の活発化と先の熊本地震との関連は「分からない」としています。",
-        "阿蘇中岳では、今年6月21日から噴火警戒レベル2が継続していましたが、気象庁は先ほど午レベル3の「入山規制」に引き上げました。\n阿蘇中岳で噴火警戒レベルが「3」となるのは、2022年3月以来です。\n気象庁によりますと、阿蘇中岳では、火山ガスの放出量が急激に増加しているということです。\n火口からおおむね2キロの範囲では、噴火に伴う大きな噴石や火砕流に警戒してください。\nこれに伴って、阿蘇山上広場は立ち入りが禁止されますが、草千里などは通常通りの観光が可能です。",
-        "福岡管区気象台は、火山活動の活発化と先の熊本地震との関連は「分からない」としています。"
-      ],
-      "words": [],
-      "source": "Yahoo News"
-    },
-    {
-      "id": "yahoo-6591673",
-      "badge": "N1",
-      "date": "Fri, 14 Aug 2026 02:55:49 GMT",
-      "title_jp": "北方領土巡る日本の抗議 露が反発",
-      "title_zh": "",
-      "duration": "2:00",
-      "plays": "new",
-      "thumb": "https://news-pctr.c.yimg.jp/t/news-topics/images/tpc/2026/8/14/1510409d35e07b51859d6b82d3ff7a0d4275d4dec908596359dce31fcba69041.jpg",
-      "externalUrl": "https://news.yahoo.co.jp/pickup/6591673?source=rss",
-      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/yahoo-6591673.mp3",
-      "body": [
-        "ザハロワ氏は「択捉島は他の全ての千島列島と同様、法的にロシアの不可分の一部である」と強調。",
-        "南クリール諸島（北方領土）は第2次大戦の終結に伴い、連合国間の合意や国連憲章によってロシアに帰属したとして、「主権や管轄権に疑いの余地はない」と従来の主張を繰り返した。"
-      ],
-      "words": [],
-      "source": "Yahoo News · 共同通信"
-    },
-    {
-      "id": "yahoo-6591697",
-      "badge": "N1",
-      "date": "Fri, 14 Aug 2026 06:46:03 GMT",
-      "title_jp": "アシックス商事 解散・清算の方針",
-      "title_zh": "",
-      "duration": "4:00",
-      "plays": "new",
-      "thumb": "https://news-pctr.c.yimg.jp/t/news-topics/images/tpc/2026/8/14/23d1a8a74b8fe09cfdf8afbbec989729df7cec73ef70d00a814e3f12ff42a3c4.jpg",
-      "externalUrl": "https://news.yahoo.co.jp/pickup/6591697?source=rss",
-      "audioUrl": "https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/yahoo-6591697.mp3",
-      "body": [
-        "アシックスが、8月14日開催の取締役会において、同社の連結子会社であるアシックス商事の解散および清算する方針を決議した。本邦法令に基づき解散および清算手続きを開始し、必要な手続きが完了次第、清算結了となる予定だ。【画像】世界スポーツメーカー売上高ランキング2025。",
-        "アシックス商事は、アシックスグループの一員として、幅広い年代・さまざまなシーンに応じたシューズを国内外へ向け販売するシューズメーカー。「アシックスウォーキング（ASICS Walking）」などのブランドを運営しており、イタリア・フィレンツェで開催されているメンズウェアの見本市「ピッティ・イマージネ・ウオモ（Pitti Immagine Uomo）」に出展するなど、グローバル展開を推し進めてきた。",
-        "アシックスは、ウォーキング事業のグローバル成長の加速およびブランドとして一貫したウォーキング戦略の実行に向け、アシックス商事の全事業および業務を、アシックスまたはアシックスジャパンに移管。会社運営を終了することを決めた。",
-        "業績に与える影響については、2026年12月期第2四半期連結決算において、特別損失として転身支援等費用67億1700万円などを計上。なお、アシックスウォーキング公式オンラインストアは、10月30日をもって注文受付を終了。アシックスウォーキングの商品については、2027年2月以降にアシックスの公式ECサイト「アシックスオンラインストア」で販売を再開する。"
-      ],
-      "words": [],
-      "source": "Yahoo News"
     }
   ]
 }
