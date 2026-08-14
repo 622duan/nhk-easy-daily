@@ -257,11 +257,11 @@ def fetch_daily_articles(limit: int = 12, categories: list = None, verbose: bool
             seen_links[link] = it['_cat']
             unique_items.append(it)
     # 反向优先级: 同 link 出现在多个 cat, 取最特化的 (world > business > domestic > top-picks)
-    cat_priority = {c: i for i, c in enumerate(reversed(cats))}
+    cat_priority = {c: i for i, c in enumerate(reversed(cats))}  # 数字越小优先级越高
     for it in rss_items:
         if it['link'] in seen_links:
             cur = seen_links[it['link']]
-            if cat_priority.get(it['_cat'], 0) > cat_priority.get(cur, 0):
+            if cat_priority.get(it['_cat'], 99) < cat_priority.get(cur, 99):
                 seen_links[it['link']] = it['_cat']
                 for u in unique_items:
                     if u['link'] == it['link']:
