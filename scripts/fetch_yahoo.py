@@ -278,11 +278,12 @@ def fetch_daily_articles(limit: int = 12, categories: list = None, verbose: bool
             cat = cats[0]
         if len(cat_buckets[cat]) < per_cat:
             cat_buckets[cat].append(it)
-    # 拼起来 + 打顺序
+    # 拼起来 + 把 _cat 修正为所属 cat
     balanced_items = []
     cat_count = {}
     for cat in cats:
         for it in cat_buckets[cat]:
+            it['_cat'] = cat  # 修正 cat 标记
             balanced_items.append(it)
             cat_count[cat] = cat_count.get(cat, 0) + 1
     # 不足 limit 时从剩余 rss_items 补
