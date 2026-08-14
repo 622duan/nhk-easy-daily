@@ -66,10 +66,10 @@ jobs:
           python scripts/fetch_nhk.py --limit "${LIMIT}" --output data/nhk-today.json
         continue-on-error: true
 
-      - name: 抓取 Yahoo News Japan
+      - name: 抓取 Yahoo News Japan (4 分类 × 3 篇 = 12 篇)
         id: fetch_yahoo
         env:
-          LIMIT: ${{ github.event.inputs.limit || '4' }}
+          LIMIT: ${{ github.event.inputs.limit || '12' }}
         run: |
           python scripts/fetch_yahoo.py --limit "${LIMIT}" --output data/yahoo-today.json
         continue-on-error: true
