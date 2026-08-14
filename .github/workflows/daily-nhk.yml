@@ -35,13 +35,20 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: 备份前一天内容
-        # 把 HEAD 的 nhk-app-format.json 保存为 yesterday.json
-        # 这样 fetch 抓空时, fetch_nhk.py 会自动用 yesterday 兜底
+        # 把 HEAD 的 nhk-today.json (raw 格式, 含完整 body) 保存为 yesterday.json
+        # 这样 fetch 抓空时, fetch_nhk.py 会自动用 yesterday 兜底, body 字段保留
         run: |
           mkdir -p data
-          # 如果 HEAD 有内容, 拷贝; 否则写空 JSON
-          git show HEAD:data/nhk-app-format.json > data/yesterday.json 2>/dev/null || \
+          # 优先用 nhk-today.json (raw, body 完整)
+          if git show HEAD:data/nhk-today.json > data/yesterday.json 2>/dev/null && [ -s data/yesterday.json ]; then
+            echo "using nhk-today.json (raw, body 完整)"
+          # fallback 到 nhk-app-format.json
+          elif git show HEAD:data/nhk-app-format.json > data/yesterday.json 2>/dev/null && [ -s data/yesterday.json ]; then
+            echo "using nhk-app-format.json (items, body 可能空)"
+          else
             echo '{"fetched_at": "", "source": "https://www3.nhk.or.jp/news/easy/", "article_count": 0, "used_yesterday": false, "fetch_error": "", "articles": []}' > data/yesterday.json
+            echo "no yesterday, using empty"
+          fi
           # 输出昨天有多少条
           python -c "
           import json
