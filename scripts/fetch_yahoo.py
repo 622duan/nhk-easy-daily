@@ -58,7 +58,8 @@ class YahooArticle:
     thumb: str
     published_at: str
     level: str = "N2"        # Yahoo News 难度默认 N2
-    
+    category: str = "top-picks"  # top-picks/world/business/domestic
+
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -218,36 +219,75 @@ def estimate_level(article: YahooArticle) -> str:
         return "N1"
 
 
-def fetch_daily_articles(limit: int = 5, verbose: bool = True) -> List[YahooArticle]:
-    """抓取 Yahoo News Japan 当日头条"""
+def fetch_daily_articles(limit: int = 12, categories: list = None, verbose: bool = True) -> List[YahooArticle]:
+    """抓取 Yahoo News Japan 多分类 (默认 12 篇: 主要+国际+经济+社会 各 3 篇)"""
     if verbose:
-        print(f"[{datetime.now(JST).isoformat()}] 抓取 Yahoo News RSS...", file=sys.stderr)
-    
+        print(f"[{datetime.now(JST).isoformat()}] 抓取 Yahoo News 多分类 RSS...", file=sys.stderr)
+
     articles = []
-    
+
+    # 多分类 RSS
+    cats = categories or ["top-picks", "world", "business", "domestic"]
+    rss_urls = [f"https://news.yahoo.co.jp/rss/topics/{cat}.xml" for cat in cats]
+
     # 1. 抓 RSS
     rss_items = []
-    for rss_url in [YAHOO_RSS]:
+    for rss_url in rss_urls:
         try:
             xml = fetch_url(rss_url, timeout=12)
             rss_items.extend(parse_rss(xml))
             if verbose:
-                print(f"  → RSS {rss_url}: {len(rss_items)} items", file=sys.stderr)
+                cat = rss_url.split('/')[-1].replace('.xml', '')
+                print(f"  → RSS {cat}: {len(rss_items)} items", file=sys.stderr)
         except Exception as e:
             print(f"  [rss err] {rss_url}: {e}", file=sys.stderr)
-    
+
     if not rss_items:
         return articles
-    
-    # 2. 每条 article 抓摘要 (Yahoo 文章正文是 JS 渲染, 用 meta description 150-300 字)
-    for item in rss_items[:limit]:
+
+    # 去重 (link 相同)
+    seen_links = set()
+    unique_items = []
+    for it in rss_items:
+        if it['link'] not in seen_links:
+            seen_links.add(it['link'])
+            unique_items.append(it)
+    rss_items = unique_items
+
+    # 按分类配额分配 (每个分类最多 limit/cats 篇)
+    per_cat = max(2, limit // len(cats))
+    cat_count = {cat: 0 for cat in cats}
+    balanced_items = []
+    for it in rss_items:
+        # 找这条 rss_item 来自哪个 cat
+        src_cat = None
+        for cat in cats:
+            if f"/{cat}.xml" in it.get('_source', '') or cat in it.get('title', '').lower():
+                src_cat = cat
+                break
+        if src_cat is None:
+            src_cat = cats[0]  # 默认 top-picks
+        if cat_count[src_cat] < per_cat:
+            balanced_items.append(it)
+            cat_count[src_cat] += 1
+        if len(balanced_items) >= limit:
+            break
+
+    if verbose:
+        print(f"  → 平衡后: {len(balanced_items)} 篇, 各分类: {cat_count}", file=sys.stderr)
+
+    # 2. 每条 article 抓完整版
+    for item in balanced_items:
+        pickup_url = item["link"]
+        m = re.search(r"pickup/(\d+)", pickup_url)
+        pickup_id = m.group(1) if m else item["title"][:20]
+
+        # 标记 source category
+        item['_source'] = next((c for c in cats if f"/{c}.xml" in str(rss_urls)), 'top-picks')
         if verbose:
             print(f"  → 抓: {item['title'][:50]}", file=sys.stderr)
 
         pickup_url = item["link"]
-        # 从 pickup URL 提取 ID
-        m = re.search(r"pickup/(\d+)", pickup_url)
-        pickup_id = m.group(1) if m else item["title"][:20]
 
         try:
             # 抓 pickup 页 (拿 description 摘要)
@@ -325,10 +365,13 @@ def fetch_daily_articles(limit: int = 5, verbose: bool = True) -> List[YahooArti
             # 估算 level
             article.level = estimate_level(article)
 
+            # 标记分类 (从 rss url)
+            article.category = next((c for c in cats if f"/{c}.xml" in str(rss_urls)), 'top-picks')
+
             if article.body and len(article.body) > 50:
                 articles.append(article)
                 if verbose:
-                    print(f"    OK: body={len(article.body)}字 level={article.level} source={article.source}", file=sys.stderr)
+                    print(f"    OK: body={len(article.body)}字 level={article.level} source={article.source} cat={article.category}", file=sys.stderr)
             else:
                 if verbose:
                     print(f"    SKIP: body 太短 ({len(article.body)}字)", file=sys.stderr)
