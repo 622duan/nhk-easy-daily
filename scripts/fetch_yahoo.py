@@ -230,15 +230,18 @@ def fetch_daily_articles(limit: int = 12, categories: list = None, verbose: bool
     cats = categories or ["top-picks", "world", "business", "domestic"]
     rss_urls = [f"https://news.yahoo.co.jp/rss/topics/{cat}.xml" for cat in cats]
 
-    # 1. 抓 RSS
+    # 1. 抓 RSS (按 cat 分桶, 保留 cat 标记)
     rss_items = []
-    for rss_url in rss_urls:
+    cat_buckets_rss = {}  # cat -> items
+    for cat, rss_url in zip(cats, rss_urls):
         try:
             xml = fetch_url(rss_url, timeout=12)
-            rss_items.extend(parse_rss(xml))
+            items = parse_rss(xml)
+            for it in items:
+                it['_cat'] = cat
+            rss_items.extend(items)
             if verbose:
-                cat = rss_url.split('/')[-1].replace('.xml', '')
-                print(f"  → RSS {cat}: {len(rss_items)} items", file=sys.stderr)
+                print(f"  → RSS {cat}: {len(items)} items", file=sys.stderr)
         except Exception as e:
             print(f"  [rss err] {rss_url}: {e}", file=sys.stderr)
 
@@ -254,19 +257,26 @@ def fetch_daily_articles(limit: int = 12, categories: list = None, verbose: bool
             unique_items.append(it)
     rss_items = unique_items
 
-    # 按 index 均匀分配到 4 分类 (rss_items 是按 cats 顺序拼接的)
+    # 按 cat 配额分配: 每个 cat 拿 per_cat 篇
     per_cat = max(2, limit // len(cats))
-    cat_count = {cat: 0 for cat in cats}
+    cat_buckets = {cat: [] for cat in cats}
+    for it in rss_items:
+        if '_cat' in it and it['_cat'] in cat_buckets:
+            if len(cat_buckets[it['_cat']]) < per_cat:
+                cat_buckets[it['_cat']].append(it)
+        else:
+            # 默认进 top-picks
+            if len(cat_buckets[cats[0]]) < per_cat:
+                it['_cat'] = cats[0]
+                cat_buckets[cats[0]].append(it)
+    # 拼起来 + 打顺序
     balanced_items = []
-    # 先给每个分类保留 per_cat 篇
-    for i, it in enumerate(rss_items):
-        cat_idx = i % len(cats) if len(rss_items) >= len(cats) else 0
-        cat = cats[cat_idx]
-        if cat_count[cat] < per_cat and len(balanced_items) < limit:
-            it['_cat'] = cat
+    cat_count = {}
+    for cat in cats:
+        for it in cat_buckets[cat]:
             balanced_items.append(it)
-            cat_count[cat] += 1
-    # 不足 limit 时, 随便补
+            cat_count[cat] = cat_count.get(cat, 0) + 1
+    # 不足 limit 时从剩余 rss_items 补
     if len(balanced_items) < limit:
         for it in rss_items:
             if it not in balanced_items:
