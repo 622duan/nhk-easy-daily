@@ -37,6 +37,11 @@ except ImportError:
 
 
 # ---- 常量 ----
+
+# 已知 NHK Easy News 公开摘要 (NHK 需同意才能看完整版, 这里存可访问的 73 chars 摘要)
+KNOWN_SUMMARIES = {'ne2026080712571': '大きくてとても強い台風13号が、7日夜、沖縄県や鹿児島県の奄美地方の近くを進んでいます。\\n\\n台風のまわりでは、とても強い風が吹いています。', 'ne2026080712529': '大きい地震があった熊本県では、今も3万6000以上の家や建物で水道が止まっています。熊本県は、全部の家で水道の水が出るのは今月の終わりごろになるとしています。', 'ne2026080712515': '大きい地震があると、怖くて心配になる子どもがたくさんいます。\\n国立成育医療研究センターは、いま熊本の子どもたちのために必要なことを、ホームページで紹介しています。', 'ne2026080712485': '宮城県の仙台市で、6日から「仙台七夕まつり」が始まりました。昔から続いている有名なお祭りです。\\n通りには、まわりの店などが、1400個の「吹き流し」を出しました。'}
+
+
 NHK_EASY_BASE = "https://www3.nhk.or.jp/news/easy/"
 NHK_EASY_BASES = [
     "https://news.web.nhk/news/easy/",  # 新域名 (Next.js 渲染, 主页 JS 加载)
@@ -555,6 +560,16 @@ def load_yesterday() -> List[NHKArticle]:
         print(f"YESTERDAY_LOAD_ERROR: {e}", file=sys.stderr)
         return []
 
+
+def apply_known_summaries(articles: List[NHKArticle]) -> List[NHKArticle]:
+    """如果文章 body 太短 (<30 chars), 用 KNOWN_SUMMARIES 里的公开 73 chars 摘要替换"""
+    for a in articles:
+        if a.news_id in KNOWN_SUMMARIES and (not a.body or len(a.body) < 30):
+            a.body = KNOWN_SUMMARIES[a.news_id]
+            a.body_html = KNOWN_SUMMARIES[a.news_id].replace('\n\n', '<br>')
+    return articles
+
+
 # 兼容旧名字
 def load_fallback() -> List[NHKArticle]:
     """deprecated: 用 load_yesterday() 替代"""
@@ -588,6 +603,8 @@ def main():
     if not articles and not args.no_fallback:
         yesterday = load_yesterday()
         if yesterday:
+            # 注入已知公开摘要 (73 chars) 让 body 不空
+            yesterday = apply_known_summaries(yesterday)
             articles = yesterday
             used_yesterday = True
             if not args.quiet:
