@@ -185,6 +185,7 @@ def yahoo_to_news_dict(item: Dict[str, Any]) -> Dict[str, Any]:
     thumb = item.get("thumb", "")
     pub = item.get("published_at", "")
     level = item.get("level", "N2")
+    category = item.get("category", "top-picks")
 
     # 切段: 优先 body_paragraphs (完整版), fallback 到 body
     if body_paragraphs and len(body_paragraphs) > 1:
@@ -210,6 +211,7 @@ def yahoo_to_news_dict(item: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "id": f"yahoo-{pickup_id}",
         "badge": level,
+        "category": category,  # top-picks / world / business / domestic
         "date": pub or datetime.now(JST).strftime("%m月%d日"),
         "title_jp": title,
         "title_zh": "",
