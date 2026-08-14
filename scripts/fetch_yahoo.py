@@ -254,24 +254,26 @@ def fetch_daily_articles(limit: int = 12, categories: list = None, verbose: bool
             unique_items.append(it)
     rss_items = unique_items
 
-    # 按分类配额分配 (每个分类最多 limit/cats 篇)
+    # 按 index 均匀分配到 4 分类 (rss_items 是按 cats 顺序拼接的)
     per_cat = max(2, limit // len(cats))
     cat_count = {cat: 0 for cat in cats}
     balanced_items = []
-    for it in rss_items:
-        # 找这条 rss_item 来自哪个 cat
-        src_cat = None
-        for cat in cats:
-            if f"/{cat}.xml" in it.get('_source', '') or cat in it.get('title', '').lower():
-                src_cat = cat
-                break
-        if src_cat is None:
-            src_cat = cats[0]  # 默认 top-picks
-        if cat_count[src_cat] < per_cat:
+    # 先给每个分类保留 per_cat 篇
+    for i, it in enumerate(rss_items):
+        cat_idx = i % len(cats) if len(rss_items) >= len(cats) else 0
+        cat = cats[cat_idx]
+        if cat_count[cat] < per_cat and len(balanced_items) < limit:
+            it['_cat'] = cat
             balanced_items.append(it)
-            cat_count[src_cat] += 1
-        if len(balanced_items) >= limit:
-            break
+            cat_count[cat] += 1
+    # 不足 limit 时, 随便补
+    if len(balanced_items) < limit:
+        for it in rss_items:
+            if it not in balanced_items:
+                it['_cat'] = cats[0]
+                balanced_items.append(it)
+                if len(balanced_items) >= limit:
+                    break
 
     if verbose:
         print(f"  → 平衡后: {len(balanced_items)} 篇, 各分类: {cat_count}", file=sys.stderr)
@@ -283,7 +285,7 @@ def fetch_daily_articles(limit: int = 12, categories: list = None, verbose: bool
         pickup_id = m.group(1) if m else item["title"][:20]
 
         # 标记 source category
-        item['_source'] = next((c for c in cats if f"/{c}.xml" in str(rss_urls)), 'top-picks')
+        item['_source'] = item.get('_cat', cats[0])
         if verbose:
             print(f"  → 抓: {item['title'][:50]}", file=sys.stderr)
 
