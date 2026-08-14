@@ -388,7 +388,7 @@ def fetch_daily_articles(limit: int = 12, categories: list = None, verbose: bool
             article.level = estimate_level(article)
 
             # 标记分类 (从 rss url)
-            article.category = next((c for c in cats if f"/{c}.xml" in str(rss_urls)), 'top-picks')
+            article.category = item.get('_cat', cats[0])
 
             if article.body and len(article.body) > 50:
                 articles.append(article)
