@@ -248,27 +248,36 @@ def fetch_daily_articles(limit: int = 12, categories: list = None, verbose: bool
     if not rss_items:
         return articles
 
-    # 去重 (link 相同)
-    seen_links = set()
+    # 去重 (link 相同, 保留第一次出现的 cat)
+    seen_links = {}
     unique_items = []
     for it in rss_items:
-        if it['link'] not in seen_links:
-            seen_links.add(it['link'])
+        link = it['link']
+        if link not in seen_links:
+            seen_links[link] = it['_cat']
             unique_items.append(it)
+    # 反向优先级: 同 link 出现在多个 cat, 取最特化的 (world > business > domestic > top-picks)
+    cat_priority = {c: i for i, c in enumerate(reversed(cats))}
+    for it in rss_items:
+        if it['link'] in seen_links:
+            cur = seen_links[it['link']]
+            if cat_priority.get(it['_cat'], 0) > cat_priority.get(cur, 0):
+                seen_links[it['link']] = it['_cat']
+                for u in unique_items:
+                    if u['link'] == it['link']:
+                        u['_cat'] = it['_cat']
+                        break
     rss_items = unique_items
 
     # 按 cat 配额分配: 每个 cat 拿 per_cat 篇
     per_cat = max(2, limit // len(cats))
     cat_buckets = {cat: [] for cat in cats}
     for it in rss_items:
-        if '_cat' in it and it['_cat'] in cat_buckets:
-            if len(cat_buckets[it['_cat']]) < per_cat:
-                cat_buckets[it['_cat']].append(it)
-        else:
-            # 默认进 top-picks
-            if len(cat_buckets[cats[0]]) < per_cat:
-                it['_cat'] = cats[0]
-                cat_buckets[cats[0]].append(it)
+        cat = it.get('_cat', cats[0])
+        if cat not in cat_buckets:
+            cat = cats[0]
+        if len(cat_buckets[cat]) < per_cat:
+            cat_buckets[cat].append(it)
     # 拼起来 + 打顺序
     balanced_items = []
     cat_count = {}
