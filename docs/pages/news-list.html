@@ -186,7 +186,17 @@
     const container = document.getElementById('newsListContainer');
     if (!container) return;
 
-    container.innerHTML = list.map(n => `
+    container.innerHTML = list.map(n => {
+      // cat 中文标签
+      const catMap = {
+        'top-picks': '主要', 'world': '国际', 'business': '经济',
+        'domestic': '国内', 'sports': '体育', 'entertainment': '娱乐',
+        'society': '社会', 'science-it': '科技', 'local': '地方'
+      };
+      const catCn = catMap[n.category] || '';
+      // source 简化 (Yahoo News · 読売新聞 → 読売新聞)
+      const sourceShort = (n.source || '').replace('Yahoo News · ', '').replace('Yahoo News', 'Yahoo').replace('NHK Easy News', 'NHK');
+      return `
       <a href="news-detail.html?id=${n.id}" class="news-item">
         <div class="news-thumb" style="background-image: url('${n.thumb}');">
           <div class="play-badge"><i class="fas fa-play"></i></div>
@@ -195,17 +205,20 @@
         <div class="flex-1">
           <div class="flex items-center gap-2 mb-1">
             <span class="badge badge-${n.badge.toLowerCase()}">${n.badge}</span>
+            ${catCn ? `<span class="text-xs px-1.5 py-0.5 rounded" style="background:#eef2ff;color:#4f46e5;">${catCn}</span>` : ''}
             <span class="text-xs text-muted">${n.date}</span>
+            <span class="text-xs text-muted">·</span>
+            <span class="text-xs text-muted">${sourceShort}</span>
           </div>
           <h3 class="jp font-bold text-sm" style="line-height: 1.5;">${n.title_jp}</h3>
-          <p class="text-xs text-muted mt-1">${n.title_zh}</p>
+          <p class="text-xs text-muted mt-1">${n.title_zh || ''}</p>
           <div class="flex items-center gap-3 mt-2 text-xs text-muted">
             <span><i class="far fa-clock"></i> ${n.duration}</span>
             <span><i class="fas fa-headphones"></i> ${n.plays} 收听</span>
           </div>
         </div>
       </a>
-    `).join('');
+    `}).join('');
 
     const counter = document.getElementById('newsCountText');
     if (counter) counter.textContent = `${list.length} 篇`;
