@@ -124,7 +124,40 @@ function _getBestJapaneseVoice() {
       || null;
 }
 
+// 共享 kana audio player (避免每个 cell 单独 <audio>)
+let _kanaAudio = null;
+function _getKanaAudio() {
+  if (!_kanaAudio) {
+    _kanaAudio = new Audio();
+    _kanaAudio.preload = 'none';
+  }
+  return _kanaAudio;
+}
+
+// 单 kana 字符 (平假/片假/拗音) 走真人 TTS mp3
+// 例: 'あ' 'きゃ' 'ガ' 'キョ'
+const _KANA_RE = /^[\u3040-\u309f\u30a0-\u30ff]$/;
+
 function speak(text, opts = {}) {
+  // 1. 优先用真人 TTS mp3 (kana 单字)
+  if (_KANA_RE.test(text) && !opts.useWeb) {
+    const audio = _getKanaAudio();
+    audio.pause();
+    audio.currentTime = 0;
+    audio.src = `https://cdn.jsdelivr.net/gh/622duan/nhk-easy-daily@main/data/audio/kana-${text}.mp3`;
+    audio.playbackRate = opts.rate || 1.0;  // mp3 已 0.8 speed 录好
+    const p = audio.play();
+    if (p && p.catch) p.catch(() => {
+      // mp3 失败 (offline / 404) → fallback 到 Web Speech API
+      _speakWeb(text, opts);
+    });
+    return;
+  }
+
+  _speakWeb(text, opts);
+}
+
+function _speakWeb(text, opts = {}) {
   if (!('speechSynthesis' in window)) {
     console.warn('[speak] speechSynthesis not supported');
     return;
